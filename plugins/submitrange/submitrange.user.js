@@ -4,7 +4,7 @@
 // @category       Highlighter
 // @version        1.0.0.20180409.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
-// @updateURL      https://github.com/Wintervorst/iitc/
+// @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/
 // @description    [iitc-20180409.010107] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
 // @include        https://*.ingress.com/intel*
