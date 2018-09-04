@@ -34,7 +34,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
-  window.plugin.submitrange = function() {};  
+  window.plugin.submitrange = function() {};   
 
   window.plugin.submitrange.highlight = function(data) {
 		var guid = data.portal.options.guid;
@@ -79,7 +79,20 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   } 
 
   // Initialize the plugin and display submitranges if at an appropriate zoom level
-  var setup = function() {    
+  var setup = function() {   
+     $("<style>")
+    .prop("type", "text/css")
+    .html(".plugin-submitdistance-name {\
+      font-size: 14px;\
+      font-weight: bold;\
+      color: gold;\
+      opacity: 0.7;\
+      text-align: center;\
+      text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000; \
+      pointer-events: none;\
+    }")
+    .appendTo("head");
+    
       window.plugin.submitrange.submitrangeLayers = new L.LayerGroup();  	              
       window.addPortalHighlighter('Portal submit range', window.plugin.submitrange);	
       addHook('mapDataRefreshEnd', window.plugin.submitrange.urlMarker);
@@ -99,12 +112,63 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     var pll = window.plugin.submitrange.getParameterByName('pll')
     if (pll == undefined) {				
         var ll = window.plugin.submitrange.getParameterByName('ll')
-        var coords = ll.split(',');			
-        createGenericMarker(L.latLng(coords[0],coords[1]), 'red', {
-          title: 'Url location'
-        }).addTo(window.plugin.submitrange.submitrangeLayers);     
+        var coords = ll.split(',');	
+        var markerLatLng = L.latLng(coords[0],coords[1]);
+      
+      	var distanceToClosest = window.plugin.submitrange.getDistanceToClosest(markerLatLng);
+      
+        createGenericMarker(markerLatLng, 'red', {
+          title: 'Url location ' + distanceToClosest,          
+        }).addTo(window.plugin.submitrange.submitrangeLayers);   
+      
+      
+      var marker = L.marker(markerLatLng, {
+      	icon: L.divIcon({
+        	className: 'plugin-submitdistance-name',
+        	iconAnchor: [100,5],
+        	iconSize: [200,10],
+        	html: distanceToClosest,
+      	})
+    	}).addTo(window.plugin.submitrange.submitrangeLayers);
     }        
   }
+  
+  
+  window.plugin.submitrange.getDistanceToClosest = function(markerLatLng) {           
+      var bounds = map.getBounds();
+    	var closestPortal;
+    	var shortestDistance = -1;
+    	$.each(window.portals, function(i, portal) {
+      	var portalLatLng = portal.getLatLng();
+        
+     		if (bounds.contains(portalLatLng)) {      
+    			var distance = markerLatLng.distanceTo(portalLatLng); 
+       	 	if (shortestDistance == -1) {
+           	 shortestDistance = distance;
+            	closestPortal = portalLatLng;
+          }
+          
+          if (distance < shortestDistance) {
+            	shortestDistance = distance;
+            	closestPortal = portalLatLng;
+          }
+    		}
+    	});    
+    
+    	if (shortestDistance > -1 && closestPortal != undefined) {
+					var poly = L.geodesicPolyline([markerLatLng,closestPortal] , {
+       			color: 'red',
+       			opacity: 0.8,
+       			weight: 5,
+       			clickable: false,   
+            html: shortestDistance       			
+    	 	}).addTo(window.plugin.submitrange.submitrangeLayers);  			     
+        return shortestDistance;
+      }
+    
+      return '';
+  }    
+  
 
 // PLUGIN END //////////////////////////////////////////////////////////
 setup.info = plugin_info; //add the script info data to the function as a property
