@@ -3,6 +3,7 @@
 // @name           IITC plugin: Portal submitrange
 // @category       Highlighter
 // @version        1.0.0.20180409.010107
+// @author         Wintervorst
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/
