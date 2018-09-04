@@ -1,5 +1,5 @@
 # submitrange.user.js
-I have created this iitc plugin to highlights the 20 meter radius of existing portals on the Intel map.
+I have created this <a href="https://iitc.me/">IITC</a> plugin to highlights the 20 meter radius of existing portals on the Intel map.
 <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/assets/20meterradius.png">See an example here</a>.
 After numerous ‘too close to an existing portal’ e-mails, I have decided to analyze them and combined with earlier research and assumptions throughout the web that a safe margin is to find and submit candidates at least with a 20 meter distance from existing portals.
 Assumption/suggestion: Find and submit candidates in the non-highlighted part of the map and you should be okay.
