@@ -6,5 +6,5 @@ This plugin depends on the 117 cells plugin made by vibrunazo for drawing the ce
 
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/occupiedcells/assets/occupiedcell1.png" />
 
-In combination with the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/occupiedcells">submitrange</a> plugin (to minimize 'too close mails')
+In combination with the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/occupiedcells">submitrange</a> plugin (to minimize 'too close mails')<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/occupiedcells/assets/occupiedcellwithsubmitrange1.png" />
