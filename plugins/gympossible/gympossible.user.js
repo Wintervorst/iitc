@@ -45,16 +45,14 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     return;                    
                 	
     
-    if (window.map.hasLayer(window.plugin.gympossible.occupiedPoGoCellsLayer)) { 
+
+    if (window.map.hasLayer(window.plugin.gympossible.level14CellsLayer)) {  
       window.plugin.gympossible.occupiedPoGoCellsLayer.clearLayers(); 
       window.plugin.gympossible.stoporgymcells = [];
       window.plugin.gympossible.initPossiblePortalList();
       window.plugin.gympossible.cellLevel = 17;
      	window.plugin.gympossible.drawCellList(); 
-    }    
-    
-    if (window.map.hasLayer(window.plugin.gympossible.level14CellsLayer)) {  
-        window.plugin.gympossible.level14CellsLayer.clearLayers();
+      window.plugin.gympossible.level14CellsLayer.clearLayers();
       window.plugin.gympossible.cellLevel = 14;
      	window.plugin.gympossible.drawCellList(); 
     }  
@@ -180,7 +178,7 @@ window.plugin.gympossible.drawOccupiedCell = function(cell, portalCellCount) {
     if (portalCellCount == 1 || portalCellCount == 5 || portalCellCount == 19 || portalCellCount == 26) {
        fill = true;
     }
-     var region = L.geodesicPolygon([corners[0],corners[1],corners[2],corners[3]], {fill: fill, color: 'pink', fillColor:'teal', opacity: 1, weight: 3, fillOpacity:0.60, clickable: false });
+     var region = L.geodesicPolygon([corners[0],corners[1],corners[2],corners[3]], {fill: fill, color: 'pink', fillColor:'teal', opacity: 1, weight: 3, fillOpacity:0.40, clickable: false });
   } else {
     var region = L.geodesicPolygon([corners[0],corners[1],corners[2],corners[3]], {fill: true, color: 'purple', fillColor:'purple', opacity: 1, weight: 1, fillOpacity:0.30, clickable: false });
   }
@@ -224,12 +222,7 @@ window.plugin.gympossible.drawOccupiedCell = function(cell, portalCellCount) {
       window.plugin.gympossible.occupiedPoGoCellsLayer.addLayer(region);  	
      // window.plugin.gympossible.occupiedPoGoCellsLayer.addLayer(marker);   
     }
-  
-   if (window.plugin.gympossible.cellLevel == 19) {
-      
-      window.plugin.gympossible.occupiedIngressCellsLayer.addLayer(region);  	
-      window.plugin.gympossible.occupiedIngressCellsLayer.addLayer(marker);   
-   } 
+ 
   
    if (window.plugin.gympossible.cellLevel == 14) {
       window.plugin.gympossible.level14CellsLayer.addLayer(region);  	
@@ -253,7 +246,7 @@ var setup = function() {
     .appendTo("head");         
         
     window.plugin.gympossible.occupiedPoGoCellsLayer = new L.LayerGroup();            
-  window.plugin.gympossible.level14CellsLayer = new L.LayerGroup();   
+    window.plugin.gympossible.level14CellsLayer = new L.LayerGroup();   
         
     window.addLayerGroup('Full Pokémon Go cells (L17)', window.plugin.gympossible.occupiedPoGoCellsLayer, true);
     window.addLayerGroup('L14 cells', window.plugin.gympossible.level14CellsLayer, true);
