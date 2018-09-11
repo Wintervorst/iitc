@@ -2,7 +2,7 @@
 // @id             iitc-plugin-s2celldrawer@wintervorst
 // @name           IITC plugin: S2 Cell Drawer
 // @category       Layer
-// @version        0.0.1.20181109.010107
+// @version        0.0.2.20181109.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/s2celldrawer/s2celldrawer.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/
@@ -17,12 +17,6 @@
 // @match          http://*.ingress.com/mission/*
 // @grant          none
 // ==/UserScript==
-
-// This plugin is a complex fork of the Regions plugin by Jonatkins and modification of plugin by vibrunazo
-// original plugin at:
-// https://github.com/jonatkins/ingress-intel-total-conversion
-// https://github.com/vibrunazo/l17cells/
-
 
 var L; // to prevent script errors on load
 var $; // to prevent script errors on load
@@ -71,7 +65,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         var corners = cell.getCornerLatLngs();
         var cellBounds = L.latLngBounds([corners[0],corners[1]]).extend(corners[2]).extend(corners[3]);
 
-        if (cellBounds.intersects(window.plugin.s2celldrawer.bounds)) {
+        // Only draw filled cells when they are completely on screen because we must likely calculate something in it
+        if ((cellOptions.fill && window.plugin.s2celldrawer.bounds.contains(cellBounds)) || (!cellOptions.fill cellBounds.intersects(window.plugin.s2celldrawer.bounds))) {
           // on screen - draw it
           window.plugin.s2celldrawer.drawCell(layer, cell, cellSize, cellOptions, showCallback, markerCss);
 
