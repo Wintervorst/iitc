@@ -2,11 +2,11 @@
 // @id             iitc-plugin-submitrange@wintervorst
 // @name           IITC plugin: Portal submitrange
 // @category       Highlighter
-// @version        1.0.1.20180409.010107
+// @version        1.0.2.20181109.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/
-// @description    [iitc-20180409.010107] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
+// @description    [iitc-20181109.010107] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180409.010107';
+  plugin_info.dateTimeVersion = '20181109.010107';
   plugin_info.pluginId = 'Submitrange';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -41,11 +41,14 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 		var portal = data.portal;                            
 		var bounds = map.getBounds();
     
-		if (window.plugin.submitrange.submitrangeLayers[guid] == undefined) {
-			var portalLatLng = portal.getLatLng();               
-			window.plugin.submitrange.draw(portal, guid);    	
-		}    
+	//	if (window.plugin.submitrange.submitrangeLayers[guid] == undefined) {
+			var portalLatLng = portal.getLatLng();             
+      //if (bounds.contains(portalLatLng)) {
+				window.plugin.submitrange.draw(portal, guid);    
+      //
+	//	}    
 	}  
+    
     
 	window.plugin.submitrange.setSelected = function(selected) {
 		if (selected) {
@@ -75,7 +78,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
     // Add the new circle to the submitrange draw layer
     circle.addTo(window.plugin.submitrange.submitrangeLayers);
-    window.plugin.submitrange.submitrangeLayers[guid] = circle;
+    // window.plugin.submitrange.submitrangeLayers[guid] = circle;
   } 
 
   // Initialize the plugin and display submitranges if at an appropriate zoom level
@@ -95,9 +98,15 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     
       window.plugin.submitrange.submitrangeLayers = new L.LayerGroup();  	              
       window.addPortalHighlighter('Portal submit range', window.plugin.submitrange);	
-      addHook('mapDataRefreshEnd', window.plugin.submitrange.urlMarker);
+      addHook('mapDataRefreshEnd', window.plugin.submitrange.urlMarker);        	
+      addHook('portalAdded', window.plugin.submitrange.portalAdded);        	
+    	//addHook('portalRemoved', window.plugin.submitrange.unhighlight);        	
   }
-
+    
+  window.plugin.submitrange.portalAdded = function(data) {  
+    //ndow.plugin.submitrange.highlight(data);  	
+  }
+  
   window.plugin.submitrange.getParameterByName =	function(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -107,29 +116,30 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
-
+  
   window.plugin.submitrange.urlMarker = function() {  
     var pll = window.plugin.submitrange.getParameterByName('pll')
     if (pll == undefined) {				
         var ll = window.plugin.submitrange.getParameterByName('ll')
-        var coords = ll.split(',');	
-        var markerLatLng = L.latLng(coords[0],coords[1]);
-      
-      	var distanceToClosest = window.plugin.submitrange.getDistanceToClosest(markerLatLng);
-      
-        createGenericMarker(markerLatLng, 'red', {
-          title: 'Url location ' + distanceToClosest,          
-        }).addTo(window.plugin.submitrange.submitrangeLayers);   
-      
-      
-      var marker = L.marker(markerLatLng, {
-      	icon: L.divIcon({
-        	className: 'plugin-submitdistance-name',
-        	iconAnchor: [100,5],
-        	iconSize: [200,10],
-        	html: distanceToClosest,
-      	})
-    	}).addTo(window.plugin.submitrange.submitrangeLayers);
+        if (ll != null) {
+          var coords = ll.split(',');	
+          var markerLatLng = L.latLng(coords[0],coords[1]);
+
+          var distanceToClosest = window.plugin.submitrange.getDistanceToClosest(markerLatLng);
+
+          createGenericMarker(markerLatLng, 'red', {
+            title: 'Url location ' + distanceToClosest,          
+          }).addTo(window.plugin.submitrange.submitrangeLayers);   
+
+          var marker = L.marker(markerLatLng, {
+            icon: L.divIcon({
+              className: 'plugin-submitdistance-name',
+              iconAnchor: [100,5],
+              iconSize: [200,10],
+              html: distanceToClosest,
+            })
+          }).addTo(window.plugin.submitrange.submitrangeLayers);
+        }
     }        
   }
   
