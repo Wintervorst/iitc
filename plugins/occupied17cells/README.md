@@ -6,5 +6,5 @@ This plugin uses copied S2 code from <a href="https://raw.githubusercontent.com/
 
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/assets/occupiedcell1.png" />
 
-In combination with the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells">submitrange</a> plugin (to minimize 'too close mails')<br/>
+In combination with the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange">submitrange</a> plugin (to minimize 'too close mails')<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/assets/occupiedcellwithsubmitrange1.png" />
