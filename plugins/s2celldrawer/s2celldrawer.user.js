@@ -2,11 +2,11 @@
 // @id             iitc-plugin-s2celldrawer@wintervorst
 // @name           IITC plugin: S2 Cell Drawer
 // @category       Layer
-// @version        0.0.3.20181109.010307
+// @version        0.0.4.20181209.010307
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/s2celldrawer/s2celldrawer.user.js
-// @downloadURL    https://github.com/Wintervorst/iitc/
-// @description    [iitc-20181109.010307] Allows drawing of s2cells and creates a layerselected hook
+// @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/s2celldrawer/s2celldrawer.user.js
+// @description    [iitc-20181209.010307] Allows drawing of s2cells and creates a layerselected hook
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 	//PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 	//(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181109.010307';
+  plugin_info.dateTimeVersion = '20181209.010307';
   plugin_info.pluginId = 'S2 Cell Drawer';
 	// PLUGIN START ///////////////////////////////////////////////////////	
 	// use own namespace for plugin

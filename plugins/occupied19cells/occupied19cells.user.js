@@ -2,11 +2,11 @@
 // @id             iitc-plugin-occupied19cells@wintervorst
 // @name           IITC plugin: L19 Cells for Ingress
 // @category       Layer
-// @version        0.0.1.20181109.010107
+// @version        0.0.2.20181209.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
-// @downloadURL    https://github.com/Wintervorst/iitc/
-// @description    [iitc-20181109.010107] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
+// @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
+// @description    [iitc-20181209.010107] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181109.010107';
+  plugin_info.dateTimeVersion = '20181209.010107';
   plugin_info.pluginId = 'occupied19cells';
   // PLUGIN START ///////////////////////////////////////////////////////
 
