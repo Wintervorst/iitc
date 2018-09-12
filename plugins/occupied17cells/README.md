@@ -1,4 +1,4 @@
-# occupiedcells.user.js
+# occupied17cells.user.js
 
 IITC Layer plugin which highlights the L17 cells which very likely already contain a Pokéstop or Gym.
 When submitting new portal candidates in Ingress, and you want them to become Pokémon locations, you should look for candidates in the non-highlighted areas.
