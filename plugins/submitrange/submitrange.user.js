@@ -2,7 +2,7 @@
 // @id             iitc-plugin-submitrange@wintervorst
 // @name           IITC plugin: Portal submitrange
 // @category       Highlighter
-// @version        1.0.3.20181209.010107
+// @version        1.0.4.20181209.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
@@ -70,7 +70,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     var latlng = new L.LatLng(coo.lat, coo.lng);
 
     // Specify the no submit circle options
-    var circleOptions = {color:'black', opacity:1, fillColor:'purple', fillOpacity:0.40, weight:3, clickable:false};
+    var circleOptions = {color:'black', opacity:1, fillColor:'purple', fillOpacity:0.40, weight:1, clickable:false};
     var range = 20; // Hardcoded to 20m, the universal too close for new submit range of a portal
 
     // Create the circle object with specified options
