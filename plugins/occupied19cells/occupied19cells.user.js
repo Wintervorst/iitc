@@ -2,11 +2,11 @@
 // @id             iitc-plugin-occupied19cells@wintervorst
 // @name           IITC plugin: L19 Cells for Ingress
 // @category       Layer
-// @version        0.0.3.20181309.010107
+// @version        0.0.4.20181409.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
-// @description    [iitc-20181309.010107] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
+// @description    [iitc-20181409.010107] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181309.010107';
+  plugin_info.dateTimeVersion = '20181409.010107';
   plugin_info.pluginId = 'occupied19cells';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -37,7 +37,6 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.occupied19cells = function() {};      
   window.plugin.occupied19cells.cellLevel = 19;  
   window.plugin.occupied19cells.layerlist = {};	
-  window.plugin.occupied19cells.possibleportallist = []; 
   window.plugin.occupied19cells.cellOptionsOccupied = {fill: true, color: 'black', fillColor:'purple', opacity: 1, weight: 1, fillOpacity:0.30, clickable: false };
   window.plugin.occupied19cells.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.3, weight: 1, clickable: false };
   
@@ -52,34 +51,20 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     
     if (window.map.hasLayer(window.plugin.occupied19cells.occupiedCellsLayer)) {
 			window.plugin.occupied19cells.occupiedCellsLayer.clearLayers();      
-      window.plugin.occupied19cells.initPossiblePortalList();
      	window.plugin.s2celldrawer.drawCellList(window.plugin.occupied19cells.occupiedCellsLayer, window.plugin.occupied19cells.cellLevel, window.plugin.occupied19cells.cellOptionsOccupied, window.plugin.occupied19cells.getPortalsPerCellCount, "plugin-occupied19cells-name");  
     }              	       
   };            
-  
-  window.plugin.occupied19cells.initPossiblePortalList = function() { 
-    window.plugin.occupied19cells.possibleportallist = [];
-    window.plugin.occupied19cells.bounds = map.getBounds();    
-    $.each(window.portals, function(i, portal) {
-      var portalLatLng = portal.getLatLng();
-     	if (window.plugin.occupied19cells.bounds.contains(portalLatLng)) {        
-        window.plugin.occupied19cells.possibleportallist.push(portal);      
-    	}
-    });
-  }
   
   window.plugin.occupied19cells.getPortalsPerCellCount = function(cell) {     
   	var countPerCell = 0;
   	var cellCorners = cell.getCornerLatLngs();
   	var cellPolygon = new google.maps.Polygon({paths: cellCorners}); 
     
-  	$.each(window.plugin.occupied19cells.possibleportallist, function(i, portal) {
+  	$.each(window.portals.occupied19cells.possibleportallist, function(i, portal) {
     	  if (portal != undefined) {        
   	  	  var portalLatLng = portal.getLatLng(); 
     	  	if (cellPolygon.containsLatLng(portalLatLng)) {
-         		countPerCell++;
-          	var indexIs = window.plugin.occupied19cells.possibleportallist.indexOf(portal);            
-     				window.plugin.occupied19cells.possibleportallist.splice(indexIs, 1);
+         		countPerCell++;       
         	}
    			}
   	}); 

@@ -2,11 +2,11 @@
 // @id             iitc-plugin-occupied17cells@wintervorst
 // @name           IITC plugin: L17 Cells for Pokémon Go
 // @category       Layer
-// @version        0.0.3.20181309.010107
+// @version        0.0.4.20181409.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
-// @description    [iitc-20181309.010107] Highlights level 17 cells where a stop/gym limit is reached, in order to see where you would best submit new portal candidates
+// @description    [iitc-20181409.010107] Highlights level 17 cells where a stop/gym limit is reached, in order to see where you would best submit new portal candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181309.010107';
+  plugin_info.dateTimeVersion = '20181409.010107';
   plugin_info.pluginId = 'occupied17cells';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -37,7 +37,6 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.occupied17cells = function() {};      
   window.plugin.occupied17cells.cellLevel = 17;  
   window.plugin.occupied17cells.layerlist = {};	
-  window.plugin.occupied17cells.possibleportallist = []; 
   window.plugin.occupied17cells.cellOptionsOccupied = {fill: true, color: 'black', fillColor:'purple', opacity: 1, weight: 1, fillOpacity:0.30, clickable: false };
   window.plugin.occupied17cells.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.3, weight: 1, clickable: false };
   
@@ -51,35 +50,21 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }              	       
     
     if (window.map.hasLayer(window.plugin.occupied17cells.occupiedCellsLayer)) {
-			window.plugin.occupied17cells.occupiedCellsLayer.clearLayers();      
-      window.plugin.occupied17cells.initPossiblePortalList();
+			window.plugin.occupied17cells.occupiedCellsLayer.clearLayers();           
      	window.plugin.s2celldrawer.drawCellList(window.plugin.occupied17cells.occupiedCellsLayer, window.plugin.occupied17cells.cellLevel, window.plugin.occupied17cells.cellOptionsOccupied, window.plugin.occupied17cells.getPortalsPerCellCount, "plugin-occupied17cells-name");  
     }              	       
-  };            
-  
-  window.plugin.occupied17cells.initPossiblePortalList = function() { 
-    window.plugin.occupied17cells.possibleportallist = [];
-    window.plugin.occupied17cells.bounds = map.getBounds();    
-    $.each(window.portals, function(i, portal) {
-      var portalLatLng = portal.getLatLng();
-     	if (window.plugin.occupied17cells.bounds.contains(portalLatLng)) {        
-        window.plugin.occupied17cells.possibleportallist.push(portal);      
-    	}
-    });
-  }
+  };             
   
   window.plugin.occupied17cells.getPortalsPerCellCount = function(cell) {     
   	var countPerCell = 0;
   	var cellCorners = cell.getCornerLatLngs();
   	var cellPolygon = new google.maps.Polygon({paths: cellCorners}); 
     
-  	$.each(window.plugin.occupied17cells.possibleportallist, function(i, portal) {
+  	$.each(window.portals, function(i, portal) {
     	  if (portal != undefined) {        
   	  	  var portalLatLng = portal.getLatLng(); 
     	  	if (cellPolygon.containsLatLng(portalLatLng)) {
-         		countPerCell++;
-          	var indexIs = window.plugin.occupied17cells.possibleportallist.indexOf(portal);            
-     				window.plugin.occupied17cells.possibleportallist.splice(indexIs, 1);
+         		countPerCell++;          
         	}
    			}
   	}); 
@@ -107,14 +92,12 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
       }      
     }
   }   
-
  
 var setup = function() {   
   	if (window.plugin.s2celldrawer === undefined) {
        alert('S2 Celldrawer plugin is required for: L17 Cells for Pokémon Go');
        return;
-    }  	 
-  	 
+    }  	 	 
   
      $("<style>")
     .prop("type", "text/css")
