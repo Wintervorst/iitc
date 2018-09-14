@@ -60,7 +60,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   	var cellCorners = cell.getCornerLatLngs();
   	var cellPolygon = new google.maps.Polygon({paths: cellCorners}); 
     
-  	$.each(window.portals.occupied19cells.possibleportallist, function(i, portal) {
+  	$.each(window.portals, function(i, portal) {
     	  if (portal != undefined) {        
   	  	  var portalLatLng = portal.getLatLng(); 
     	  	if (cellPolygon.containsLatLng(portalLatLng)) {
