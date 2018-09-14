@@ -26,7 +26,7 @@ Aside from the 20 meter radius, the maximum limit of stops/gyms in a L17 cell is
 ## <a href="https://github.com/Wintervorst/iitc/tree/master/plugins/gympossible">Gympossible cells</a>
 Highlights level 14 cells which are 1 stop short of having an additional gym. By smartly submitting new candidates you can focus on these cells to improve the rate of gyms in your area. 
 (requires <a href="https://github.com/Wintervorst/iitc/tree/master/plugins/s2celldrawer">S2 Celldrawer</a>)<br/>
-<img src="https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/assets/gymthreshold.png"/>
+<img src="https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/assets/gymthreshold1.png"/>
 
 # Installation requirements
 ## (1) An active Ingress Account
