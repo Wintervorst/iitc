@@ -117,7 +117,7 @@ var setup = function() {
     
     window.addLayerGroup('L17 - Pokémon cells', window.plugin.occupied17cells.cellsLayer, false);                 	
     window.plugin.occupied17cells.layerlist['L17 - Pokémon cells'] =  window.plugin.occupied17cells.cellsLayer;  
-    window.addLayerGroup('L17 - Pokémon full cells', window.plugin.occupied17cells.occupiedCellsLayer, false);                 	
+    window.addLayerGroup('L17 - Pokémon full cells', window.plugin.occupied17cells.occupiedCellsLayer, true);                 	
     window.plugin.occupied17cells.layerlist['L17 - Pokémon full cells'] =  window.plugin.occupied17cells.occupiedCellsLayer;
     window.addHook('mapDataRefreshEnd', window.plugin.occupied17cells.update);    
   

@@ -176,9 +176,9 @@ var setup = function() {
     window.plugin.gympossible.cellsLayer = new L.LayerGroup();      	      
     window.plugin.gympossible.occupiedCellsLayer = new L.LayerGroup();      	
     
-    window.addLayerGroup('L14 - Pokémon cells', window.plugin.gympossible.cellsLayer, false);                 	
+    window.addLayerGroup('L14 - Pokémon cells', window.plugin.gympossible.cellsLayer, true);                 	
     window.plugin.gympossible.layerlist['L14 - Pokémon cells'] =  window.plugin.gympossible.cellsLayer;  
-    window.addLayerGroup('L14 - Gym possible cells', window.plugin.gympossible.occupiedCellsLayer, false);                 	
+    window.addLayerGroup('L14 - Gym possible cells', window.plugin.gympossible.occupiedCellsLayer, true);                 	
     window.plugin.gympossible.layerlist['L14 - Gym possible cells'] =  window.plugin.gympossible.occupiedCellsLayer;
     window.addHook('mapDataRefreshEnd', window.plugin.gympossible.update);    
   
