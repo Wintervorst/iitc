@@ -1,6 +1,6 @@
 # Extensions for <a href="https://iitc.me/">IITC</a> - Ingress Intel map
 
-# * See installation requirements below
+# * See detailed installation requirements below
 
 I have created several user scripts to help players be more effective in submitting new candidates for portals, pokéstops or pokégyms.
 
