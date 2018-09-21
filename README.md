@@ -8,7 +8,7 @@ I have created several user scripts to help players be more effective in submitt
 <img src="https://github.com/Wintervorst/iitc/raw/master/assets/pogopackdefault.png"/><br/>
 - #### 1. Install Tampermonkey or Greasemonkey
 - #### 2. Install these userscripts:
-  - <a href="https://static.iitc.me/build/release/total-conversion-build.user.js">IITC<a> - Faster and prettier intel<br/>
+  - <a href="https://static.iitc.me/build/release/total-conversion-build.user.js">IITC<a> - Faster and prettier intel by Breunig and Jon Atkins (or download the mobile client)<br/> 
   - <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js">Submitrange</a> - Draws 20m radius of existing portals - Submit candidates outside this radius<br/>
   - <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/s2celldrawer/s2celldrawer.user.js">S2 Celldrawer</a> - Allows drawing of the S2 cells<br/>
   - <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js">Full Pokémon cells</a> - Highlights (purple) level 17 S2 cells which will not spawn an additional stop or gym.<br/>
