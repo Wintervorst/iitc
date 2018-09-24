@@ -153,16 +153,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         
      		if (bounds.contains(portalLatLng)) {      
     			var distance = markerLatLng.distanceTo(portalLatLng); 
-       	 	if (shortestDistance == -1) {
-           	 shortestDistance = distance;
-            	closestPortal = portalLatLng;
-          }
+				if (shortestDistance == -1) {
+					shortestDistance = distance;
+					closestPortal = portalLatLng;
+				}
           
-          if (distance < shortestDistance) {
-            	shortestDistance = distance;
-            	closestPortal = portalLatLng;
-          }
-    		}
+				if (distance != 0 && distance < shortestDistance) {
+					shortestDistance = distance;
+					closestPortal = portalLatLng;
+				}
+			}
     	});    
     
     	if (shortestDistance > -1 && closestPortal != undefined) {
