@@ -2,11 +2,11 @@
 // @id             iitc-plugin-submitrange@wintervorst
 // @name           IITC plugin: Portal submitrange
 // @category       Highlighter
-// @version        1.0.4.20181209.010107
+// @version        1.0.5.20182409.010107
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
-// @description    [iitc-20181209.010107] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
+// @description    [iitc-20182409.010107] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181209.010107';
+  plugin_info.dateTimeVersion = '20182409.010107';
   plugin_info.pluginId = 'Submitrange';
   // PLUGIN START ///////////////////////////////////////////////////////
 
