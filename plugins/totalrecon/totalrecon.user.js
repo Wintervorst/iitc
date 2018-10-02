@@ -2,11 +2,11 @@
 // @id             iitc-plugin-totalrecon@wintervorst
 // @name           IITC plugin: Total Recon
 // @category       Highlighter
-// @version        0.0.5.20180110.010107
+// @version        0.0.6.20180210.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
-// @description    [iitc-20180110.010107] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
+// @description    [iitc-20180210.013370] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -35,7 +35,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180110.010107';
+  plugin_info.dateTimeVersion = '20180210.013370';
   plugin_info.pluginId = 'totalrecon';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -139,19 +139,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.totalrecon.scriptUrlIsSet = function() {
     window.plugin.totalrecon.scriptURL = localStorage.getItem('totalrecon.scriptURL');
 
-    //if (window.plugin.totalrecon.scriptURL === undefined || window.plugin.totalrecon.scriptURL === null || window.plugin.totalrecon.scriptURL == '') {
+    if (window.plugin.totalrecon.scriptURL === undefined || window.plugin.totalrecon.scriptURL === null || window.plugin.totalrecon.scriptURL == '') {
 
+		var inputDiv = document.createElement('div');
+		inputDiv.innerHTML = '<form id="askforscripturl" name="askforscripturl" style="width:200px;background-color:#fff;position:fixed;left:50px;top:50px">'
+						  + '<label style="clear:both; float:left; width:100% padding:5px; margin:5px; color=#000" for="scripturl">Total Recon needs a script URL to work. Enter script URL below or disable the script</label>'
+						  + '<input name="scripturl" id="scripturlinput" style="clear:both; float:left; width:100%" type="text" placeholder="Scripturl" required />'
+						  + '<button type="submit" style="clear:both; float:left; width:100%;height:30px;">Set scripturl</button></form>';
 
-            var inputDiv = document.createElement('div');
-            inputDiv.innerHTML = '<form id="askforscripturl" name="askforscripturl" style="width:200px;background-color:#fff;position:fixed;left:50px;top:50px">'
-                              + '<label style="clear:both; float:left; width:100% padding:5px; margin:5px; color=#000" for="scripturl">Total Recon needs a script URL to work. Enter script URL below or disable the script</label>'
-                              + '<input name="scripturl" id="scripturlinput" style="clear:both; float:left; width:100%" type="text" placeholder="Scripturl" required />'
-                              + '<button type="submit" style="clear:both; float:left; width:100%;height:30px;">Set scripturl</button></form>';
+		document.body.appendChild(inputDiv);
 
-			document.body.appendChild(inputDiv);
-
-
-        window.map.on('click', function(e) { e.preventDefault(); });
         $('body').on('submit','#askforscripturl', function(e) {
             console.log(e);
             e.preventDefault();
@@ -162,7 +159,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         });
 
         return false;
-     //}
+     }
      return true;
   }
 
