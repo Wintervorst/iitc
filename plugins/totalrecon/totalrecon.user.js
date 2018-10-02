@@ -2,7 +2,7 @@
 // @id             iitc-plugin-totalrecon@wintervorst
 // @name           IITC plugin: Total Recon
 // @category       Highlighter
-// @version        0.0.6.20180210.013370
+// @version        0.0.7.20180210.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
@@ -78,7 +78,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     	  if (candidate != undefined && candidate[3] != '' && candidate[4] != '') {
 			var portalLatLng = L.latLng(candidate[3], candidate[4]);
 			var status = candidate[5];
-
+            var title = candidate[1];
 			switch(status) {
 			   case 'candidate':
 				markerColor = 'grey';
@@ -90,7 +90,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 				break;
 				case 'live':
 				markerColor = 'green';
-				markerLayer = window.plugin.totalrecon.opredLayer;
+				markerLayer = window.plugin.totalrecon.acceptedLayer;
 				break;
 				case 'rejected':
 				markerColor = 'red';
@@ -99,9 +99,22 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 			}
 
 			var marker = createGenericMarker(portalLatLng, markerColor, {
-				title: candidate[1]
+				title: title
 			});
 			markerLayer.addLayer(marker);
+
+            if (title != '') {
+                var titleMarker = L.marker(portalLatLng, {
+                    icon: L.divIcon({
+                     className: 'plugin-totalrecon-name',
+                      iconAnchor: [100,5],
+                        iconSize: [200,10],
+                        html: title
+                    })
+                });
+                window.plugin.totalrecon.titleLayer.addLayer(titleMarker);
+            }
+
 		}
   	   });
      }
@@ -125,10 +138,12 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         var markerLatLng = latlng;
         var formpopup = L.popup();
         formpopup.setLatLng(markerLatLng);
-         formpopup.setContent('<form id="submit-to-google" name="submit-to-google-sheet" style="width:200px;height:90px;">'
+         formpopup.setContent('<form id="submit-to-google" name="submit-to-google-sheet" style="width:200px;height:140px;">'
                               + '<select name="status" style="clear:both; float:left; width:100%"><option value="candidate">Candidate</option><option value="submitted">Submitted</option><option value="live">Live</option><option value="rejected">Rejected</option></select>'
                               + '<input name="title" style="clear:both; float:left; width:100%" type="text" placeholder="Titel" required>'
                               + '<input name="description" style="clear:both; float:left; width:100%" type="text" placeholder="Description">'
+                              + '<input name="submitteddate" style="clear:both; float:left; width:100%" type="text" placeholder="Submitted (dd-mm-jjjj)">'
+                              + '<input name="responsedate" style="clear:both; float:left; width:100%" type="text" placeholder="Response (dd-mm-jjjj)">'
                               + '<input name="lat" type="hidden" value="' + markerLatLng.lat +  '">'
                               + '<input name="lng" type="hidden" value="' + markerLatLng.lng +  '">'
                               + '<input name="nickname" type="hidden" value="' + window.PLAYER.nickname + '">'
@@ -142,7 +157,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     if (window.plugin.totalrecon.scriptURL === undefined || window.plugin.totalrecon.scriptURL === null || window.plugin.totalrecon.scriptURL == '') {
 
 		var inputDiv = document.createElement('div');
-		inputDiv.innerHTML = '<form id="askforscripturl" name="askforscripturl" style="width:200px;background-color:#fff;position:fixed;left:50px;top:50px">'
+		inputDiv.innerHTML = '<form id="askforscripturl" name="askforscripturl" style="width:200px;background-color:#fff;position:fixed;left:50px;top:50px; z-index:3000">'
 						  + '<label style="clear:both; float:left; width:100% padding:5px; margin:5px; color=#000" for="scripturl">Total Recon needs a script URL to work. Enter script URL below or disable the script</label>'
 						  + '<input name="scripturl" id="scripturlinput" style="clear:both; float:left; width:100%" type="text" placeholder="Scripturl" required />'
 						  + '<button type="submit" style="clear:both; float:left; width:100%;height:30px;">Set scripturl</button></form>';
@@ -152,7 +167,6 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         $('body').on('submit','#askforscripturl', function(e) {
             console.log(e);
             e.preventDefault();
-            map.closePopup();
             console.log($("#scripturlinput").val());
             localStorage.setItem('totalrecon.scriptURL', $("#scripturlinput").val());
             window.location.reload();
@@ -170,13 +184,29 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.addPortalHighlighter('Total Recon', window.plugin.totalrecon);
         window.plugin.totalrecon.candidateLayer = new L.LayerGroup();
         window.plugin.totalrecon.submittedLayer = new L.LayerGroup();
-        window.plugin.totalrecon.opredLayer = new L.LayerGroup();
         window.plugin.totalrecon.rejectedLayer = new L.LayerGroup();
+        window.plugin.totalrecon.acceptedLayer = new L.LayerGroup();
+        window.plugin.totalrecon.titleLayer = new L.LayerGroup();
 
         window.addLayerGroup('Total Recon - Candidates', window.plugin.totalrecon.candidateLayer, true);
         window.addLayerGroup('Total Recon - Submitted', window.plugin.totalrecon.submittedLayer, true);
-        window.addLayerGroup('Total Recon - OPR-ed', window.plugin.totalrecon.opredLayer, true);
         window.addLayerGroup('Total Recon - Rejected', window.plugin.totalrecon.rejectedLayer, true);
+        window.addLayerGroup('Total Recon - Accepted', window.plugin.totalrecon.acceptedLayer, true);
+        window.addLayerGroup('Total Recon - Titles', window.plugin.totalrecon.titleLayer, true);
+
+        $("<style>")
+            .prop("type", "text/css")
+            .html(".plugin-totalrecon-name {\
+font-size: 12px;\
+font-weight: bold;\
+color: gold;\
+opacity: 0.7;\
+text-align: center;\
+text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000; \
+pointer-events: none;\
+}")
+            .appendTo("head");
+
 
         $('body').on('submit','#submit-to-google', function(e) {
             console.log(e);
