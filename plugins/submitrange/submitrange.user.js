@@ -2,11 +2,11 @@
 // @id             iitc-plugin-submitrange@wintervorst
 // @name           IITC plugin: Portal submitrange
 // @category       Highlighter
-// @version        1.0.5.20182409.010107
+// @version        1.0.8.20180410.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
-// @description    [iitc-20182409.010107] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
+// @description    [iitc-20180410.013370] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,42 +29,28 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20182409.010107';
+  plugin_info.dateTimeVersion = '20180410.013370';
   plugin_info.pluginId = 'Submitrange';
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
   window.plugin.submitrange = function() {};   
 
-  window.plugin.submitrange.highlight = function(data) {
-		var guid = data.portal.options.guid;
-		var portal = data.portal;                            
-		var bounds = map.getBounds();
+  
+   window.plugin.occupied17cells.update = function() {		    
+     if (!window.map.hasLayer(window.plugin.submitrange.submitrangeLayers))
+     return;
+      
+	 if (window.map.hasLayer(window.plugin.submitrange.submitrangeLayers)) {
+         window.plugin.submitrange.submitrangeLayers.clearLayers();      
+		 $.each(window.portals, function(i, portal) {    	      
+			window.plugin.submitrange.draw(portal);
+   		 });          
+      }
+   }       
     
-	//	if (window.plugin.submitrange.submitrangeLayers[guid] == undefined) {
-			var portalLatLng = portal.getLatLng();             
-      //if (bounds.contains(portalLatLng)) {
-				window.plugin.submitrange.draw(portal, guid);    
-      //
-	//	}    
-	}  
-    
-    
-	window.plugin.submitrange.setSelected = function(selected) {
-		if (selected) {
-			if (!map.hasLayer(window.plugin.submitrange.submitrangeLayers)) {
-				map.addLayer(window.plugin.submitrange.submitrangeLayers);
-			}
-		} else {
-			if (map.hasLayer(window.plugin.submitrange.submitrangeLayers)) {
-				map.removeLayer(window.plugin.submitrange.submitrangeLayers);
-			}
-		}
-	}   
-    
-  // Define and add the submitrange circles for a given portal
-  // guid - The unique ID of the portal to be added
-  window.plugin.submitrange.draw = function(portal, guid) {           
+  // Define and add the submitrange circles for a given portal  
+  window.plugin.submitrange.draw = function(portal) {           
     // Create a new location object for the portal
     var coo = portal._latlng;
     var latlng = new L.LatLng(coo.lat, coo.lng);
@@ -77,8 +63,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     var circle = new L.Circle(latlng, range, circleOptions);
 
     // Add the new circle to the submitrange draw layer
-    circle.addTo(window.plugin.submitrange.submitrangeLayers);
-    // window.plugin.submitrange.submitrangeLayers[guid] = circle;
+    circle.addTo(window.plugin.submitrange.submitrangeLayers);    
   } 
 
   // Initialize the plugin and display submitranges if at an appropriate zoom level
@@ -96,16 +81,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }")
     .appendTo("head");
     
-      window.plugin.submitrange.submitrangeLayers = new L.LayerGroup();  	              
-      window.addPortalHighlighter('Portal submit range', window.plugin.submitrange);	
-      addHook('mapDataRefreshEnd', window.plugin.submitrange.urlMarker);        	
-      addHook('portalAdded', window.plugin.submitrange.portalAdded);        	
-    	//addHook('portalRemoved', window.plugin.submitrange.unhighlight);        	
-  }
-    
-  window.plugin.submitrange.portalAdded = function(data) {  
-    //ndow.plugin.submitrange.highlight(data);  	
-  }
+      window.plugin.submitrange.submitrangeLayers = new L.LayerGroup();  
+	  window.addLayerGroup('Portal submit range', window.plugin.submitrange.submitrangeLayers, true);      
+      addHook('mapDataRefreshEnd', window.plugin.submitrange.update);    	
+  }    
   
   window.plugin.submitrange.getParameterByName =	function(name, url) {
     if (!url) url = window.location.href;
