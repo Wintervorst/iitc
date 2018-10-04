@@ -37,7 +37,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.submitrange = function() {};   
 
   
-   window.plugin.occupied17cells.update = function() {		    
+   window.plugin.submitrange.update = function() {		    
      if (!window.map.hasLayer(window.plugin.submitrange.submitrangeLayers))
      return;
       
