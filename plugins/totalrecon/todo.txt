@@ -1,0 +1,11 @@
+- Better layermanagement as used in the other plugins
+- Rename 'candidate' to 'potential' and 'candidates' to 'potentials'
+- Add imageurls for submitted candidates
+- Draw image of submitted candidate. When editing. And for desktop on marker:hover
+- Autorefresh (every minute) mechanism for 'direct' synchronization between multiple devices and users (performance impact hit?)
+   Compare timestamps of objects and update accordingly?
+- Store layerreference instead of layer + marker combination for handling updates
+- Write manual so people can use this plugin without my assistence
+
+
+

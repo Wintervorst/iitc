@@ -1,0 +1,3 @@
+- Create an instance of this project which works as a highlighter and make this one a layer based one
+- Bugfix - Check for existing layers before adding new. Store guids in list and only draw when it is not present yet
+
