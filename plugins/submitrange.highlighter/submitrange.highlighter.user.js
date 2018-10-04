@@ -1,12 +1,12 @@
 // ==UserScript==
-// @id             iitc-plugin-submitrange-highlighter@wintervorst
-// @name           IITC plugin: Portal Submitrange Highlighter
+// @id             iitc-plugin-submitrangehighlighter@wintervorst
+// @name           IITC plugin: Portal submitrange - Highlight edition
 // @category       Highlighter
-// @version        1.0.6.20182409.010107
+// @version        1.0.7.20181004.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
-// @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange.highlighter/submitrange.highlighter.user.js
-// @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange.highlighter/submitrange.highlighter.user.js
-// @description    [iitc-20182409.010107] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
+// @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
+// @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
+// @description    [iitc-20181004.013370] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,40 +29,42 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20182409.010107';
-  plugin_info.pluginId = 'submitrange.highlighter';
+  plugin_info.dateTimeVersion = '20181004.013370';
+  plugin_info.pluginId = 'Submitrange Highlighter';
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
-  window.plugin.submitrange.highlighter = function() {};   
+  window.plugin.submitrangeHighlighter = function() {};
 
-  window.plugin.submitrange.highlighter.highlight = function(data) {
+  window.plugin.submitrangeHighlighter.highlight = function(data) {
 		var guid = data.portal.options.guid;
-		var portal = data.portal;                            
+		var portal = data.portal;
 		var bounds = map.getBounds();
-    
-	 if (window.plugin.submitrange.highlighter.submitrange.highlighterLayers[guid] === undefined) {
-		var portalLatLng = portal.getLatLng();             
-       	window.plugin.submitrange.highlighter.draw(portal, guid);          
-	 }    
-	}  
-    
-    
-	window.plugin.submitrange.highlighter.setSelected = function(selected) {
+
+	if (window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers[guid] == undefined) {
+			var portalLatLng = portal.getLatLng();
+      //if (bounds.contains(portalLatLng)) {
+				window.plugin.submitrangeHighlighter.draw(portal, guid);
+      //
+	  }
+	}
+
+
+	window.plugin.submitrangeHighlighter.setSelected = function(selected) {
 		if (selected) {
-			if (!map.hasLayer(window.plugin.submitrange.highlighter.submitrange.highlighterLayers)) {
-				map.addLayer(window.plugin.submitrange.highlighter.submitrange.highlighterLayers);
+			if (!map.hasLayer(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers)) {
+				map.addLayer(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers);
 			}
 		} else {
-			if (map.hasLayer(window.plugin.submitrange.highlighter.submitrange.highlighterLayers)) {
-				map.removeLayer(window.plugin.submitrange.highlighter.submitrange.highlighterLayers);
+			if (map.hasLayer(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers)) {
+				map.removeLayer(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers);
 			}
 		}
-	}   
-    
-  // Define and add the submitrange.highlighter circles for a given portal
+	}
+
+  // Define and add the submitrange circles for a given portal
   // guid - The unique ID of the portal to be added
-  window.plugin.submitrange.highlighter.draw = function(portal, guid) {           
+  window.plugin.submitrangeHighlighter.draw = function(portal, guid) {
     // Create a new location object for the portal
     var coo = portal._latlng;
     var latlng = new L.LatLng(coo.lat, coo.lng);
@@ -74,13 +76,13 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     // Create the circle object with specified options
     var circle = new L.Circle(latlng, range, circleOptions);
 
-    // Add the new circle to the submitrange.highlighter draw layer
-    circle.addTo(window.plugin.submitrange.highlighter.submitrange.highlighterLayers);
-    window.plugin.submitrange.highlighter.submitrange.highlighterLayers[guid] = circle;
-  } 
+    // Add the new circle to the submitrange draw layer
+    circle.addTo(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers);
+    window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers[guid] = circle;
+  }
 
-  // Initialize the plugin and display submitrange.highlighters if at an appropriate zoom level
-  var setup = function() {   
+  // Initialize the plugin and display submitranges if at an appropriate zoom level
+  var setup = function() {
      $("<style>")
     .prop("type", "text/css")
     .html(".plugin-submitdistance-name {\
@@ -93,19 +95,19 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
       pointer-events: none;\
     }")
     .appendTo("head");
-    
-      window.plugin.submitrange.highlighter.submitrange.highlighterLayers = new L.LayerGroup();  	              
-      window.addPortalHighlighter('Portal submit range', window.plugin.submitrange.highlighter);	
-      addHook('mapDataRefreshEnd', window.plugin.submitrange.highlighter.urlMarker);        	
-      addHook('portalAdded', window.plugin.submitrange.highlighter.portalAdded);        	
-    	//addHook('portalRemoved', window.plugin.submitrange.highlighter.unhighlight);        	
+
+      window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers = new L.LayerGroup();
+      window.addPortalHighlighter('Portal submit range', window.plugin.submitrangeHighlighter);
+      addHook('mapDataRefreshEnd', window.plugin.submitrangeHighlighter.urlMarker);
+      addHook('portalAdded', window.plugin.submitrangeHighlighter.portalAdded);
+    	//addHook('portalRemoved', window.plugin.submitrangeHighlighter.unhighlight);
   }
-    
-  window.plugin.submitrange.highlighter.portalAdded = function(data) {  
-    //ndow.plugin.submitrange.highlighter.highlight(data);  	
+
+  window.plugin.submitrangeHighlighter.portalAdded = function(data) {
+      window.plugin.submitrangeHighlighter.highlight(data);
   }
-  
-  window.plugin.submitrange.highlighter.getParameterByName =	function(name, url) {
+
+  window.plugin.submitrangeHighlighter.getParameterByName =	function(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
     var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -114,20 +116,20 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
-  
-  window.plugin.submitrange.highlighter.urlMarker = function() {  
-    var pll = window.plugin.submitrange.highlighter.getParameterByName('pll')
-    if (pll == undefined) {				
-        var ll = window.plugin.submitrange.highlighter.getParameterByName('ll')
+
+  window.plugin.submitrangeHighlighter.urlMarker = function() {
+    var pll = window.plugin.submitrangeHighlighter.getParameterByName('pll')
+    if (pll == undefined) {
+        var ll = window.plugin.submitrangeHighlighter.getParameterByName('ll')
         if (ll != null) {
-          var coords = ll.split(',');	
+          var coords = ll.split(',');
           var markerLatLng = L.latLng(coords[0],coords[1]);
 
-          var distanceToClosest = window.plugin.submitrange.highlighter.getDistanceToClosest(markerLatLng);
+          var distanceToClosest = window.plugin.submitrangeHighlighter.getDistanceToClosest(markerLatLng);
 
           createGenericMarker(markerLatLng, 'red', {
-            title: 'Url location ' + distanceToClosest,          
-          }).addTo(window.plugin.submitrange.highlighter.submitrange.highlighterLayers);   
+            title: 'Url location ' + distanceToClosest,
+          }).addTo(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers);
 
           var marker = L.marker(markerLatLng, {
             icon: L.divIcon({
@@ -136,47 +138,47 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
               iconSize: [200,10],
               html: distanceToClosest,
             })
-          }).addTo(window.plugin.submitrange.highlighter.submitrange.highlighterLayers);
+          }).addTo(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers);
         }
-    }        
+    }
   }
-  
-  
-  window.plugin.submitrange.highlighter.getDistanceToClosest = function(markerLatLng) {           
+
+
+  window.plugin.submitrangeHighlighter.getDistanceToClosest = function(markerLatLng) {
       var bounds = map.getBounds();
     	var closestPortal;
     	var shortestDistance = -1;
     	$.each(window.portals, function(i, portal) {
       	var portalLatLng = portal.getLatLng();
-        
-     		if (bounds.contains(portalLatLng)) {      
-    			var distance = markerLatLng.distanceTo(portalLatLng); 
+
+     		if (bounds.contains(portalLatLng)) {
+    			var distance = markerLatLng.distanceTo(portalLatLng);
 				if (shortestDistance == -1) {
 					shortestDistance = distance;
 					closestPortal = portalLatLng;
 				}
-          
+
 				if (distance != 0 && distance < shortestDistance) {
 					shortestDistance = distance;
 					closestPortal = portalLatLng;
 				}
 			}
-    	});    
-    
+    	});
+
     	if (shortestDistance > -1 && closestPortal != undefined) {
 					var poly = L.geodesicPolyline([markerLatLng,closestPortal] , {
        			color: 'red',
        			opacity: 0.8,
        			weight: 5,
-       			clickable: false,   
-            html: shortestDistance       			
-    	 	}).addTo(window.plugin.submitrange.highlighter.submitrange.highlighterLayers);  			     
+       			clickable: false,
+            html: shortestDistance
+    	 	}).addTo(window.plugin.submitrangeHighlighter.submitrangeHighlighterLayers);
         return shortestDistance;
       }
-    
+
       return '';
-  }    
-  
+  }
+
 
 // PLUGIN END //////////////////////////////////////////////////////////
 setup.info = plugin_info; //add the script info data to the function as a property
