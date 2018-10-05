@@ -11,7 +11,7 @@ function initialSetup () {
     totalReconSheet = activeSpreadsheet.insertSheet(sheetName);    
     
     // Set appropriate column headers
-    totalReconSheet.appendRow(['id','timestamp','title','description','lat','lng','status','nickname','submitteddate','responsedate']);          
+    totalReconSheet.appendRow(['id','timestamp','title','description','lat','lng','status','nickname','submitteddate','responsedate','candidateimageurl']);          
    // Set column format    
     var latColumn = totalReconSheet.getRange("E2:E");
     var lngColumn = totalReconSheet.getRange("F2:F");

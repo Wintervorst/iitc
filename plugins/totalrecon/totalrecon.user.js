@@ -2,7 +2,7 @@
 // @id             iitc-plugin-totalrecon@wintervorst
 // @name           IITC plugin: Total Recon
 // @category       Highlighter
-// @version        0.1.1.20180410.013370
+// @version        0.1.2.20180410.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
@@ -221,11 +221,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                               + '<button type="submit" style="clear:both; float:left; width:100%;height:30px;">Send</button></form>';
 
 		if (id !== '') {
-			formContent += '<hr/><a href="https://ingress.com/intel?ll='+lat+','+lng+'" style="margin:4px; float:left;">Link</a>';
+			formContent += '<a href="https://ingress.com/intel?ll='+lat+','+lng+'&z=19" style="padding:4px; float:left;">Link</a>';
 		}
 
 		if (imageUrl !== '' && imageUrl !== undefined) {
-			formContent += ' <a href="' + imageUrl + '" style="margin:4px; float:right;">Image</a>';
+			formContent += ' <a href="' + imageUrl + '" style="padding:4px; float:right;" target="_blank">Image</a>';
 		}
 
         formpopup.setContent(formContent + '</div>');
