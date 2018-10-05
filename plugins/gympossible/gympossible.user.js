@@ -2,11 +2,11 @@
 // @id             iitc-plugin-gympossible@wintervorst
 // @name           IITC plugin: L14 Cells - Gympossible
 // @category       Layer
-// @version        0.0.3.20181309.010107
+// @version        0.0.4.20180510.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
-// @description    [iitc-20181309.010107] Highlights level 14 cells where the next stop wil generate a gym in that cell in order to see where you would best submit new portal candidates
+// @description    [iitc-20180510.013370] Highlights level 14 cells where the next stop wil generate a gym in that cell in order to see where you would best submit new portal candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181309.010107';
+  plugin_info.dateTimeVersion = '20180510.013370';
   plugin_info.pluginId = 'gympossible';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -41,7 +41,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.gympossible.possibleportallist = []; 
   window.plugin.gympossible.stoporgymcells = [];
   window.plugin.gympossible.cellOptionsOccupied = {fill: true, color: 'teal', fillColor:'teal', opacity: 1, weight: 3, fillOpacity:0.30, clickable: false };
-  window.plugin.gympossible.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.3, weight: 3, clickable: false };
+  window.plugin.gympossible.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.8, weight: 3, clickable: false };
   
   
   window.plugin.gympossible.update = function() {		    
