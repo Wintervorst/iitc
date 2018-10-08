@@ -9,6 +9,8 @@ Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1S
 It's easy to use, but it requires a bit of configuration if you want to create your own google sheet. However, when you've completed the setup, it is a matter of installing the userscript and you are good to go.
 
 If you want to make use of an existing sheet. Install the userscript, load IITC and enter the scripturl.
+<img src="/assets/enterscripturl.png"></img><br/>
+
 
 If you want to create your own sheet, you should follow these instructions:
 
