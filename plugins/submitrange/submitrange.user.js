@@ -1,12 +1,12 @@
 // ==UserScript==
 // @id             iitc-plugin-submitrange@wintervorst
 // @name           IITC plugin: Portal submitrange
-// @category       Highlighter
-// @version        1.0.8.20180410.013370
+// @category       Layer
+// @version        1.0.9.20180810.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
-// @description    [iitc-20180410.013370] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
+// @description    [iitc-20180810.013370] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,25 +29,41 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180410.013370';
+  plugin_info.dateTimeVersion = '20180810.013370';
   plugin_info.pluginId = 'Submitrange';
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
   window.plugin.submitrange = function() {};   
-
+  window.plugin.submitrange.layerlist = {};	
   
    window.plugin.submitrange.update = function() {		    
      if (!window.map.hasLayer(window.plugin.submitrange.submitrangeLayers))
      return;
       
 	 if (window.map.hasLayer(window.plugin.submitrange.submitrangeLayers)) {
-         window.plugin.submitrange.submitrangeLayers.clearLayers();      
+         window.plugin.submitrange.submitrangeLayers.clearLayers();    
+	      
 		 $.each(window.portals, function(i, portal) {    	      
 			window.plugin.submitrange.draw(portal);
    		 });          
+		 window.plugin.submitrange.urlMarker();		
       }
-   }       
+   }
+
+  window.plugin.submitrange.setSelected = function(a) {        
+    if (a.display) {
+      var selectedLayer = window.plugin.submitrange.layerlist[a.name];      
+      if (selectedLayer !== undefined) {
+      	if (!window.map.hasLayer(selectedLayer)) {
+        	  window.map.addLayer(selectedLayer);
+      	}      
+      	if (window.map.hasLayer(selectedLayer)) {
+        	 window.plugin.submitrange.update();
+      	}
+      }      
+    }
+  }     
     
   // Define and add the submitrange circles for a given portal  
   window.plugin.submitrange.draw = function(portal) {           
@@ -65,26 +81,6 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     // Add the new circle to the submitrange draw layer
     circle.addTo(window.plugin.submitrange.submitrangeLayers);    
   } 
-
-  // Initialize the plugin and display submitranges if at an appropriate zoom level
-  var setup = function() {   
-     $("<style>")
-    .prop("type", "text/css")
-    .html(".plugin-submitdistance-name {\
-      font-size: 14px;\
-      font-weight: bold;\
-      color: gold;\
-      opacity: 0.7;\
-      text-align: center;\
-      text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000; \
-      pointer-events: none;\
-    }")
-    .appendTo("head");
-    
-      window.plugin.submitrange.submitrangeLayers = new L.LayerGroup();  
-	  window.addLayerGroup('Portal submit range', window.plugin.submitrange.submitrangeLayers, true);      
-      addHook('mapDataRefreshEnd', window.plugin.submitrange.update);    	
-  }    
   
   window.plugin.submitrange.getParameterByName =	function(name, url) {
     if (!url) url = window.location.href;
@@ -156,7 +152,41 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
       }
     
       return '';
-  }    
+  }  
+
+ // Initialize the plugin and display submitranges if at an appropriate zoom level
+  var setup = function() {   
+     $("<style>")
+    .prop("type", "text/css")
+    .html(".plugin-submitdistance-name {\
+      font-size: 14px;\
+      font-weight: bold;\
+      color: gold;\
+      opacity: 0.7;\
+      text-align: center;\
+      text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000; \
+      pointer-events: none;\
+    }")
+    .appendTo("head");
+    
+      window.plugin.submitrange.submitrangeLayers = new L.LayerGroup();  
+	  window.addLayerGroup('Portal submit range', window.plugin.submitrange.submitrangeLayers, true);      
+	  window.plugin.submitrange.layerlist['Portal submit range'] =  window.plugin.submitrange.submitrangeLayers;
+      addHook('mapDataRefreshEnd', window.plugin.submitrange.update);    	
+	  window.pluginCreateHook('displayedLayerUpdated');
+	  
+      window.addHook('displayedLayerUpdated',  window.plugin.submitrange.setSelected);
+	  window.updateDisplayedLayerGroup = window.updateDisplayedLayerGroupModified;
+  }   
+  
+  // Overload for IITC default in order to catch the manual select/deselect event and handle it properly
+// Update layerGroups display status to window.overlayStatus and localStorage 'ingress.intelmap.layergroupdisplayed'
+ window.updateDisplayedLayerGroupModified = function(name, display) {  
+  overlayStatus[name] = display;  
+  localStorage['ingress.intelmap.layergroupdisplayed'] = JSON.stringify(overlayStatus);
+  runHooks('displayedLayerUpdated', {name: name, display: display});
+}
+  
   
 
 // PLUGIN END //////////////////////////////////////////////////////////
