@@ -58,6 +58,7 @@ And choose ‘Deploy’
 Copy the ‘Current web app URL’. You will be needing it later on.
 
 Install the <a href="totalrecon.userscript.js">userscript</a>. On first launch you will be prompted to enter this URL.
+<img src="/assets/enterscripturl.png"></img><br/>
 
 You will need to share this URL with all people and/or devices who will share the same set of data.
 
