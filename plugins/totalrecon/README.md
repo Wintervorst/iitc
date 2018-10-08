@@ -1,11 +1,10 @@
 If you would like to share your potential and submitted portals over multiple devices and with multiple users. This script is it.
 
-<img src=""></img><br/>
-<img src=""></img><br/>
+<img src="/assets/markersonthemap.png"></img><br/>
+<img src="/assets/mapwitheditdialogue"></img><br/>
 
-You can try it out with these values
-Test script url:  
-Test sheet url: 
+You can try it out with this script url
+Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1StT3JsL-43i3p9qOaRzEUVaiEiahR/exec 
 
 It's easy to use, but it requires a bit of configuration if you want to create your own google sheet. However, when you've completed the setup, it is a matter of installing the userscript and you are good to go.
 
@@ -54,7 +53,7 @@ Set ‘Who has access to the app” to Anyone even anonymous.
 <img src="/assets/deploywebapp.png"></img><br/>
 
 And choose ‘Deploy’
-<img src="/assets/copywebappurl.png"></img><br/>
+<img src="/assets/webapppublished.png"></img><br/>
 
 Copy the ‘Current web app URL’. You will be needing it later on.
 
