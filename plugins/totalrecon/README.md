@@ -17,7 +17,7 @@ If you want to make use of an existing sheet. Install the userscript, load IITC 
 
 If you want to create your own sheet, you should follow these instructions:
 
-Go to: https://docs.google.com/spreadsheets/u/0/
+(1) Go to: https://docs.google.com/spreadsheets/u/0/
 Start a new, blank, spreadsheet<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/startnewspreadsheet.png"></img><br/>
 
@@ -45,7 +45,7 @@ Choose advanced<br/>
 Go to ‘Untitled project’<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/gotountitled.png"></img><br/>
 
-Choose your Google+ account and ‘Allow’
+Choose your Google+ account and ‘Allow’<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/choose allow.png"></img><br/>
 
 The initialsetup will be run and the sheet will be prepared with the proper columns and column settings<br/>
