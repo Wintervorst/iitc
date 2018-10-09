@@ -2,7 +2,7 @@
 
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/markersonthemap.png"></img><br/>
 Tap/click on the Intel map to add and edit locations<br/>
-<img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/mapwitheditdialogue"></img><br/>
+<img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/mapwitheditdialogue.png"></img><br/>
 Overview of locations in a google sheet<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/filledsheet.png"></img><br/>
 
