@@ -3,19 +3,19 @@
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/markersonthemap.png"></img><br/>
 ## Tap/click on the Intel map to add and edit locations<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/mapwitheditdialogue.png"></img><br/>
-## Overview of locations in a google sheet<br/>
+## The portals are stored in a Google Sheet for easy (bulk) management<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/filledsheet.png"></img><br/>
-
-
 
 ## It's easy to use, but it requires a bit of configuration if you want to create your own google sheet. However, when you've completed the setup, it is a matter of installing the userscript and you are good to go.
 
-## If you want to make use of an existing sheet. Install the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js">userscript</a>, load IITC and enter the scripturl.<br/>
+## A. If you want to make use of an existing sheet. Install the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js">userscript</a>, load IITC and enter the scripturl.<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/enterscripturl.png"></img><br/>
 ## You can test it out with this script url
 Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1StT3JsL-43i3p9qOaRzEUVaiEiahR/exec 
 
-## If you want to create your own sheet, you should follow these instructions:
+## List of functions is at the end of this page
+
+## B. If you want to create your own sheet, you should follow these instructions:
 
 #### 1. Go to: https://docs.google.com/spreadsheets/u/0/
 #### 2. Start a new, blank, spreadsheet<br/>
