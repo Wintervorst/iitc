@@ -61,11 +61,12 @@ Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1S
 
 #### 16. Copy the ‘Current web app URL’. You will be needing it later on.<br/>
 
-#### 16. Install the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js">userscript</a>. On first launch you will be prompted to enter this URL.<br/>
+#### 17. Install the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js">userscript</a>. On first launch you will be prompted to enter this URL.<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/enterscripturl.png"></img><br/>
 
 You will need to share this URL with all people and/or devices who will share the same set of data.
 
+## List of functions
 Enable the ‘Highlighter’ and when you click on the map it will display the input fields for storing your data. Set another highlighter and the popup will no longer be shown when clicking randomly on the map. However if you click on an existing marker, you can edit it and submit the changes.<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/highlights.png"></img><br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/clickonmap.png"></img><br/>
