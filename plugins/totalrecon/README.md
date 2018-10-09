@@ -1,15 +1,15 @@
 # If you would like to share your potential and submitted portals over multiple devices and with multiple users. This script is it.
 
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/markersonthemap.png"></img><br/>
-Tap/click on the Intel map to add and edit locations<br/>
+## Tap/click on the Intel map to add and edit locations<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/mapwitheditdialogue.png"></img><br/>
-Overview of locations in a google sheet<br/>
+## Overview of locations in a google sheet<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/filledsheet.png"></img><br/>
 
-You can try it out with this script url
+## You can try it out with this script url
 Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1StT3JsL-43i3p9qOaRzEUVaiEiahR/exec 
 
-It's easy to use, but it requires a bit of configuration if you want to create your own google sheet. However, when you've completed the setup, it is a matter of installing the userscript and you are good to go.
+## It's easy to use, but it requires a bit of configuration if you want to create your own google sheet. However, when you've completed the setup, it is a matter of installing the userscript and you are good to go.
 
 ## If you want to make use of an existing sheet. Install the <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js">userscript</a>, load IITC and enter the scripturl.<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/enterscripturl.png"></img><br/>
