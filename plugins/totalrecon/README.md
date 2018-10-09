@@ -12,6 +12,7 @@
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/enterscripturl.png"></img><br/>
 ## You can test it out with this script url
 Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1StT3JsL-43i3p9qOaRzEUVaiEiahR/exec 
+You can reset the script url with 
 
 ## List of functions is at the end of this page
 
