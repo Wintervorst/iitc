@@ -16,8 +16,8 @@ It's easy to use, but it requires a bit of configuration if you want to create y
 
 ## If you want to create your own sheet, you should follow these instructions:
 
-### 1. Go to: https://docs.google.com/spreadsheets/u/0/
-### 2. Start a new, blank, spreadsheet<br/>
+#### 1. Go to: https://docs.google.com/spreadsheets/u/0/
+#### 2. Start a new, blank, spreadsheet<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/startnewspreadsheet.png"></img><br/>
 
 Go to ‘Tools’ -> ‘Script editor’<br/>
