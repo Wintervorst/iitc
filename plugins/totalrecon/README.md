@@ -1,6 +1,5 @@
 If you would like to share your potential and submitted portals over multiple devices and with multiple users. This script is it.
 
-
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/markersonthemap.png"></img><br/>
 Tap/click on the Intel map to add and edit locations
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/mapwitheditdialogue"></img><br/>
@@ -12,13 +11,13 @@ Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1S
 
 It's easy to use, but it requires a bit of configuration if you want to create your own google sheet. However, when you've completed the setup, it is a matter of installing the userscript and you are good to go.
 
-If you want to make use of an existing sheet. Install the userscript, load IITC and enter the scripturl.<br/>
+## If you want to make use of an existing sheet. Install the userscript, load IITC and enter the scripturl.<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/enterscripturl.png"></img><br/>
 
-If you want to create your own sheet, you should follow these instructions:
+## If you want to create your own sheet, you should follow these instructions:
 
-(1) Go to: https://docs.google.com/spreadsheets/u/0/
-Start a new, blank, spreadsheet<br/>
+### 1. Go to: https://docs.google.com/spreadsheets/u/0/
+### 2. Start a new, blank, spreadsheet<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/startnewspreadsheet.png"></img><br/>
 
 Go to ‘Tools’ -> ‘Script editor’<br/>
