@@ -1,7 +1,11 @@
 If you would like to share your potential and submitted portals over multiple devices and with multiple users. This script is it.
 
-<img src="/assets/markersonthemap.png"></img><br/>
+
+<img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/markersonthemap.png"></img><br/>
+Tap/click on the Intel map to add and edit locations
 <img src="/assets/mapwitheditdialogue"></img><br/>
+Overview of locations in a google sheet
+<img src="/assets/filledsheet.png"></img><br/>
 
 You can try it out with this script url
 Test script url: https://script.google.com/macros/s/AKfycbzIvhFdBzYCppUSQ7SkHY1StT3JsL-43i3p9qOaRzEUVaiEiahR/exec 
