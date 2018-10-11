@@ -25,7 +25,7 @@ You can reset the script url by installing <a href="https://github.com/Wintervor
 #### 3. Go to ‘Tools’ -> ‘Script editor’<br/>
 <kbd><img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/toolsmenu.png"></img></kbd><br/>
 
-#### 4. Remove content in Code.gs and paste the content from this <a href="Code.gs">Code.gs</a> file<br/>
+#### 4. Remove content in Code.gs and paste the content from this <a href="Code.gs">Code.gs</a> file and click the Save Button<br/>
 <kbd><img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/setsheetscriptcontent.png"></img></kbd><br/>
 
 #### 5. Select the ‘initialSetup’ function<br/>
