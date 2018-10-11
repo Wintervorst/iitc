@@ -2,11 +2,11 @@
 // @id             iitc-plugin-totalrecon@wintervorst
 // @name           IITC plugin: Total Recon
 // @category       Highlighter
-// @version        0.1.2.20180410.013370
+// @version        1.0.3.20181110.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
-// @description    [iitc-20180410.013370] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
+// @description    [iitc-20181110.013370] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -34,7 +34,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180410.013370';
+  plugin_info.dateTimeVersion = '20181110.013370';
   plugin_info.pluginId = 'totalrecon';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -46,10 +46,38 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.totalrecon.initialized = false;
   window.plugin.totalrecon.markercollection = [];
   window.plugin.totalrecon.plottedmarkers = {};
+  window.plugin.totalrecon.plottedtitles = {};
+  window.plugin.totalrecon.plottedsubmitrange = {};
+  window.plugin.totalrecon.layerlist = {};
   window.plugin.totalrecon.scriptURL = localStorage.getItem('totalrecon.scriptURL');
   window.plugin.totalrecon.highlight = function(data) {} // Dummy required
   window.plugin.totalrecon.setSelected = function(selected) {
     window.plugin.totalrecon.isPlacingMarkers = selected;
+  }
+
+  window.plugin.totalrecon.setSelectedLayer = function(a) {
+    var selectedLayer = window.plugin.totalrecon.layerlist[a.name];
+    if (a.display) {
+        
+        if (selectedLayer !== undefined) {
+      	if (!window.map.hasLayer(selectedLayer)) {
+        	  window.map.addLayer(selectedLayer);
+      	}
+      	if (window.map.hasLayer(selectedLayer)) {
+        	window.plugin.totalrecon.drawMarkers();
+      	}
+      }
+    } else {        
+        if (selectedLayer !== undefined && (a.name === 'Total Recon - Potentials' || a.name === 'Total Recon - Submitted' || a.name === 'Total Recon - Rejected' || a.name == 'Total Recon - Accepted')) {
+             for (var propertyName in window.plugin.totalrecon.plottedmarkers) {
+                 var markerLayer = window.plugin.totalrecon.plottedmarkers[propertyName];
+                 if (markerLayer !== undefined && markerLayer.layer === selectedLayer) {
+                     window.plugin.totalrecon.removeExistingCircle(propertyName);
+                     window.plugin.totalrecon.removeExistingTitle(propertyName);
+                 }
+             }
+        }
+    }
   }
 
   window.plugin.totalrecon.refreshData = function() {};
@@ -77,14 +105,64 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
   window.plugin.totalrecon.drawMarker = function(candidate) {
     if (candidate != undefined && candidate.lat != '' && candidate.lng != '') {
+       if(window.plugin.totalrecon.addMarkerToLayer(candidate)) {
+           window.plugin.totalrecon.addTitleToLayer(candidate);
+           window.plugin.totalrecon.addCircleToLayer(candidate);
+       }
+    }
+  }
 
+   window.plugin.totalrecon.addCircleToLayer = function(candidate) {
+       if (window.map.hasLayer(window.plugin.totalrecon.submitRangeLayer)) {
+           var portalLatLng = L.latLng(candidate.lat, candidate.lng);
+           window.plugin.totalrecon.drawCircle(portalLatLng, window.plugin.totalrecon.submitRangeLayer, candidate.id);
+       }
+   }
+
+   window.plugin.totalrecon.removeExistingTitle = function(guid) {
+       var existingTitle = window.plugin.totalrecon.plottedtitles[guid];
+           if (existingTitle !== undefined) {
+               window.plugin.totalrecon.titleLayer.removeLayer(existingTitle.marker);
+           }
+   }
+
+    window.plugin.totalrecon.removeExistingCircle = function(guid) {
+        var existingCircle = window.plugin.totalrecon.plottedsubmitrange[guid];
+        if (existingCircle !== undefined) {
+            window.plugin.totalrecon.submitRangeLayer.removeLayer(existingCircle.marker);
+        }
+   }
+
+   window.plugin.totalrecon.addTitleToLayer = function(candidate) {
+       if (window.map.hasLayer(window.plugin.totalrecon.titleLayer)) {
+           window.plugin.totalrecon.removeExistingTitle(candidate.id);
+           var title = candidate.title;
+           if (title != '') {
+               var portalLatLng = L.latLng(candidate.lat, candidate.lng);
+                var titleMarker = L.marker(portalLatLng, {
+                    icon: L.divIcon({
+                     className: 'plugin-totalrecon-name',
+                      iconAnchor: [100,5],
+                        iconSize: [200,10],
+                        html: title
+                    })
+                });
+                window.plugin.totalrecon.titleLayer.addLayer(titleMarker);
+
+                window.plugin.totalrecon.plottedtitles[candidate.id] = {'marker':titleMarker};
+            }
+       }
+   }
+
+
+  window.plugin.totalrecon.addMarkerToLayer = function(candidate) {
       var existingMarker = window.plugin.totalrecon.plottedmarkers[candidate.id];
       if (existingMarker !== undefined) {
        	 existingMarker.layer.removeLayer(existingMarker.marker);
       }
 
-	  var portalLatLng = L.latLng(candidate.lat, candidate.lng);
-	  var status = candidate.status;
+      var portalLatLng = L.latLng(candidate.lat, candidate.lng);
+      var status = candidate.status;
       var title = candidate.title;
 			switch(status) {
 			   case 'potential':
@@ -106,27 +184,52 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 				break;
 			}
 
+
+     if (window.map.hasLayer(markerLayer)) {
 			var marker = createGenericMarker(portalLatLng, markerColor, {
 				title: title,
-        id:candidate.id,
-        data:candidate
+                id:candidate.id,
+                data:candidate,
+                draggable: true
 			});
+
+         marker.on('dragend', function(e) {
+          var data = e.target.options.data;
+             var guid = data.id;
+          var latlng = marker.getLatLng();
+           data.lat = latlng.lat;
+           data.lng = latlng.lng;
+          // window.plugin.totalrecon.drawCircle(latlng, window.plugin.totalrecon.submitRangeLayer, guid);
+  	    	window.plugin.totalrecon.drawInputPopop(latlng, data);
+	    });
+
+         marker.on('dragstart', function(e) {          
+          var guid = e.target.options.data.id;
+
+          window.plugin.totalrecon.removeExistingTitle(guid);
+          window.plugin.totalrecon.removeExistingCircle(guid);
+
+	    });
 			markerLayer.addLayer(marker);
+         window.plugin.totalrecon.plottedmarkers[candidate.id] = {'marker':marker, 'layer':markerLayer};
 
-      window.plugin.totalrecon.plottedmarkers[candidate.id] = {'marker':marker, 'layer':markerLayer};
+         return true;
+     }
 
-            if (title != '') {
-                var titleMarker = L.marker(portalLatLng, {
-                    icon: L.divIcon({
-                     className: 'plugin-totalrecon-name',
-                      iconAnchor: [100,5],
-                        iconSize: [200,10],
-                        html: title
-                    })
-                });
-                window.plugin.totalrecon.titleLayer.addLayer(titleMarker);
-            }
-			}
+     return false;
+  }
+
+  window.plugin.totalrecon.drawCircle = function(latlng, layer, guid) {
+      window.plugin.totalrecon.removeExistingCircle(guid);
+    // Specify the no submit circle options
+    var circleOptions = {color:'black', opacity:1, fillColor:'grey', fillOpacity:0.40, weight:1, clickable:false};
+    var range = 20; // Hardcoded to 20m, the universal too close for new submit range of a portal
+
+    // Create the circle object with specified options
+    var circle = new L.Circle(latlng, range, circleOptions);
+    window.plugin.totalrecon.plottedsubmitrange[guid] = {'marker':circle};
+    // Add the new circle to the submitrange draw layer
+    circle.addTo(layer);
   }
 
   window.plugin.totalrecon.clearAllLayers = function() {
@@ -135,6 +238,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 	 window.plugin.totalrecon.acceptedLayer.clearLayers();
 	 window.plugin.totalrecon.rejectedLayer.clearLayers();
 	 window.plugin.totalrecon.titleLayer.clearLayers();
+     window.plugin.totalrecon.submitRangeLayer.clearLayers();
   }
 
   window.plugin.totalrecon.drawMarkers = function () {
@@ -162,11 +266,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
          title: 'Place your mark!'
      	});
 
-      window.plugin.totalrecon.editmarker = marker;
+       window.plugin.totalrecon.editmarker = marker;
+       marker.addTo(window.map);
 
-    	marker.addTo(window.map);
-
-  	  window.plugin.totalrecon.drawInputPopop(latlng);
+  	   window.plugin.totalrecon.drawInputPopop(latlng);
 	};
 
 
@@ -209,11 +312,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                              + '<option value="submitted"' + window.plugin.totalrecon.setselectedoption('submitted',status)  +'>Submitted</option>'
                              + '<option value="live"' + window.plugin.totalrecon.setselectedoption('live',status)  +'>Live</option>'
                              +  '<option value="rejected"' + window.plugin.totalrecon.setselectedoption('rejected',status)  +'>Rejected</option></select>'
-                              + '<input name="title" style="clear:both; float:left; width:100%; height:30px;" type="text" placeholder="Title (required)" required value="' + title +  '">'
-                              + '<input name="description" style="clear:both; float:left; width:100%; height:30px;" type="text" placeholder="Description" value="' + description +  '">'
-                              + '<input name="submitteddate" style="clear:both; float:left; width:100%; height:30px;" type="text" placeholder="Submitted (dd-mm-jjjj)" value="' + submitteddate +  '">'
-                              + '<input name="responsedate" style="clear:both; float:left; width:100%; height:30px;" type="text" placeholder="Response (dd-mm-jjjj)" value="' + responsedate +  '">'
-							  + '<input name="candidateimageurl" style="clear:both; float:left; width:100%; height:30px;" type="text" placeholder="Submission image url" value="' + imageUrl +  '">'
+                              + '<input name="title" style="clear:both; float:left; width:100%; height:30px;" type="text" autocomplete="off" placeholder="Title (required)" required value="' + title +  '">'
+                              + '<input name="description" style="clear:both; float:left; width:100%; height:30px;" type="text" autocomplete="off" placeholder="Description" value="' + description +  '">'
+                              + '<input name="submitteddate" style="clear:both; float:left; width:100%; height:30px;" type="text" autocomplete="off" placeholder="Submitted (dd-mm-jjjj)" value="' + submitteddate +  '">'
+                              + '<input name="responsedate" style="clear:both; float:left; width:100%; height:30px;" type="text" autocomplete="off" placeholder="Response (dd-mm-jjjj)" value="' + responsedate +  '">'
+							  + '<input name="candidateimageurl" style="clear:both; float:left; width:100%; height:30px;" type="text" autocomplete="off" placeholder="Submission image url" value="' + imageUrl +  '">'
                               + '<input name="id" type="hidden" value="' + id +  '">'
                               + '<input name="lat" type="hidden" value="' + lat +  '">'
                               + '<input name="lng" type="hidden" value="' + lng +  '">'
@@ -283,14 +386,21 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.totalrecon.submittedLayer = new L.featureGroup();
         window.plugin.totalrecon.rejectedLayer = new L.featureGroup();
         window.plugin.totalrecon.acceptedLayer = new L.featureGroup();
-
         window.plugin.totalrecon.titleLayer = new L.LayerGroup();
+         window.plugin.totalrecon.submitRangeLayer = new L.LayerGroup();
 
         window.addLayerGroup('Total Recon - Potentials', window.plugin.totalrecon.potentialLayer, true);
+        window.plugin.totalrecon.layerlist['Total Recon - Potentials'] = window.plugin.totalrecon.potentialLayer;
         window.addLayerGroup('Total Recon - Submitted', window.plugin.totalrecon.submittedLayer, true);
+         window.plugin.totalrecon.layerlist['Total Recon - Submitted'] = window.plugin.totalrecon.submittedLayer;
         window.addLayerGroup('Total Recon - Rejected', window.plugin.totalrecon.rejectedLayer, true);
+         window.plugin.totalrecon.layerlist['Total Recon - Rejected'] = window.plugin.totalrecon.rejectedLayer;
         window.addLayerGroup('Total Recon - Accepted', window.plugin.totalrecon.acceptedLayer, true);
+         window.plugin.totalrecon.layerlist['Total Recon - Accepted'] = window.plugin.totalrecon.acceptedLayer;
         window.addLayerGroup('Total Recon - Titles', window.plugin.totalrecon.titleLayer, true);
+         window.plugin.totalrecon.layerlist['Total Recon - Titles'] = window.plugin.totalrecon.titleLayer;
+        window.addLayerGroup('Total Recon - Submitrange', window.plugin.totalrecon.submitRangeLayer, false);
+         window.plugin.totalrecon.layerlist['Total Recon - Submitrange'] = window.plugin.totalrecon.submitRangeLayer;
 
         $("<style>")
             .prop("type", "text/css")
@@ -342,7 +452,21 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
         window.plugin.totalrecon.getStoredData();
         window.plugin.totalrecon.initialized = true;
+
+
+         window.pluginCreateHook('displayedLayerUpdated');
+
+         window.addHook('displayedLayerUpdated',  window.plugin.totalrecon.setSelectedLayer);
+         window.updateDisplayedLayerGroup = window.updateDisplayedLayerGroupModified;
       }
+
+     // Overload for IITC default in order to catch the manual select/deselect event and handle it properly
+      // Update layerGroups display status to window.overlayStatus and localStorage 'ingress.intelmap.layergroupdisplayed'
+     window.updateDisplayedLayerGroupModified = function(name, display) {
+         overlayStatus[name] = display;
+         localStorage['ingress.intelmap.layergroupdisplayed'] = JSON.stringify(overlayStatus);
+         runHooks('displayedLayerUpdated', {name: name, display: display});
+     }
   }
 
 // PLUGIN END //////////////////////////////////////////////////////////
