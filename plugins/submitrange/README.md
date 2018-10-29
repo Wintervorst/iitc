@@ -4,9 +4,7 @@ I have created this <a href="https://iitc.me/">IITC</a> plugin to highlights the
 After numerous ‘too close to an existing portal’ e-mails, I have decided to analyze them and combined with earlier research and assumptions throughout the web that a safe margin is to find and submit candidates at least with a 20 meter distance from existing portals.
 Assumption/suggestion: Find and submit candidates in the non-highlighted part of the map and you should be okay.
 
-This theory in combination with my plugin is not tested thoroughly yet, since my latest submitted candidates are from last week, just after I have created this script, and my locale OPR backlog is about 3-4 months. But I would greatly appreciate your help in testing it and confirming this theory.
-
-Without you even using it for submitting new candidates you can help me test this theory by installing the plugin and opening the blue link in your ‘too close to existing portal’ e-mails.<br/>
+Without you even using it for submitting new candidates you can try it out and confirm this theory by installing the plugin and opening the blue link in your ‘too close to existing portal’ e-mails.<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/assets/tooclosemaillink.png" /><br/>
 It will open up your Intel and if the submit range plugin is enabled it should draw a marker on the place where you’ve submitted the portal candidate. If it is inside the purple area it was actually ‘too close’, if not, it may disprove this theory.
 <br/>
