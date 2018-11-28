@@ -11,7 +11,7 @@ function initialSetup () {
     totalReconSheet = activeSpreadsheet.insertSheet(sheetName);    
     
     // Set appropriate column headers
-    totalReconSheet.appendRow(['id','timestamp','title','description','lat','lng','status','nickname','submitteddate','responsedate','candidateimageurl']);          
+    totalReconSheet.appendRow(['id','timestamp','title','description','lat','lng','status','nickname','submitteddate','responsedate','candidateimageurl','intellink']); 
    // Set column format    
     var latColumn = totalReconSheet.getRange("E2:E");
     var lngColumn = totalReconSheet.getRange("F2:F");
@@ -99,6 +99,8 @@ function doPost(e) {
       }            
     }
         
+    // Auto add intel link
+    newRow[11] = 'https://intel.ingress.com/intel/?z=19&ll=' + newRow[4] + ',' + newRow[5];
     // Add or update;
     sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow]);    
                   
