@@ -7,7 +7,7 @@ I have created several user scripts to help players be more effective in submitt
 ## TLDR; If you want to have this (image below) for Pokémon Go:</br>
 <img src="https://github.com/Wintervorst/iitc/raw/master/assets/pogopackdefault.png"/><br/>
 - #### 1. Install Tampermonkey or Greasemonkey
-- #### 2. Install these userscripts:
+- #### 2. Install these userscripts in this particular order
   - <a href="https://static.iitc.me/build/release/total-conversion-build.user.js">IITC<a> - Faster and prettier intel by Breunig and Jon Atkins (or download the mobile client)<br/> 
   - <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js">Submitrange</a> - Draws 20m radius of existing portals - Submit candidates outside this radius<br/>
   - <a href="https://github.com/Wintervorst/iitc/raw/master/plugins/s2celldrawer/s2celldrawer.user.js">S2 Celldrawer</a> - Allows drawing of the S2 cells<br/>
