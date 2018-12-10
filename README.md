@@ -51,7 +51,7 @@ Highlights level 14 cells which are 1 stop short of having an additional gym. By
 ## (1) An active Ingress Account
 Download and install <a href="https://www.ingress.com/">Ingress</a> and create an account
 
-## (2) Pick Chrome, Firefox or use the <a href="https://iitc.me/mobile/">IITC mobile App</a> 
+## (2) Pick Chrome, Firefox or use the IITC mobile App (search the store for your device) 
 ### (a) Chrome - Install <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a>
 ### (b) FireFox - Install <a href="https://addons.mozilla.org/nl/firefox/addon/greasemonkey/">GreaseMonkey</a>
 
