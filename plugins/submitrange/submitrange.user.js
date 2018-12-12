@@ -2,7 +2,7 @@
 // @id             iitc-plugin-submitrange@wintervorst
 // @name           IITC plugin: Portal submitrange
 // @category       Layer
-// @version        1.0.9.20180810.013370
+// @version        1.0.10.20181212.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180810.013370';
+  plugin_info.dateTimeVersion = '20181212.013370';
   plugin_info.pluginId = 'Submitrange';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -102,7 +102,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
           var distanceToClosest = window.plugin.submitrange.getDistanceToClosest(markerLatLng);
 
-          createGenericMarker(markerLatLng, 'red', {
+          createGenericMarker(markerLatLng, 'pink', {
             title: 'Url location ' + distanceToClosest,          
           }).addTo(window.plugin.submitrange.submitrangeLayers);   
 
@@ -141,11 +141,12 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     	});    
     
     	if (shortestDistance > -1 && closestPortal != undefined) {
-					var poly = L.geodesicPolyline([markerLatLng,closestPortal] , {
-       			color: 'red',
+			var poly = L.geodesicPolyline([markerLatLng,closestPortal] , {
+       			color: 'pink',
        			opacity: 0.8,
-       			weight: 5,
+       			weight: 3,
        			clickable: false,   
+			    dashArray: 10,
             html: shortestDistance       			
     	 	}).addTo(window.plugin.submitrange.submitrangeLayers);  			     
         return shortestDistance;
