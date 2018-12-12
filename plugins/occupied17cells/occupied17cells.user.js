@@ -2,7 +2,7 @@
 // @id             iitc-plugin-occupied17cells@wintervorst
 // @name           IITC plugin: L17 Cells for Pokémon Go
 // @category       Layer
-// @version        0.0.5.20180510.013370
+// @version        0.0.6.20181212.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180510.013370';
+  plugin_info.dateTimeVersion = '20181212.013370';
   plugin_info.pluginId = 'occupied17cells';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -109,6 +109,7 @@ var setup = function() {
       text-align: center;\
       text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000; \
       pointer-events: none;\
+	  display: none;\
     }")
     .appendTo("head");         
     
