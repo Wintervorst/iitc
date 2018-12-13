@@ -2,7 +2,7 @@
 // @id             iitc-plugin-gympossible@wintervorst
 // @name           IITC plugin: L14 Cells - Gympossible
 // @category       Layer
-// @version        0.0.4.20180510.013370
+// @version        0.0.5.20181312.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180510.013370';
+  plugin_info.dateTimeVersion = '20181312.013370';
   plugin_info.pluginId = 'gympossible';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -66,7 +66,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.gympossible.stoporgymcells = [];
       	window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.occupiedCellsLayer, window.plugin.gympossible.stopOrGymCellLevel, window.plugin.gympossible.cellOptionsOccupied, window.plugin.gympossible.getPortalsPerCellCount, "plugin-gympossible-name");      
       }
-     	window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.occupiedCellsLayer, window.plugin.gympossible.cellLevel, window.plugin.gympossible.cellOptionsOccupied, window.plugin.gympossible.getStopsPerCellHighlighted, "plugin-gympossible-name");  
+	   if (map.getZoom() > 14) {
+     	window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.occupiedCellsLayer, window.plugin.gympossible.cellLevel, window.plugin.gympossible.cellOptionsOccupied, window.plugin.gympossible.getStopsPerCellHighlighted,
+}		"plugin-gympossible-name");  
+	   }
     }              	       
   };            
   
@@ -153,6 +156,15 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
   }     
 
+      window.plugin.gympossible.setLayerState = function() {
+       var label = $(".leaflet-control-layers-overlays label span:contains('L14 - Gym possible cells')").parent();
+       if (map.getZoom() > 14) {
+           label.removeClass('disabled').attr('title', '');
+       } else {
+           window.plugin.gympossible.occupiedCellsLayer.clearLayers();
+           label.addClass('disabled').attr('title', 'Zoom in to show those.');
+       }
+    }
  
 var setup = function() {   
   	if (window.plugin.s2celldrawer === undefined) {
@@ -184,6 +196,8 @@ var setup = function() {
   
     window.pluginCreateHook('displayedLayerUpdated');
     window.addHook('displayedLayerUpdated',  window.plugin.gympossible.setSelected);
+	
+	map.on('zoomend', function() { window.plugin.gympossible.setLayerState(); });
 }
    
 // PLUGIN END //////////////////////////////////////////////////////////

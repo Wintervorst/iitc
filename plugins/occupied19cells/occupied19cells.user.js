@@ -2,7 +2,7 @@
 // @id             iitc-plugin-occupied19cells@wintervorst
 // @name           IITC plugin: L19 Cells for Ingress
 // @category       Layer
-// @version        0.0.5.20180510.013370
+// @version        0.0.6.20181312.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20180510.013370';
+  plugin_info.dateTimeVersion = '20181312.013370';
   plugin_info.pluginId = 'occupied19cells';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -50,8 +50,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }              	       
     
     if (window.map.hasLayer(window.plugin.occupied19cells.occupiedCellsLayer)) {
-			window.plugin.occupied19cells.occupiedCellsLayer.clearLayers();      
+			window.plugin.occupied19cells.occupiedCellsLayer.clearLayers(); 
+		if (map.getZoom() > 14) {			
      	window.plugin.s2celldrawer.drawCellList(window.plugin.occupied19cells.occupiedCellsLayer, window.plugin.occupied19cells.cellLevel, window.plugin.occupied19cells.cellOptionsOccupied, window.plugin.occupied19cells.getPortalsPerCellCount, "plugin-occupied19cells-name");  
+		}
     }              	       
   };            
   
@@ -94,6 +96,15 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
   }  
 
+        window.plugin.occupied19cells.setLayerState = function() {
+       var label = $(".leaflet-control-layers-overlays label span:contains('L19 - Ingress full cells')").parent();
+       if (map.getZoom() > 14) {
+           label.removeClass('disabled').attr('title', '');
+       } else {
+           window.plugin.occupied19cells.occupiedCellsLayer.clearLayers();
+           label.addClass('disabled').attr('title', 'Zoom in to show those.');
+       }
+		}
  
 var setup = function() {   
   	if (window.plugin.s2celldrawer === undefined) {
@@ -127,6 +138,7 @@ var setup = function() {
   
     window.pluginCreateHook('displayedLayerUpdated');
     window.addHook('displayedLayerUpdated',  window.plugin.occupied19cells.setSelected);
+    map.on('zoomend', function() { window.plugin.occupied19cells.setLayerState(); });
 }
    
 // PLUGIN END //////////////////////////////////////////////////////////
