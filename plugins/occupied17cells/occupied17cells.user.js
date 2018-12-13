@@ -2,7 +2,7 @@
 // @id             iitc-plugin-occupied17cells@wintervorst
 // @name           IITC plugin: L17 Cells for Pokémon Go
 // @category       Layer
-// @version        0.0.7.20181312.013370
+// @version        0.0.8.20181312.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
@@ -96,7 +96,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   }   
   
           window.plugin.occupied17cells.setLayerState = function() {
-       var label = $(".leaflet-control-layers-overlays label span:contains('L19 - Ingress full cells')").parent();
+       var label = $(".leaflet-control-layers-overlays label span:contains('L17 - Pokémon full cells')").parent();
        if (map.getZoom() > 14) {
            label.removeClass('disabled').attr('title', '');
        } else {
