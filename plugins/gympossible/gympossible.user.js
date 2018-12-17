@@ -2,7 +2,7 @@
 // @id             iitc-plugin-gympossible@wintervorst
 // @name           IITC plugin: L14 Cells - Gympossible
 // @category       Layer
-// @version        0.0.5.20181312.013370
+// @version        0.0.6.20181712.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
@@ -29,21 +29,41 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181312.013370';
+  plugin_info.dateTimeVersion = '20181712.013370';
   plugin_info.pluginId = 'gympossible';
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
   window.plugin.gympossible = function() {};      
   window.plugin.gympossible.cellLevel = 14;  
-  window.plugin.gympossible.stopOrGymCellLevel = 17;  
+  window.plugin.gympossible.stopOrGymCellLevel = 17;
+  window.plugin.gympossible.minZoomLevel = 13;
+  window.plugin.gympossible.minThresholdZoomLevel = 15;
   window.plugin.gympossible.layerlist = {};	
   window.plugin.gympossible.possibleportallist = []; 
   window.plugin.gympossible.stoporgymcells = [];
-  window.plugin.gympossible.cellOptionsOccupied = {fill: true, color: 'teal', fillColor:'teal', opacity: 1, weight: 3, fillOpacity:0.30, clickable: false };
-  window.plugin.gympossible.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.8, weight: 3, clickable: false };
+  window.plugin.gympossible.cellOptionsOccupied = {fill: true, color: 'teal', fillColor:'teal', opacity: 1, weight: 3, fillOpacity:0.30, clickable: false };  
+  window.plugin.gympossible.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.8, weight: 3, clickable: false };  
   
-  
+
+    window.plugin.gympossible.setDisabledState = function() {
+       var labelFull = $(".leaflet-control-layers-overlays label span:contains('L14 - Gym possible cells')").parent();
+       if (map.getZoom() >= window.plugin.gympossible.minThresholdZoomLevel) {
+           labelFull.removeClass('disabled').attr('title', '');
+       } else {
+           window.plugin.gympossible.occupiedCellsLayer.clearLayers();
+           labelFull.addClass('disabled').attr('title', 'Zoom in to show those.');
+       }
+
+       var label = $(".leaflet-control-layers-overlays label span:contains('L14 - Pokémon cells')").parent();
+       if (map.getZoom() >= window.plugin.gympossible.minZoomLevel) {
+           label.removeClass('disabled').attr('title', '');
+       } else {
+           window.plugin.gympossible.cellsLayer.clearLayers();
+           label.addClass('disabled').attr('title', 'Zoom in to show those.');
+       }
+    }
+
   window.plugin.gympossible.update = function() {		    
      if (!window.map.hasLayer(window.plugin.gympossible.cellsLayer) && !window.map.hasLayer(window.plugin.gympossible.occupiedCellsLayer))
      return;
@@ -52,24 +72,26 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     if (window.map.hasLayer(window.plugin.gympossible.cellsLayer)) {
         initialized = true;
       
-        window.plugin.gympossible.cellsLayer.clearLayers();      
-        window.plugin.gympossible.initPossiblePortalList();
-        window.plugin.gympossible.stoporgymcells = [];
-        window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.cellsLayer, window.plugin.gympossible.stopOrGymCellLevel, window.plugin.gympossible.cellOptionsEmpty, window.plugin.gympossible.getPortalsPerCellCount, "plugin-gympossible-name");      
-     	  window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.cellsLayer, window.plugin.gympossible.cellLevel, window.plugin.gympossible.cellOptionsEmpty, window.plugin.gympossible.getStopsPerCellCountAlways, "plugin-gympossible-name");  
+        window.plugin.gympossible.cellsLayer.clearLayers();
+        if (map.getZoom() >= window.plugin.gympossible.minZoomLevel) {
+            window.plugin.gympossible.initPossiblePortalList();
+            window.plugin.gympossible.stoporgymcells = [];
+            window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.cellsLayer, window.plugin.gympossible.stopOrGymCellLevel, window.plugin.gympossible.cellOptionsEmpty, window.plugin.gympossible.getPortalsPerCellCount, "plugin-gympossible-name");
+            window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.cellsLayer, window.plugin.gympossible.cellLevel, window.plugin.gympossible.cellOptionsEmpty, window.plugin.gympossible.getStopsPerCellCountAlways, "plugin-gympossible-name");
+        }
     }              	       
     
     if (window.map.hasLayer(window.plugin.gympossible.occupiedCellsLayer)) {
-			window.plugin.gympossible.occupiedCellsLayer.clearLayers();      
+	  window.plugin.gympossible.occupiedCellsLayer.clearLayers();
       if (!initialized) {
       	window.plugin.gympossible.initPossiblePortalList();
         window.plugin.gympossible.stoporgymcells = [];
       	window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.occupiedCellsLayer, window.plugin.gympossible.stopOrGymCellLevel, window.plugin.gympossible.cellOptionsOccupied, window.plugin.gympossible.getPortalsPerCellCount, "plugin-gympossible-name");      
       }
-	   if (map.getZoom() > 14) {
-     	window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.occupiedCellsLayer, window.plugin.gympossible.cellLevel, window.plugin.gympossible.cellOptionsOccupied, window.plugin.gympossible.getStopsPerCellHighlighted,
-}		"plugin-gympossible-name");  
-	   }
+       
+       if (map.getZoom() >= window.plugin.gympossible.minThresholdZoomLevel) {
+           window.plugin.s2celldrawer.drawCellList(window.plugin.gympossible.occupiedCellsLayer, window.plugin.gympossible.cellLevel, window.plugin.gympossible.cellOptionsOccupied, window.plugin.gympossible.getStopsPerCellHighlighted, "plugin-gympossible-name");           
+       }
     }              	       
   };            
   
@@ -84,7 +106,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     });
   }
   
-  window.plugin.gympossible.getPortalsPerCellCount = function(cell) {     
+  window.plugin.gympossible.getPortalsPerCellCount = function(cell) {
   	var countPerCell = 0;
   	var cellCorners = cell.getCornerLatLngs();
   	var cellPolygon = new google.maps.Polygon({paths: cellCorners}); 
@@ -108,23 +130,23 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }       
   	
     return result;
-  }
-  
-  
-  window.plugin.gympossible.getStopsPerCellHighlighted = function(cell) {     
+  }     
+
+   window.plugin.gympossible.getStopsPerCellHighlighted = function(cell) {
   	var countPerCell = window.plugin.gympossible.getStopsPerCellCount(cell);
     if (countPerCell == 1 || countPerCell == 5 || countPerCell == 19) {
-      return {Show:true, Value:countPerCell};      
-    }    
+      return {Show:true, Value:countPerCell};
+    }
     return {Show:false, Value:countPerCell};
   }
+
   
    window.plugin.gympossible.getStopsPerCellCountAlways = function(cell) {     
   	  var countPerCell = window.plugin.gympossible.getStopsPerCellCount(cell);       	  	 
       return {Show:true, Value:countPerCell}
   }
   
-  window.plugin.gympossible.getStopsPerCellCount = function(cell) {     
+  window.plugin.gympossible.getStopsPerCellCount = function(cell) {      
   	var countPerCell = 0;
   	var cellCorners = cell.getCornerLatLngs();
   	var cellPolygon = new google.maps.Polygon({paths: cellCorners}); 
@@ -138,7 +160,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }        
     });
     }
-    
+
     return countPerCell;       	
   }
   
@@ -156,21 +178,12 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
   }     
 
-      window.plugin.gympossible.setLayerState = function() {
-       var label = $(".leaflet-control-layers-overlays label span:contains('L14 - Gym possible cells')").parent();
-       if (map.getZoom() > 14) {
-           label.removeClass('disabled').attr('title', '');
-       } else {
-           window.plugin.gympossible.occupiedCellsLayer.clearLayers();
-           label.addClass('disabled').attr('title', 'Zoom in to show those.');
-       }
-    }
  
 var setup = function() {   
   	if (window.plugin.s2celldrawer === undefined) {
        alert('S2 Celldrawer plugin is required for: L14 Cells - Gympossible');
        return;
-    }  	 
+    }
   
      $("<style>")
     .prop("type", "text/css")
@@ -196,8 +209,8 @@ var setup = function() {
   
     window.pluginCreateHook('displayedLayerUpdated');
     window.addHook('displayedLayerUpdated',  window.plugin.gympossible.setSelected);
-	
-	map.on('zoomend', function() { window.plugin.gympossible.setLayerState(); });
+
+    map.on('zoomend', function() { window.plugin.gympossible.setDisabledState(); });
 }
    
 // PLUGIN END //////////////////////////////////////////////////////////
