@@ -93,8 +93,6 @@ function doPost(e) {
       });
       
       if (currentRowData != '') {         
-         newRow[4] = currentRowData.lat;
-         newRow[5] = currentRowData.lng;
          newRow[7] = currentRowData.nickname;
       }            
     }
