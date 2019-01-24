@@ -2,11 +2,11 @@
 // @id             iitc-plugin-newportals@wintervorst
 // @name           IITC plugin: New portals
 // @category       Layer
-// @version        0.0.2.20190123.013370
+// @version        0.0.3.20190124.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
-// @description    [iitc-20190123.013370] Highlights new portals created since previous session on a previous day. All new portals for today are marked for the entire day.
+// @description    [iitc-20190124.013370] Highlights new portals created since previous session on a previous day. All new portals for today are marked for the entire day.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190123.013370';
+  plugin_info.dateTimeVersion = '20190124.013370';
   plugin_info.pluginId = 'newportals';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -122,14 +122,15 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
    window.plugin.newportals.archiveStoredPortalList = function() {
        if (window.plugin.newportals.portallist.length > 0) {
           var today = new Date().toISOString().substring(0,10);
+          var todayList = [];
           for (var i = 0;  i < window.plugin.newportals.portallist.length; i++) {
               var portal = window.plugin.newportals.portallist[i];
-              if (today != portal.time.substring(0,10) && window.plugin.newportals.portalguidlist.indexOf(portal.id) === -1)
-              {                 
-                 // Remove from todays portallist
-                 window.plugin.newportals.portallist.splice(i, 1);
+              if (today == portal.time.substring(0,10))
+              {
+                 todayList.push(portal);
               }
           }
+          window.plugin.newportals.portallist = todayList;
           localStorage.setItem('newportals.portallist', JSON.stringify(window.plugin.newportals.portallist));          
        }
    }
