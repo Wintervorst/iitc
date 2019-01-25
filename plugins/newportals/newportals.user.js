@@ -2,11 +2,11 @@
 // @id             iitc-plugin-newportals@wintervorst
 // @name           IITC plugin: New portals
 // @category       Layer
-// @version        0.0.3.20190124.013370
+// @version        0.0.4.20190125.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
-// @description    [iitc-20190124.013370] Highlights new portals created since previous session on a previous day. All new portals for today are marked for the entire day.
+// @description    [iitc-20190125.013370] Highlights new portals created since previous session on a previous day. All new portals for today are marked for the entire day.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190124.013370';
+  plugin_info.dateTimeVersion = '20190125.013370';
   plugin_info.pluginId = 'newportals';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -47,6 +47,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
               window.plugin.newportals.addPortal(portal);
           }
       });
+	  
+	  window.plugin.newportals.drawMarkers();
    }
 
    window.plugin.newportals.addPortal = function(portal) {
@@ -54,12 +56,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
        // If the title is undefined, we are zoomed out to far to get all portals
        if (portal.options.data.title !== undefined && window.plugin.newportals.portalguidlist.indexOf(guid) === -1)  {
            var toStorePortal = {'id':guid, 'lat':portal.getLatLng().lat, 'lng':portal.getLatLng().lng, 't': portal.options.data.title, 'time':new Date().toISOString() };
-           window.plugin.newportals.portallist.push(toStorePortal);
-           window.plugin.newportals.drawMarker(toStorePortal);
+           window.plugin.newportals.portallist.push(toStorePortal);           
            localStorage.setItem('newportals.portallist', JSON.stringify(window.plugin.newportals.portallist));
            window.plugin.newportals.portalguidlist += guid;
            localStorage.setItem('newportals.portalguidlist', window.plugin.newportals.portalguidlist);
-       }
+       }	   	  
    }
 
    window.plugin.newportals.drawMarker = function(portal) {
