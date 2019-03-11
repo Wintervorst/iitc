@@ -2,11 +2,11 @@
 // @id             iitc-plugin-occupied17cells@wintervorst
 // @name           IITC plugin: L17 Cells for Pokémon Go
 // @category       Layer
-// @version        0.0.8.20181312.013370
+// @version        0.0.9.20190311.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
-// @description    [iitc-20180510.013370] Highlights level 17 cells where a stop/gym limit is reached, in order to see where you would best submit new portal candidates
+// @description    [iitc-20190311.013370] Highlights level 17 cells where a stop/gym limit is reached, in order to see where you would best submit new portal candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181312.013370';
+  plugin_info.dateTimeVersion = '20190311.013370';
   plugin_info.pluginId = 'occupied17cells';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -37,8 +37,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.occupied17cells = function() {};      
   window.plugin.occupied17cells.cellLevel = 17;  
   window.plugin.occupied17cells.layerlist = {};	
-  window.plugin.occupied17cells.cellOptionsOccupied = {fill: true, color: 'black', fillColor:'purple', opacity: 1, weight: 1, fillOpacity:0.30, clickable: false };
-  window.plugin.occupied17cells.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.5, weight: 2, clickable: false };
+  window.plugin.occupied17cells.cellOptionsOccupied = {fill: true, color: 'black', fillColor:'purple', opacity: 1, weight: 1, fillOpacity:0.30, clickable: false, interactive: false };
+  window.plugin.occupied17cells.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.5, weight: 2, clickable: false, interactive: false };
   
   window.plugin.occupied17cells.update = function() {		    
      if (!window.map.hasLayer(window.plugin.occupied17cells.cellsLayer) && !window.map.hasLayer(window.plugin.occupied17cells.occupiedCellsLayer))

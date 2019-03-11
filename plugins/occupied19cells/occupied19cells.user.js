@@ -2,11 +2,11 @@
 // @id             iitc-plugin-occupied19cells@wintervorst
 // @name           IITC plugin: L19 Cells for Ingress
 // @category       Layer
-// @version        0.0.6.20181312.013370
+// @version        0.0.7.20190311.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
-// @description    [iitc-20180510.013370] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
+// @description    [iitc-20190311.013370] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181312.013370';
+  plugin_info.dateTimeVersion = '20190311.013370';
   plugin_info.pluginId = 'occupied19cells';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -37,8 +37,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   window.plugin.occupied19cells = function() {};      
   window.plugin.occupied19cells.cellLevel = 19;  
   window.plugin.occupied19cells.layerlist = {};	
-  window.plugin.occupied19cells.cellOptionsOccupied = {fill: true, color: 'black', fillColor:'purple', opacity: 1, weight: 1, fillOpacity:0.30, clickable: false };
-  window.plugin.occupied19cells.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.5, weight: 2, clickable: false };
+  window.plugin.occupied19cells.cellOptionsOccupied = {fill: true, color: 'black', fillColor:'purple', opacity: 1, weight: 1, fillOpacity:0.30, clickable: false, interactive: false };
+  window.plugin.occupied19cells.cellOptionsEmpty = {fill: false, color: 'orange', opacity: 0.5, weight: 2, clickable: false, interactive: false };
   
   window.plugin.occupied19cells.update = function() {		    
      if (!window.map.hasLayer(window.plugin.occupied19cells.cellsLayer) && !window.map.hasLayer(window.plugin.occupied19cells.occupiedCellsLayer))
