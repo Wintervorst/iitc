@@ -2,7 +2,7 @@
 // @id             iitc-plugin-newportals@wintervorst
 // @name           IITC plugin: New portals
 // @category       Layer
-// @version        0.1.0.20190314.013370
+// @version        0.1.1.20190314.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
@@ -238,7 +238,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         var bounds = map.getBounds();
         var boundArray = [bounds._northEast, bounds._southWest];
         var boxId = window.plugin.newportals.getGuid();
-        var rectangle = L.rectangle(boundArray, {color: "#ff7800", weight: 20, fillColor:'#ff7800', fillOpacity:0.1, clickable: false, 'data':boxId});
+        var rectangle = L.rectangle(boundArray, {color: "#ff7800", weight: 20, fillColor:'#ff7800', fillOpacity:0.1, clickable: true, 'data':boxId});
         rectangle.addTo(window.plugin.newportals.viewLayer);
 
         window.plugin.newportals.viewLayerLayers[boxId] = rectangle;
@@ -314,11 +314,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
          window.plugin.newportals.getDeleteEnabled = function() {
                var deleteEnabled = localStorage.getItem('newportals.deleteEnabled');
-               if (deleteEnabled === undefined || deleteEnabled === null || deleteEnabled === '' || deleteEnabled === "true") {
-                   window.plugin.newportals.deleteEnabled = true;
-                   localStorage.setItem('newportals.deleteEnabled', true);
-               } else {
+               if (deleteEnabled === undefined || deleteEnabled === null || deleteEnabled === '' || deleteEnabled === "false") {
                    window.plugin.newportals.deleteEnabled = false;
+                   localStorage.setItem('newportals.deleteEnabled', false);
+               } else {
+                   window.plugin.newportals.deleteEnabled = true;
                }
            }
 
