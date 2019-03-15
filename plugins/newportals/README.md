@@ -1,5 +1,5 @@
 # newportals.user.js
-This plugin allows you to index certain areas on your intel map and highlight new portals since your last visit to that part of the Intel map<br/>
+This plugin allows you to index certain areas, views, on your intel map and highlight new portals since your last visit to that part of the Intel map<br/>
 <img src="https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/assets/newportals.png" /><br/>
 <br/>
 <br/>
