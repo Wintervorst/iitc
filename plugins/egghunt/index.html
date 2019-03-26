@@ -1,0 +1,208 @@
+<html>
+ <head>
+  <script  src="http://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+  <style>
+     body {
+	   font-family:Arial;
+	 }
+	 
+	 #easteregghuntmain {
+	    position:absolute;
+		top: 20px;
+		left:60px;
+		width:600px;
+		height:260px;
+		border:1px solid brown;
+        border-radius: 4px;				
+	 }
+	 
+	 #toplistinfo, #eggsplorer, #hints {
+		width:198px;
+		height:260px;
+		float:left;
+		border:1px solid green;		
+	 }
+	 
+	 .head {
+		float:left;
+		height:28px;
+		font-size:18px;
+		line-height:28px;
+		font-weight:bold;
+		text-align:center;
+		font-family:Arial;		
+		border-bottom:1px solid green;	
+		width:100%;		
+	 }
+	 
+	 .counter {
+		float:left;
+		height:160px;
+		width:100%;
+		padding:4px;
+	 }
+	 
+	 .countertitle {
+		float:left:
+		width:100%;
+		height:40px;
+		font-size:30px;		
+	 }
+	 
+	 #counterclock {
+		height:60px;
+		width:100%;
+	 }
+	 
+	 .hunterstats {
+		float:left;		
+		width:100%;
+		padding:4px;
+	 }
+	 
+	 #signedupcount, #latestsignup, #eggshidden, #eggsfound, .logitem, .hintitem {
+		width:100%;
+		float:left;
+	 }
+	 
+	 #eggshidden, #eggsfound {
+		margin:2px;
+	 }
+	 
+	 #signedupcount, #latestsignup {
+		font-size:14px;
+	 }
+	 
+	 #hintlist {
+		height: 230px;
+		width:100%;
+		overflow-y:auto;
+		overflow-x:hidden;
+	 }
+	 
+	 .hintitem, .logitem {	    
+		border-bottom: 1px solid grey;
+		font-size:12px;
+		padding:2px;
+	 }
+	 
+	 #eggsplorer .head {
+		border: 1px solid green;
+	 }
+	 
+	 .res {
+		color:blue;
+		font-weight:bold;
+	 }
+	 
+	 .enl {
+		color:green;
+		font-weight:bold;
+	 }
+	 
+	 #easteregghideegg {
+		position:absolute;
+		top: 400px;
+		left:60px;
+		width:300px;
+		height:208px;
+		border:1px solid brown;
+        border-radius: 4px;	
+	 }
+	 
+	 .hintinput, .useimage, .hidebutton {
+		width:100%;
+		float:left;
+		padding:5px;
+	 }
+	 
+	 .hintinput {
+	    height:120px;
+	 }
+	 
+  </style>
+ </head>
+ <body>
+  <div id="easteregghuntmain">
+      <div id="toplistinfo">
+	     <div class="head">Easter Egg Hunt 2019</div>
+			<div class="counter" id="huntcounter">
+				 <div class="countertitle">
+					Hunt starts in:
+				 </div>
+				 <div id="counterclock" class="counterclock">
+					28d:20h:23m:15s
+				 </div>
+			</div>
+			<div class="hunterstats"> 
+				 <div id="signedupcount" class="signedupcount">16 hunters signed up</div>
+				 
+				 <div id="latestsignup" class="latestsignup">Latest signup (2019-03-21 14:55:31) : <span class="res">Nariburuh</div>
+			 </div>
+		 </div>
+	  
+		  <div id="eggsplorer">
+			 <div class="head">Eggsplorer</div>
+			 <div id="eggshidden">53 eggs hidden</div>
+			 <div id="eggsfound">2 eggs found</div>
+			 <div class="head">Egglog</div>
+			 <div id="egglog">
+				<div class="logitem">13:22:00 - <span class="res">Joelie</span> found a Golden Egg at <span class="enl">Metropool</span></div>
+				<div class="logitem">13:12:21 - <span class="res">Bartson</span> found a Silver Egg at <span class="res">Newfound church</span></div>
+			 </div>
+		  </div>
+		  <div id="hints">
+			  <div class="head">Hints</div>
+			  <div id="hintlist">
+				  <div class="hintitem">
+					  You can find me at the biggest transit hub
+				  </div>
+				  <div class="hintitem">
+					  <img src="http://lh3.googleusercontent.com/9QvzrXQQ0y1b5PxuOtU6g2aZwO00jrUAzs86K1T0LgzGquLXfKR5N75wk7jQ3ai5FBLeEwGtf3Mafoq-5jqy=s180"></img>
+				  </div>
+				  <div class="hintitem">
+					  Standing in a grassy area
+				  </div>
+				  <div class="hintitem">
+					  My nickname is Blote Bertus
+				  </div>
+				  <div class="hintitem">
+					  <img src="https://lh6.ggpht.com/okk2z07rnKBMl72aEUWpKyp19dm102nJ4_6RAX3n1tJpkz9rfdAkyHhy_r_3XcA1dxxZslwJk7TVd5WTDIoY9A=s180"></img>
+				  </div>
+			  </div>
+		  
+		  </div>  
+	  </div>  
+	  
+	  <div id="easteregghideegg">	  
+	       <div class="head">Hide an Egg</div>
+		   <textarea class="hintinput" placeholder="Type your hints here. E.g. My feet are always in the water"></textarea>		   
+		   <label class="useimage"><input type="checkbox">Use portal image as hint</input></label>
+		   <button type="submit" class="hidebutton">Hide an egg here!</button>
+	  </div>
+ 
+ </body>
+ 
+ <script type="text/javascript">
+   getData = function() {
+     $.ajax({
+        url: 'https://script.google.com/macros/s/AKfycbwc1VVSeDKaBvMhJiOESJXQOFb6rRZyylT16I2zfZdKNyOwoVo/exec',
+        type: 'GET',
+        dataType: 'text',
+        success: function (data, status, header) {
+			console.log(data);
+            console.log(JSON.parse(data));            
+        },
+        error: function (x, y, z) {
+            console.log('Error message: ' + x + '\n' + y + '\n' + z);
+        }
+    });
+  }
+  
+  getData();
+ 
+ </script>
+ 
+ </html>
+ 
+ 
