@@ -544,7 +544,6 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }\
         \
         .eggsplorer-content {\
-            background-color: #f0f;\
             display: flex;\
             flex-direction: column;\
             width: 100%;\
