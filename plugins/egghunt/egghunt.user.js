@@ -155,21 +155,23 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             + '</div>'
             + '<div id="eggsplorer">'
             + '	 <div class="head">Eggsplorer</div>'
-            + '	 <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
-            + '	 <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
-			+ ' <div class="head">Egglog</div>'
-			+ '<div id="egglog">';
+            + '    <div class="eggsplorer-content collapsable">'
+            + '	     <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
+            + '	     <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
+            + '    </div>'
+			+ '  <div id="egglog">'
+			+ '    <div class="head">Egglog</div>';
             htmlContent +=  window.plugin.egghunt.getLogList(data);
 			htmlContent += ''
-			+ '</div>'
-            + '</div>'
-            + '<div id="hints">'
-			+ ' <div class="head">Hints</div>'
-			+ '<div id="hintlist">';
+			+ '    </div>'
+            + '  </div>'
+            + '  <div id="hints">'
+			+ '    <div class="head">Hints</div>'
+			+ '    <div id="hintlist">';
             htmlContent +=  window.plugin.egghunt.getHintList(data);
             htmlContent += ''
-            + '	  </div>'
-		  + '</div>';
+            + '	 </div>'
+		    + '</div>';
 
         window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
     }
@@ -428,86 +430,125 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
      window.plugin.egghunt.addStyling = function() {
-              $("<style>")
-                  .prop("type", "text/css")
-                  .html(".plugin-egghunt-name {\
-        font-size: 14px;\
-              font-weight: bold;\
-              color: gold;\
-              opacity: 0.7;\
-              text-align: center;\
-              text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000; \
-              pointer-events: none;\
-            }  #easteregghuntmain {\
-	    position:absolute;\
-		top: 20px;\
-		left:60px;\
-		width:600px;\
-		height:260px;\
-		border:1px solid brown;\
-        border-radius:4px;\
-        background-color:#FFF;\
-         z-index:6000;\
-	 } #toplistinfo, #eggsplorer, #hints {\
-		width:198px;\
-		height:260px;\
-		float:left;\
-		border:1px solid green;\
-	 } .head {\
-		float:left;\
-		height:28px;\
-		font-size:18px;\
-		line-height:28px;\
-		font-weight:bold;\
-		text-align:center;\
-		font-family:Arial;\
-		border-bottom:1px solid green;	\
-		width:100%;		\
-	 } .counter {\
-		float:left;\
-		height:160px;\
-		width:100%;\
-		padding:4px;\
-	 } .countertitle {\
-		float:left:\
-		width:100%;\
-		height:40px;\
-		font-size:30px;	\
-	 } #counterclock {\
-		height:60px;\
-		width:100%;\
-	 } .hunterstats {\
-		float:left;	\
-		width:100%;\
-		padding:4px;\
-	 } #signedupcount, #latestsignup, #eggshidden, #eggsfound, .logitem, .hintitem {\
-		width:100%;\
-		float:left;\
-	 } #eggshidden, #eggsfound {\
-		margin:2px;\
-	 } #signedupcount, #latestsignup {\
-		font-size:14px;\
-      } #egglog {\
-		height: 158px;\
-		width:100%;\
-		overflow-y:auto;\
-		overflow-x:hidden;\
-	 } #hintlist {\
-		height: 230px;\
-		width:100%;\
-		overflow-y:auto;\
-		overflow-x:hidden;\
-	 } .hintitem, .logitem {\
-		border-bottom: 1px solid grey;\
-		font-size:12px;\
-		padding:2px;\
-	 } #eggsplorer .head {\
-		border: 1px solid green;\
-	 } #easteregghuntmain .res {\
-		font-weight:bold;\
-	 } #easteregghuntmain .enl {\
-		font-weight:bold;\
-	 }  ").appendTo("head");
+      $("<style>").prop("type", "text/css").html("\
+        \
+        .plugin-egghunt-name {\
+            font-size: 14px;\
+            font-weight: bold;\
+            color: gold;\
+            opacity: 0.7;\
+            text-align: center;\
+            text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000;\
+            pointer-events: none;\
+        }\
+        \
+        #easteregghuntmain {\
+            position:absolute;\
+            top: 20px;\
+            left:60px;\
+            width:600px;\
+            height:260px;\
+            border:1px solid brown;\
+            border-radius:4px;\
+            background-color:#FFF;\
+            z-index:6000;\
+        }\
+        \
+        #toplistinfo, #eggsplorer, #hints {\
+            width:198px;\
+            height:260px;\
+            float:left;\
+            border:1px solid green;\
+        }\
+        \
+        .head {\
+            float:left;\
+            height:28px;\
+            font-size:18px;\
+            line-height:28px;\
+            font-weight:bold;\
+            text-align:center;\
+            font-family:Arial;\
+            border-bottom:1px solid green;	\
+            width:100%;		\
+        }\
+        \
+        .counter {\
+            float:left;\
+            height:160px;\
+            width:100%;\
+            padding:4px;\
+        }\
+        \
+        .countertitle {\
+            float:left:\
+            width:100%;\
+            height:40px;\
+            font-size:30px;	\
+        }\
+        \
+        #counterclock {\
+            height:60px;\
+            width:100%;\
+        }\
+        \
+        .hunterstats {\
+            float:left;	\
+            width:100%;\
+            padding:4px;\
+        }\
+        \
+        #signedupcount, #latestsignup, .logitem, .hintitem {\
+            width:100%;\
+            float:left;\
+        }\
+        \
+        #eggshidden, #eggsfound {\
+            margin:2px;\
+        }\
+        \
+        #signedupcount, #latestsignup {\
+            font-size:14px;\
+        }\
+        \
+        #egglog {\
+            height: 158px;\
+            width:100%;\
+            overflow-y:auto;\
+            overflow-x:hidden;\
+        }\
+        \
+        #hintlist {\
+            height: 230px;\
+            width:100%;\
+            overflow-y:auto;\
+            overflow-x:hidden;\
+        }\
+        \
+        .hintitem, .logitem {\
+            border-bottom: 1px solid grey;\
+            font-size:12px;\
+            padding:2px;\
+        }\
+        \
+        #eggsplorer .head {\
+            border: 1px solid green;\
+        }\
+        \
+        #easteregghuntmain .res {\
+            font-weight:bold;\
+        }\
+        \
+        #easteregghuntmain .enl {\
+            font-weight:bold;\
+        }\
+        \
+        .eggsplorer-content {\
+            display: flex;\
+            flex-direction: column;\
+            width: 100%;\
+        }\
+     ").appendTo("head");
      }
 
   // PLUGIN END //////////////////////////////////////////////////////////
