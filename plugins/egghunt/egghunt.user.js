@@ -138,40 +138,50 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
     window.plugin.egghunt.updateEggsplorer = function(data) {
         var htmlContent = ''
-        + '<div id="toplistinfo">'
-        + '<div class="head">Easter Egg Hunt 2019</div>'
-            + '	<div class="counter" id="huntcounter">'
-            + '	<div class="countertitle">'
-            + '		Hunt starts in:'
-			+ '	 </div>'
-			+ ' <div id="counterclock" class="counterclock">'
-			+ data.startdatetime
-			+ '</div>'
-			+ '</div>'
-			+ '<div class="hunterstats"> '
-			+ ' <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
-            + '<div id="latestsignup" class="latestsignup">Latest signup ('+ data.latesthunter.timestamp  +') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
-			+ '</div>'
-            + '</div>'
-            + '<div id="eggsplorer">'
-            + '	 <div class="head">Eggsplorer</div>'
-            + '    <div class="eggsplorer-content collapsable">'
-            + '	     <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
-            + '	     <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
-            + '    </div>'
-			+ '  <div id="egglog">'
-			+ '    <div class="head">Egglog</div>';
-            htmlContent +=  window.plugin.egghunt.getLogList(data);
-			htmlContent += ''
-			+ '    </div>'
-            + '  </div>'
-            + '  <div id="hints">'
-			+ '    <div class="head">Hints</div>'
-			+ '    <div id="hintlist">';
-            htmlContent +=  window.plugin.egghunt.getHintList(data);
-            htmlContent += ''
-            + '	 </div>'
-		    + '</div>';
+        + '<div class="head-container">'
+        + '  <div class="head head-column">Easter Egg Hunt 2019</div>'
+        + '	 <div class="head head-column">Eggsplorer</div>'
+		+ '  <div class="head head-column">Hints</div>'
+        + '</div>'
+        + '<div class="column-container">'
+        + '  <div class="column column-left">'
+        + '    <div id="toplistinfo">'
+        + '	     <div class="counter" id="huntcounter">'
+        + '	       <div class="countertitle">'
+        + '		     Hunt starts in:'
+		+ '	       </div>'
+		+ '        <div id="counterclock" class="counterclock">'
+		+            data.startdatetime
+		+ '        </div>'
+		+ '        <div class="hunterstats"> '
+		+ '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
+        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ data.latesthunter.timestamp  +') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
+		+ '        </div>'
+        + '      </div>'
+        + '    </div>'
+        + '  </div>'
+        + '  <div class="column column-center">'
+        + '    <div id="eggsplorer">'
+        + '      <div class="eggsplorer-content collapsable">'
+        + '	       <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
+        + '	       <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
+        + '      </div>'
+		+ '    <div class="head">Egglog</div>'
+		+ '    <div id="egglog">'
+                 htmlContent +=  window.plugin.egghunt.getLogList(data);
+		         htmlContent += ''
+		+ '    </div>'
+        + '  </div>'
+        + '</div>'
+        + '<div class="column column-right">'
+        + '  <div id="hints">'
+		+ '    <div id="hintlist">';
+        htmlContent +=  window.plugin.egghunt.getHintList(data);
+        htmlContent += ''
+        + '	 </div>'
+        + '</div>'
+        + '</div>'
+	    + '</div>';
 
         window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
     }
@@ -432,6 +442,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
      window.plugin.egghunt.addStyling = function() {
       $("<style>").prop("type", "text/css").html("\
         \
+        :root {\
+            --easter-cyan: #adfff5;\
+            --easter-green: #bbffb5;\
+            --easter-orange: #ffcba6;\
+            --easter-purple: #d8c4ff;\
+            --easter-red: #ffb5bf;\
+            --easter-yellow: #fbffae;\
+            --panel-shade: 0px 0px 16px 2px rgba(0,0,0,0.24);\
+        }\
+        \
         .plugin-egghunt-name {\
             font-size: 14px;\
             font-weight: bold;\
@@ -443,45 +463,50 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }\
         \
         #easteregghuntmain {\
+            background-color: var(--easter-cyan);\
+            border-radius:8px;\
+            box-shadow: var(--panel-shade);\
+            display: flex;\
+            flex-direction: column;\
+            height:260px;\
+            left:60px;\
             position:absolute;\
             top: 20px;\
-            left:60px;\
             width:600px;\
-            height:260px;\
-            border:1px solid brown;\
-            border-radius:4px;\
-            background-color:#FFF;\
             z-index:6000;\
         }\
         \
-        #toplistinfo, #eggsplorer, #hints {\
-            width:198px;\
-            height:260px;\
-            float:left;\
-            border:1px solid green;\
+        .head-container {\
+            display: flex;\
+        }\
+        .column-container {\
+            display: flex;\
+            flex: 1;\
         }\
         \
         .head {\
-            float:left;\
-            height:28px;\
+            background-color: var(--easter-purple);\
             font-size:18px;\
             line-height:28px;\
             font-weight:bold;\
             text-align:center;\
             font-family:Arial;\
-            border-bottom:1px solid green;	\
-            width:100%;		\
+        }\
+        .head-column {\
+            flex: 1;\
+        }\
+        \
+        .column {\
+            flex: 1;\
         }\
         \
         .counter {\
-            float:left;\
             height:160px;\
             width:100%;\
             padding:4px;\
         }\
         \
         .countertitle {\
-            float:left:\
             width:100%;\
             height:40px;\
             font-size:30px;	\
@@ -493,14 +518,12 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }\
         \
         .hunterstats {\
-            float:left;	\
             width:100%;\
             padding:4px;\
         }\
         \
         #signedupcount, #latestsignup, .logitem, .hintitem {\
             width:100%;\
-            float:left;\
         }\
         \
         #eggshidden, #eggsfound {\
@@ -512,7 +535,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }\
         \
         #egglog {\
-            height: 158px;\
+            flex: 1;\
             width:100%;\
             overflow-y:auto;\
             overflow-x:hidden;\
@@ -531,8 +554,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding:2px;\
         }\
         \
-        #eggsplorer .head {\
-            border: 1px solid green;\
+        #eggsplorer {\
+            display: flex;\
+            flex-direction: column;\
+            height: 100%;\
         }\
         \
         #easteregghuntmain .res {\
