@@ -174,8 +174,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '  </div>'
         + '</div>'
         + '<div class="column column-right">'
-        + '  <div id="hints">'
-        + '    <div id="hintlist">';
+        + '  <div id="hintlist">';
         htmlContent +=  window.plugin.egghunt.getHintList(data);
         htmlContent += ''
         + '	 </div>'
@@ -441,7 +440,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
      window.plugin.egghunt.addStyling = function() {
       $("<style>").prop("type", "text/css").html(`
-        \
+
         :root {
             --easter-cyan: #adfff5;
             --easter-green: #bbffb5;
@@ -463,16 +462,17 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }
         
         #easteregghuntmain {
-            background-color: var(--easter-cyan);
+            background-color: darkviolet;
             border-radius:8px;
             box-shadow: var(--panel-shade);
+            color: white;
             display: flex;
             flex-direction: column;
-            height:260px;
+            height:280px;
             left:60px;
             position:absolute;
             top: 20px;
-            width:600px;
+            width:640px;
             z-index:6000;
         }
         
@@ -482,28 +482,33 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         .column-container {
             display: flex;
             flex: 1;
+            padding: 8px;
         }
         
         .head {
-            background-color: var(--easter-purple);
-            font-size:18px;
-            line-height:28px;
-            font-weight:bold;
-            text-align:center;
+            background-color: orange;
+            color: darkviolet;
             font-family:Arial;
+            font-size:18px;
+            font-weight:bold;
+            line-height:28px;
+            padding: 8px;
+            text-align:center;
         }
         .head-column {
             flex: 1;
         }
         
         .column {
+            display: flex;
             flex: 1;
+            flex-direction: column;
+            margin: 8px;
         }
         
         .counter {
             height:160px;
             width:100%;
-            padding:4px;
         }
         
         .countertitle {
@@ -542,16 +547,15 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }
         
         #hintlist {
-            height: 230px;
-            width:100%;
+            flex: 1;
             overflow-y:auto;
             overflow-x:hidden;
         }
         
         .hintitem, .logitem {
             border-bottom: 1px solid grey;
-            font-size:12px;
-            padding:2px;
+            font-size: 12px;
+            padding: 2px 0;
         }
         
         #eggsplorer {
@@ -571,7 +575,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         .eggsplorer-content {
             display: flex;
             flex-direction: column;
-            width: 100%;
+            padding-bottom: 8px;
         }
      `).appendTo("head");
      }
