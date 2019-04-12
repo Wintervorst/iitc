@@ -1,8 +1,8 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.3.20190412.013370
+// @version        0.0.4.20190412.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js
@@ -36,6 +36,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   // use own namespace for plugin
   window.plugin.egghunt = function() {};
     window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbwc1VVSeDKaBvMhJiOESJXQOFb6rRZyylT16I2zfZdKNyOwoVo/exec';
+    window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js'
+    window.plugin.egghunt.pluginVersion = '0.0.4';
     window.plugin.egghunt.storedtokenkeyname = 'egghunt.installationtoken';
     window.plugin.egghunt.eggsplorer = {};
     window.plugin.egghunt.egglist = [];
@@ -44,6 +46,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     window.plugin.egghunt.datarequestdate = '';
     window.plugin.egghunt.requesteddata = '';
     window.plugin.egghunt.isbunny = false;
+    window.plugin.egghunt.huntHasStarted = false;
 
     var setup = function() {
         window.plugin.egghunt.getBunnyEnabled();
@@ -82,6 +85,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
      window.plugin.egghunt.updateInterface = function(data, requestDate) {
          if (requestDate === window.plugin.egghunt.datarequestdate) {
              console.log(data);
+             window.plugin.egghunt.huntHasStarted = data.huntHasStarted;
              window.plugin.egghunt.egglist = data.egglist;
              if (window.plugin.egghunt.egglist != null) {
                  window.plugin.egghunt.egglayer.clearLayers();
@@ -148,10 +152,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '    <div id="toplistinfo">'
         + '	     <div class="counter" id="huntcounter">'
         + '	       <div class="countertitle">'
-        + '		     Hunt starts in:'
+        + '		     Hunt starts in'
         + '	       </div>'
         + '        <div id="counterclock" class="counterclock">'
-        +            data.startdatetime
+        +            window.plugin.egghunt.startTimer(data.startdatetime)
         + '        </div>'
         + '        <div class="hunterstats"> '
         + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
@@ -184,6 +188,40 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
         window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
     }
+  window.plugin.egghunt.startTime = 0;
+   window.plugin.egghunt.timerRunning = false;
+  window.plugin.egghunt.clock = null;
+    window.plugin.egghunt.startTimer = function(time) {
+        window.plugin.egghunt.startTime = time;
+
+      if (!window.plugin.egghunt.timerRunning) {
+          window.plugin.egghunt.timerRunning = true;
+          setInterval(function(){ window.plugin.egghunt.updateTimeToStart(); }, 1000);
+      }
+    }
+    window.plugin.egghunt.updateTimeToStart = function() {
+         if (window.plugin.egghunt.clock == null || window.plugin.egghunt.clock.length == 0) {
+            window.plugin.egghunt.clock = $("#counterclock");
+        }
+              var secondMultiplier = 1000;
+     var minuteMultiplier = secondMultiplier * 60;
+   var hourMultiplier = minuteMultiplier * 60;
+   var dayMultiplier = hourMultiplier * 24;
+        window.plugin.egghunt.startTime -= secondMultiplier;
+
+        var diff = window.plugin.egghunt.startTime;
+    var days = parseInt(Math.floor(diff / dayMultiplier));
+    diff -= days * dayMultiplier;
+    var hours = Math.floor(diff / hourMultiplier);
+  diff -= hours * hourMultiplier;
+  var minutes = Math.floor(diff / minuteMultiplier);
+  diff -= minutes * minuteMultiplier;
+  var seconds = Math.floor(diff / secondMultiplier);
+
+
+   var result = days  + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds ';
+     window.plugin.egghunt.clock.text(result);
+    }
 
     window.plugin.egghunt.getLogList = function(data) {
         var returnValue = '';
@@ -200,8 +238,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
     window.plugin.egghunt.getHintList = function(data) {
-          var returnValue = '';
-        if (data.hintlist != null && data.hintlist.length > 0) {
+        var returnValue = '';
+        if (data.pluginOutDated) {
+            returnValue = '<div style="font-size:28px">Your plugin is outdated, you need to download a new version from <a href="' + window.plugin.egghunt.updateUrl + '">here</a>.</div>';
+        } else if (data.hintlist != null && data.hintlist.length > 0) {
            for (var i = 0; i < data.hintlist.length; i++) {
               var hint = data.hintlist[i];
                if (hint.text == "") {
@@ -210,6 +250,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                    returnValue += '<div class="hintitem">' + hint.text + '</div>';
                }
            }
+        } else if (!data.huntHasStarted) {
+             returnValue = '<div style="font-size:16px">Hints will be visible as soon as the hunt starts</div>';
         }
 
         return returnValue;
@@ -228,7 +270,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
                       var latlng = selectedPortal.getLatLng();
                       window.plugin.egghunt.drawInputPopop(selectedPortal, latlng);
-                  } else {
+                  } else if (window.plugin.egghunt.huntHasStarted) {
                       window.plugin.egghunt.getUpdate(portal.selectedPortalGuid);
                   }
               }
@@ -289,6 +331,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             url: window.plugin.egghunt.scriptURL + '?nickname=' + window.PLAYER.nickname + '&team=' + window.PLAYER.team + ''
             + '&token=' + window.plugin.egghunt.getOrSetInstallationToken() + ''
             + '&nwlat=' +northWest.lat  + '&nwlng=' +northWest.lng + '&selat=' +southEast.lat + '&selng=' +southEast.lng + ''
+            + '&version=' + window.plugin.egghunt.pluginVersion + ''
             + '&portalid=' + portalid,
             type: 'GET',
             dataType: 'text',
