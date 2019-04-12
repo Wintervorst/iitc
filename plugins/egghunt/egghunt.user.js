@@ -50,7 +50,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.egghunt.initButtonControl();
         window.plugin.egghunt.addStyling();
         window.plugin.egghunt.egglayer = new L.featureGroup();
-	    window.addLayerGroup('Eggs', window.plugin.egghunt.egglayer, true);
+        window.addLayerGroup('Eggs', window.plugin.egghunt.egglayer, true);
         window.plugin.egghunt.egglayer.on("click", window.plugin.egghunt.eggClicked);
 
         window.plugin.egghunt.initControls();
@@ -141,7 +141,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '<div class="head-container">'
         + '  <div class="head head-column">Easter Egg Hunt 2019</div>'
         + '	 <div class="head head-column">Eggsplorer</div>'
-		+ '  <div class="head head-column">Hints</div>'
+        + '  <div class="head head-column">Hints</div>'
         + '</div>'
         + '<div class="column-container">'
         + '  <div class="column column-left">'
@@ -149,14 +149,14 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '	     <div class="counter" id="huntcounter">'
         + '	       <div class="countertitle">'
         + '		     Hunt starts in:'
-		+ '	       </div>'
-		+ '        <div id="counterclock" class="counterclock">'
-		+            data.startdatetime
-		+ '        </div>'
-		+ '        <div class="hunterstats"> '
-		+ '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
+        + '	       </div>'
+        + '        <div id="counterclock" class="counterclock">'
+        +            data.startdatetime
+        + '        </div>'
+        + '        <div class="hunterstats"> '
+        + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
         + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ data.latesthunter.timestamp  +') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
-		+ '        </div>'
+        + '        </div>'
         + '      </div>'
         + '    </div>'
         + '  </div>'
@@ -166,22 +166,22 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '	       <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
         + '	       <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
         + '      </div>'
-		+ '    <div class="head">Egglog</div>'
-		+ '    <div id="egglog">'
+        + '    <div class="head">Egglog</div>'
+        + '    <div id="egglog">'
                  htmlContent +=  window.plugin.egghunt.getLogList(data);
-		         htmlContent += ''
-		+ '    </div>'
+                 htmlContent += ''
+        + '    </div>'
         + '  </div>'
         + '</div>'
         + '<div class="column column-right">'
         + '  <div id="hints">'
-		+ '    <div id="hintlist">';
+        + '    <div id="hintlist">';
         htmlContent +=  window.plugin.egghunt.getHintList(data);
         htmlContent += ''
         + '	 </div>'
         + '</div>'
         + '</div>'
-	    + '</div>';
+        + '</div>';
 
         window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
     }
@@ -354,22 +354,22 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
         // Create a token for this installation if it did not already exist
     window.plugin.egghunt.getOrSetInstallationToken = function() {
-	    var token = localStorage.getItem(window.plugin.egghunt.storedtokenkeyname);
-	    if (token === undefined || token === null) {
-		    token = window.plugin.egghunt.generateToken();
-			localStorage.setItem(window.plugin.egghunt.storedtokenkeyname, token);
-		}
-		return token;
-	}
+        var token = localStorage.getItem(window.plugin.egghunt.storedtokenkeyname);
+        if (token === undefined || token === null) {
+            token = window.plugin.egghunt.generateToken();
+            localStorage.setItem(window.plugin.egghunt.storedtokenkeyname, token);
+        }
+        return token;
+    }
 
     window.plugin.egghunt.generateToken = function() {
-		// Source: https://gist.github.com/jed/982883
+        // Source: https://gist.github.com/jed/982883
         var guid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-			(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-		)
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
 
         return guid.replace(/-/g,"");
-	}
+    }
 
                window.plugin.egghunt.initButtonControl = function() {
                 L.Control.ToggleControl = L.Control.extend({
@@ -378,8 +378,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
                         this._toggleButton = this._createButton(
-     		             'EH', 'Tick to become a bunny',''
-     		              , container, this._toggleOnOff, this);
+                          'EH', 'Tick to become a bunny',''
+                           , container, this._toggleOnOff, this);
 
                         this._switchRole();
                         return container;
@@ -390,8 +390,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                     },
 
                     _createButton: function (html, title, className, container, fn, context) {
-     	         	var link = L.DomUtil.create('a', className, container);
-     		        link.innerHTML = html;
+                      var link = L.DomUtil.create('a', className, container);
+                     link.innerHTML = html;
                         link.href = '#';
                         link.title = title;
 
@@ -440,140 +440,140 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
      window.plugin.egghunt.addStyling = function() {
-      $("<style>").prop("type", "text/css").html("\
+      $("<style>").prop("type", "text/css").html(`
         \
-        :root {\
-            --easter-cyan: #adfff5;\
-            --easter-green: #bbffb5;\
-            --easter-orange: #ffcba6;\
-            --easter-purple: #d8c4ff;\
-            --easter-red: #ffb5bf;\
-            --easter-yellow: #fbffae;\
-            --panel-shade: 0px 0px 16px 2px rgba(0,0,0,0.24);\
-        }\
-        \
-        .plugin-egghunt-name {\
-            font-size: 14px;\
-            font-weight: bold;\
-            color: gold;\
-            opacity: 0.7;\
-            text-align: center;\
-            text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000;\
-            pointer-events: none;\
-        }\
-        \
-        #easteregghuntmain {\
-            background-color: var(--easter-cyan);\
-            border-radius:8px;\
-            box-shadow: var(--panel-shade);\
-            display: flex;\
-            flex-direction: column;\
-            height:260px;\
-            left:60px;\
-            position:absolute;\
-            top: 20px;\
-            width:600px;\
-            z-index:6000;\
-        }\
-        \
-        .head-container {\
-            display: flex;\
-        }\
-        .column-container {\
-            display: flex;\
-            flex: 1;\
-        }\
-        \
-        .head {\
-            background-color: var(--easter-purple);\
-            font-size:18px;\
-            line-height:28px;\
-            font-weight:bold;\
-            text-align:center;\
-            font-family:Arial;\
-        }\
-        .head-column {\
-            flex: 1;\
-        }\
-        \
-        .column {\
-            flex: 1;\
-        }\
-        \
-        .counter {\
-            height:160px;\
-            width:100%;\
-            padding:4px;\
-        }\
-        \
-        .countertitle {\
-            width:100%;\
-            height:40px;\
-            font-size:30px;	\
-        }\
-        \
-        #counterclock {\
-            height:60px;\
-            width:100%;\
-        }\
-        \
-        .hunterstats {\
-            width:100%;\
-            padding:4px;\
-        }\
-        \
-        #signedupcount, #latestsignup, .logitem, .hintitem {\
-            width:100%;\
-        }\
-        \
-        #eggshidden, #eggsfound {\
-            margin:2px;\
-        }\
-        \
-        #signedupcount, #latestsignup {\
-            font-size:14px;\
-        }\
-        \
-        #egglog {\
-            flex: 1;\
-            width:100%;\
-            overflow-y:auto;\
-            overflow-x:hidden;\
-        }\
-        \
-        #hintlist {\
-            height: 230px;\
-            width:100%;\
-            overflow-y:auto;\
-            overflow-x:hidden;\
-        }\
-        \
-        .hintitem, .logitem {\
-            border-bottom: 1px solid grey;\
-            font-size:12px;\
-            padding:2px;\
-        }\
-        \
-        #eggsplorer {\
-            display: flex;\
-            flex-direction: column;\
-            height: 100%;\
-        }\
-        \
-        #easteregghuntmain .res {\
-            font-weight:bold;\
-        }\
-        \
-        #easteregghuntmain .enl {\
-            font-weight:bold;\
-        }\
-        \
-        .eggsplorer-content {\
-            display: flex;\
-            flex-direction: column;\
-            width: 100%;\
-        }\
-     ").appendTo("head");
+        :root {
+            --easter-cyan: #adfff5;
+            --easter-green: #bbffb5;
+            --easter-orange: #ffcba6;
+            --easter-purple: #d8c4ff;
+            --easter-red: #ffb5bf;
+            --easter-yellow: #fbffae;
+            --panel-shade: 0px 0px 16px 2px rgba(0,0,0,0.24);
+        }
+        
+        .plugin-egghunt-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: gold;
+            opacity: 0.7;
+            text-align: center;
+            text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 2px #000;
+            pointer-events: none;
+        }
+        
+        #easteregghuntmain {
+            background-color: var(--easter-cyan);
+            border-radius:8px;
+            box-shadow: var(--panel-shade);
+            display: flex;
+            flex-direction: column;
+            height:260px;
+            left:60px;
+            position:absolute;
+            top: 20px;
+            width:600px;
+            z-index:6000;
+        }
+        
+        .head-container {
+            display: flex;
+        }
+        .column-container {
+            display: flex;
+            flex: 1;
+        }
+        
+        .head {
+            background-color: var(--easter-purple);
+            font-size:18px;
+            line-height:28px;
+            font-weight:bold;
+            text-align:center;
+            font-family:Arial;
+        }
+        .head-column {
+            flex: 1;
+        }
+        
+        .column {
+            flex: 1;
+        }
+        
+        .counter {
+            height:160px;
+            width:100%;
+            padding:4px;
+        }
+        
+        .countertitle {
+            width:100%;
+            height:40px;
+            font-size:30px;	
+        }
+        
+        #counterclock {
+            height:60px;
+            width:100%;
+        }
+        
+        .hunterstats {
+            width:100%;
+            padding:4px;
+        }
+        
+        #signedupcount, #latestsignup, .logitem, .hintitem {
+            width:100%;
+        }
+        
+        #eggshidden, #eggsfound {
+            margin:2px;
+        }
+        
+        #signedupcount, #latestsignup {
+            font-size:14px;
+        }
+        
+        #egglog {
+            flex: 1;
+            width:100%;
+            overflow-y:auto;
+            overflow-x:hidden;
+        }
+        
+        #hintlist {
+            height: 230px;
+            width:100%;
+            overflow-y:auto;
+            overflow-x:hidden;
+        }
+        
+        .hintitem, .logitem {
+            border-bottom: 1px solid grey;
+            font-size:12px;
+            padding:2px;
+        }
+        
+        #eggsplorer {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+        
+        #easteregghuntmain .res {
+            font-weight:bold;
+        }
+        
+        #easteregghuntmain .enl {
+            font-weight:bold;
+        }
+        
+        .eggsplorer-content {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+     `).appendTo("head");
      }
 
   // PLUGIN END //////////////////////////////////////////////////////////
