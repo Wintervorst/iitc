@@ -141,52 +141,50 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
     window.plugin.egghunt.updateEggsplorer = function(data) {
-        var htmlContent = ''
-        + '<div class="head-container">'
-        + '  <div class="head head-column">Easter Egg Hunt 2019</div>'
-        + '	 <div class="head head-column">Eggsplorer</div>'
-        + '  <div class="head head-column">Hints</div>'
-        + '</div>'
-        + '<div class="column-container">'
-        + '  <div class="column column-left">'
-        + '    <div id="toplistinfo">'
-        + '	     <div class="counter" id="huntcounter">'
-        + '	       <div class="countertitle">'
-        + '		     Hunt starts in'
-        + '	       </div>'
-        + '        <div id="counterclock" class="counterclock">'
-        +            window.plugin.egghunt.startTimer(data.startdatetime)
-        + '        </div>'
-        + '        <div class="hunterstats"> '
-        + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
-        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ data.latesthunter.timestamp  +') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
-        + '        </div>'
-        + '      </div>'
-        + '    </div>'
-        + '  </div>'
-        + '  <div class="column column-center">'
-        + '    <div id="eggsplorer">'
-        + '      <div class="eggsplorer-content collapsable">'
-        + '	       <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
-        + '	       <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
-        + '      </div>'
-        + '    <div class="head">Egglog</div>'
-        + '    <div id="egglog">'
-                 htmlContent +=  window.plugin.egghunt.getLogList(data);
-                 htmlContent += ''
-        + '    </div>'
-        + '  </div>'
-        + '</div>'
-        + '<div class="column column-right">'
-        + '  <div id="hintlist">';
-        htmlContent +=  window.plugin.egghunt.getHintList(data);
-        htmlContent += ''
-        + '	 </div>'
-        + '</div>'
-        + '</div>'
-        + '</div>';
+      var htmlContent = `
+        <div class="head-container">
+          <div class="head head-column">Easter Egg Hunt 2019</div>
+          <div class="head head-column">Eggsplorer</div>
+          <div class="head head-column">Hints</div>
+        </div>
+        <div class="column-container">
+          <div class="column column-left">
+            <div id="toplistinfo">
+              <div class="counter" id="huntcounter">
+                <div class="countertitle">Hunt starts in</div>
+                <div id="counterclock" class="counterclock">
+                  ${window.plugin.egghunt.startTimer(data.startdatetime)}
+                </div>
+                <div class="hunterstats">
+                  <div id="signedupcount" class="signedupcount">${data.huntercount} hunters signed up</div>
+                  <div id="latestsignup" class="latestsignup">Latest signup (${data.latesthunter.timestamp}) : <span class="${data.latesthunter.team.toLowerCase().substring(0,3)}">${data.latesthunter.huntername}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column column-center">
+            <div id="eggsplorer">
+              <div class="eggsplorer-content collapsable">
+                <div id="eggshidden">${data.eggsplorer.hidden} eggs hidden</div>
+           	    <div id="eggsfound">${data.eggsplorer.found} eggs found</div>
+              </div>
+              <div class="head">Egglog</div>
+              <div id="egglog">
+                ${htmlContent +=  window.plugin.egghunt.getLogList(data)}
+                ${htmlContent += ''}
+              </div>
+            </div>
+          </div>
+          <div class="column column-right">
+            <div id="hintlist">
+              ${htmlContent +=  window.plugin.egghunt.getHintList(data)}
+              ${htmlContent += ''}
+            </div>
+          </div>
+        </div>
+      </div>`
 
-        window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
+      window.plugin.egghunt.eggsplorer.innerHTML = htmlContent
     }
   window.plugin.egghunt.startTime = 0;
    window.plugin.egghunt.timerRunning = false;
