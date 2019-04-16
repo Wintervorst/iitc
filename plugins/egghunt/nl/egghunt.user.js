@@ -2,7 +2,7 @@
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.6.20190416.013370
+// @version        0.0.7.20190416.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
@@ -46,6 +46,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     window.plugin.egghunt.datarequestdate = '';
     window.plugin.egghunt.requesteddata = '';
     window.plugin.egghunt.isbunny = false;
+    window.plugin.egghunt.ishunter = true;
     window.plugin.egghunt.huntHasStarted = false;
 
     var setup = function() {
@@ -87,6 +88,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
              console.log(data);
              window.plugin.egghunt.huntHasStarted = data.huntHasStarted;
              window.plugin.egghunt.egglist = data.egglist;
+             window.plugin.egghunt.ishunter = !data.isbunny;
              if (window.plugin.egghunt.egglist != null) {
                  window.plugin.egghunt.egglayer.clearLayers();
                  for (var i = 0; i < window.plugin.egghunt.egglist.length; i++) {
@@ -279,7 +281,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         if (selectedPortal !== undefined) {
             if (selectedPortal !== window.plugin.egghunt.selectedportal) {
                   window.plugin.egghunt.selectedportal = selectedPortal;
-                  if (window.plugin.egghunt.isbunny) {
+                  if (window.plugin.egghunt.isbunny && !window.plugin.egghunt.ishunter) {
                       var existingLayer = window.plugin.egghunt.egglayerlist[portal.selectedPortalGuid];
                       if (existingLayer !== undefined)  {
                           selectedPortal = existingLayer;
@@ -287,11 +289,29 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
                       var latlng = selectedPortal.getLatLng();
                       window.plugin.egghunt.drawInputPopop(selectedPortal, latlng);
-                  } else if (window.plugin.egghunt.huntHasStarted) {
-                      window.plugin.egghunt.getUpdate(portal.selectedPortalGuid);
+             //     } else if (window.plugin.egghunt.huntHasStarted && window.plugin.egghunt.ishunter) {
+                      } else if (window.plugin.egghunt.ishunter) {
+                      window.plugin.egghunt.drawSearchPopup(portal.selectedPortalGuid);
                   }
               }
           }
+    }
+
+    window.plugin.egghunt.drawSearchPopup = function(guid) {
+         var selectedPortal = window.plugin.egghunt.selectedportal;
+         var latlng = window.plugin.egghunt.selectedportal.getLatLng();
+         var formpopup = L.popup();
+
+        formpopup.setLatLng(latlng);
+
+       var formContent = '<div style="width:200px;height:40px;margin-top:30px;"><form id="submit-search" name="submit-search">'
+                                      + '<input name="portalid" id="portalid" type="hidden" value="' + guid +  '"/>'
+                                      + '<input name="submitbuttonvalue" id="submittedstate" type="hidden">'
+                                      + '<button type="submit" id="searchbutton" value="search" style="clear:both; float:left; width:100%;height:30px;">Search here</button>'
+                                      + '</form>';
+
+                formpopup.setContent(formContent + '</div>');
+                formpopup.openOn(window.map);
     }
 
     window.plugin.egghunt.drawInputPopop = function(portal, latlng) {
@@ -343,13 +363,17 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         var northWest = map.getBounds().getNorthWest();
         var southEast = map.getBounds().getSouthEast();
         var requestDate = new Date();
+        var portalidstring = '';
+        if (portalid !== undefined) {
+           portalidstring = '&portalid=' + portalid
+        }
         window.plugin.egghunt.datarequestdate = requestDate;
         $.ajax({
             url: window.plugin.egghunt.scriptURL + '?nickname=' + window.PLAYER.nickname + '&team=' + window.PLAYER.team + ''
             + '&token=' + window.plugin.egghunt.getOrSetInstallationToken() + ''
             + '&nwlat=' +northWest.lat  + '&nwlng=' +northWest.lng + '&selat=' +southEast.lat + '&selng=' +southEast.lng + ''
             + '&version=' + window.plugin.egghunt.pluginVersion + ''
-            + '&portalid=' + portalid,
+            + portalidstring,
             type: 'GET',
             dataType: 'text',
             success: function (data, status, header) {
@@ -408,6 +432,25 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
              }
          });
 
+        });
+
+         $('body').on('submit','#submit-search', function(e) {
+            e.preventDefault();
+                 //e.stopPropagation();
+                 map.closePopup();
+               console.log(e.currentTarget, e);
+                  var targetId = $(e.target).attr('id');
+                 if (targetId === undefined && !(targetId === 'searchbutton'))
+                 {
+                     return false;
+                 }
+
+                 var portalid = $(e.target).find("#portalid").val();
+             if (portalid !== undefined) {
+                 window.plugin.egghunt.getUpdate(portalid);
+             } else {
+                 return false;
+             }
         });
     }
 
