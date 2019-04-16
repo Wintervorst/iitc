@@ -2,7 +2,7 @@
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.5.20190416.013370
+// @version        0.0.6.20190416.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
@@ -255,10 +255,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         } else if (data.hintlist != null && data.hintlist.length > 0) {
            for (var i = 0; i < data.hintlist.length; i++) {
               var hint = data.hintlist[i];
+               if (hint.portalurl !== undefined) {
+                   returnValue += '<a href="' + hint.portalurl + '">';
+               }
                if (hint.text == "") {
                    returnValue += '<div class="hintitem"><img src="' + hint.url.replace("http:","https:") + '=s180"></img></div>';
                } else {
                    returnValue += '<div class="hintitem">' + hint.text + '</div>';
+               }
+                if (hint.portalurl !== undefined) {
+                   returnValue += '</a>';
                }
            }
         } else if (!data.huntHasStarted) {
