@@ -1,12 +1,12 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.4.20190412.013370
+// @version        0.0.5.20190416.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
-// @description    [iitc-20190412.013370] Easter Egg Hunt
+// @description    [iitc-20190416.013370] Easter Egg Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190412.013370';
+  plugin_info.dateTimeVersion = '20190416.013370';
   plugin_info.pluginId = 'egghunt';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -140,6 +140,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.egghunt.initFormResponse();
     }
 
+
+
     window.plugin.egghunt.updateEggsplorer = function(data) {
         var htmlContent = ''
         + '<div class="head-container">'
@@ -159,7 +161,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '        </div>'
         + '        <div class="hunterstats"> '
         + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
-        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ data.latesthunter.timestamp  +') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
+        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ window.plugin.egghunt.formatTimeStamp(data.latesthunter.timestamp) + ') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
         + '        </div>'
         + '      </div>'
         + '    </div>'
@@ -188,9 +190,17 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
         window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
     }
+
+    window.plugin.egghunt.formatTimeStamp = function(dateTime) {
+     // 2019-04-12T21:57:08
+
+        return dateTime.substring(0, 10) + ' ' + dateTime.substring(11, 19);
+    }
+
   window.plugin.egghunt.startTime = 0;
    window.plugin.egghunt.timerRunning = false;
   window.plugin.egghunt.clock = null;
+    window.plugin.egghunt.currentTimeText = '';
     window.plugin.egghunt.startTimer = function(time) {
         window.plugin.egghunt.startTime = time;
 
@@ -198,11 +208,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
           window.plugin.egghunt.timerRunning = true;
           setInterval(function(){ window.plugin.egghunt.updateTimeToStart(); }, 1000);
       }
+      return window.plugin.egghunt.currentTimeText;
     }
     window.plugin.egghunt.updateTimeToStart = function() {
-         if (window.plugin.egghunt.clock == null || window.plugin.egghunt.clock.length == 0) {
-            window.plugin.egghunt.clock = $("#counterclock");
-        }
+        window.plugin.egghunt.clock = $("#counterclock");
+         
               var secondMultiplier = 1000;
      var minuteMultiplier = secondMultiplier * 60;
    var hourMultiplier = minuteMultiplier * 60;
@@ -220,6 +230,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
    var result = days  + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds ';
+        window.plugin.egghunt.currentTimeText = result;
      window.plugin.egghunt.clock.text(result);
     }
 
