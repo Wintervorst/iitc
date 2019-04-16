@@ -143,9 +143,9 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     window.plugin.egghunt.updateEggsplorer = function(data) {
       var htmlContent = `
         <div class="head-container">
-          <div class="head head-column">Easter Egg Hunt 2019</div>
-          <div class="head head-column">Eggsplorer</div>
-          <div class="head head-column">Hints</div>
+          <div class="head head-column head-left">Easter Egg Hunt 2019</div>
+          <div class="head head-column head-center">Eggsplorer</div>
+          <div class="head head-column head-right">Hints</div>
         </div>
         <div class="column-container">
           <div class="column column-left">
@@ -504,7 +504,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         
         #easteregghuntmain {
             background-color: darkviolet;
-            border-radius:8px;
+            border-radius: 12px 12px 8px 8px;
             box-shadow: var(--panel-shade);
             color: white;
             display: flex;
@@ -520,9 +520,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         .head-container {
             display: flex;
         }
+
         .column-container {
             display: flex;
             flex: 1;
+            height: calc(100% - 60px);
             padding: 8px;
         }
         
@@ -536,8 +538,17 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding: 8px;
             text-align:center;
         }
+
         .head-column {
             flex: 1;
+        }
+
+        .head-left {
+            border-radius: 8px 0 0;
+        }
+
+        .head-right {
+            border-radius: 0 8px 0 0;
         }
         
         .column {
