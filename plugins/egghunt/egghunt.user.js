@@ -1,12 +1,12 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.4.20190412.013370
+// @version        0.0.8.20190417.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js
-// @description    [iitc-20190412.013370] Easter Egg Hunt
+// @description    [iitc-20190417.013370] Easter Egg Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,14 +29,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190412.013370';
+  plugin_info.dateTimeVersion = '20190417.013370';
   plugin_info.pluginId = 'egghunt';
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
   window.plugin.egghunt = function() {};
-    window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbwc1VVSeDKaBvMhJiOESJXQOFb6rRZyylT16I2zfZdKNyOwoVo/exec';
+     window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbwc1VVSeDKaBvMhJiOESJXQOFb6rRZyylT16I2zfZdKNyOwoVo/exec';
     window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js'
+//     window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbz9UoFa_SaZPPwyKPpWtyBOWfk-snDIs1yzlI8OuGs0rJU8yxY/exec';
+//     window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js'
     window.plugin.egghunt.pluginVersion = '0.0.4';
     window.plugin.egghunt.storedtokenkeyname = 'egghunt.installationtoken';
     window.plugin.egghunt.eggsplorer = {};
@@ -46,6 +48,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     window.plugin.egghunt.datarequestdate = '';
     window.plugin.egghunt.requesteddata = '';
     window.plugin.egghunt.isbunny = false;
+    window.plugin.egghunt.ishunter = true;
     window.plugin.egghunt.huntHasStarted = false;
 
     var setup = function() {
@@ -87,6 +90,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
              console.log(data);
              window.plugin.egghunt.huntHasStarted = data.huntHasStarted;
              window.plugin.egghunt.egglist = data.egglist;
+             window.plugin.egghunt.ishunter = !data.isbunny;
              if (window.plugin.egghunt.egglist != null) {
                  window.plugin.egghunt.egglayer.clearLayers();
                  for (var i = 0; i < window.plugin.egghunt.egglist.length; i++) {
@@ -140,55 +144,67 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.egghunt.initFormResponse();
     }
 
-    window.plugin.egghunt.updateEggsplorer = function(data) {
-      var htmlContent = `
-        <div class="head-container">
-          <div class="head head-column head-left">Easter Egg Hunt 2019</div>
-          <div class="head head-column head-center">Eggsplorer</div>
-          <div class="head head-column head-right">Hints</div>
-        </div>
-        <div class="column-container">
-          <div class="column column-left">
-            <div id="toplistinfo">
-              <div class="counter" id="huntcounter">
-                <div class="countertitle">Hunt starts in</div>
-                <div id="counterclock" class="counterclock">
-                  ${window.plugin.egghunt.startTimer(data.startdatetime)}
-                </div>
-                <div class="hunterstats">
-                  <div id="signedupcount" class="signedupcount">${data.huntercount} hunters signed up</div>
-                  <div id="latestsignup" class="latestsignup">Latest signup (${data.latesthunter.timestamp}) : <span class="${data.latesthunter.team.toLowerCase().substring(0,3)}">${data.latesthunter.huntername}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column column-center">
-            <div id="eggsplorer">
-              <div class="eggsplorer-content collapsable">
-                <div id="eggshidden">${data.eggsplorer.hidden} eggs hidden</div>
-           	    <div id="eggsfound">${data.eggsplorer.found} eggs found</div>
-              </div>
-              <div class="head">Egglog</div>
-              <div id="egglog">
-                ${htmlContent +=  window.plugin.egghunt.getLogList(data)}
-                ${htmlContent += ''}
-              </div>
-            </div>
-          </div>
-          <div class="column column-right">
-            <div id="hintlist">
-              ${htmlContent +=  window.plugin.egghunt.getHintList(data)}
-              ${htmlContent += ''}
-            </div>
-          </div>
-        </div>
-      </div>`
 
-      window.plugin.egghunt.eggsplorer.innerHTML = htmlContent
+
+    window.plugin.egghunt.updateEggsplorer = function(data) {
+        var htmlContent = ''
+        + '<div class="head-container">'
+        + '  <div class="head head-column">Easter Egg Hunt 2019</div>'
+        + '	 <div class="head head-column">Eggsplorer</div>'
+        + '  <div class="head head-column">Hints</div>'
+        + '</div>'
+        + '<div class="column-container">'
+        + '  <div class="column column-left">'
+        + '    <div id="toplistinfo">'
+        + '	     <div class="counter" id="huntcounter">'
+        + '	       <div class="countertitle">'
+        + '		     Hunt starts in'
+        + '	       </div>'
+        + '        <div id="counterclock" class="counterclock">'
+        +            window.plugin.egghunt.startTimer(data.startdatetime)
+        + '        </div>'
+        + '        <div class="hunterstats"> '
+        + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
+        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ window.plugin.egghunt.formatTimeStamp(data.latesthunter.timestamp) + ') : <span class="nickname ' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
+        + '        </div>'
+        + '      </div>'
+        + '    </div>'
+        + '  </div>'
+        + '  <div class="column column-center">'
+        + '    <div id="eggsplorer">'
+        + '      <div class="eggsplorer-content collapsable">'
+        + '	       <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
+        + '	       <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
+        + '      </div>'
+        + '    <div class="head">Egglog</div>'
+        + '    <div id="egglog">'
+                 htmlContent +=  window.plugin.egghunt.getLogList(data);
+                 htmlContent += ''
+        + '    </div>'
+        + '  </div>'
+        + '</div>'
+        + '<div class="column column-right">'
+        + '  <div id="hintlist">';
+        htmlContent +=  window.plugin.egghunt.getHintList(data);
+        htmlContent += ''
+        + '	 </div>'
+        + '</div>'
+        + '</div>'
+        + '</div>';
+
+        window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
     }
+
+    window.plugin.egghunt.formatTimeStamp = function(dateTime) {
+     // 2019-04-12T21:57:08
+
+        return dateTime.substring(0, 10) + ' ' + dateTime.substring(11, 19);
+    }
+
   window.plugin.egghunt.startTime = 0;
    window.plugin.egghunt.timerRunning = false;
   window.plugin.egghunt.clock = null;
+    window.plugin.egghunt.currentTimeText = '';
     window.plugin.egghunt.startTimer = function(time) {
         window.plugin.egghunt.startTime = time;
 
@@ -196,11 +212,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
           window.plugin.egghunt.timerRunning = true;
           setInterval(function(){ window.plugin.egghunt.updateTimeToStart(); }, 1000);
       }
+      return window.plugin.egghunt.currentTimeText;
     }
     window.plugin.egghunt.updateTimeToStart = function() {
-         if (window.plugin.egghunt.clock == null || window.plugin.egghunt.clock.length == 0) {
-            window.plugin.egghunt.clock = $("#counterclock");
-        }
+        window.plugin.egghunt.clock = $("#counterclock");
+         
               var secondMultiplier = 1000;
      var minuteMultiplier = secondMultiplier * 60;
    var hourMultiplier = minuteMultiplier * 60;
@@ -218,6 +234,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
    var result = days  + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds ';
+        window.plugin.egghunt.currentTimeText = result;
      window.plugin.egghunt.clock.text(result);
     }
 
@@ -227,8 +244,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
            for (var i = 0; i < data.latestfindslist.length; i++) {
               var find = data.latestfindslist[i];
                // <a onclick="window.selectPortalByLatLng(52.25109, 6.801604);return false" title="Pruisische Veldweg 11I, 7552 AA Hengelo, The Netherlands" href="/intel?ll=52.25109,6.801604&amp;z=17&amp;pll=52.25109,6.801604" class="help">1950's Art Hengelo</a>
-               returnValue += '<div class="logitem">'+ find.timestamp.substring(0,19) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Egg at '
-                  + '<a href="' + find.portal.link + '" class="help">' + find.portal.title  + '</a></div>';
+               returnValue += '<div class="logitem">'+ window.plugin.egghunt.formatTimeStamp(find.timestamp) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Egg</div>';
            }
         }
 
@@ -242,10 +258,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         } else if (data.hintlist != null && data.hintlist.length > 0) {
            for (var i = 0; i < data.hintlist.length; i++) {
               var hint = data.hintlist[i];
+               if (hint.portalurl !== undefined) {
+                   returnValue += '<a href="' + hint.portalurl + '">';
+               }
                if (hint.text == "") {
                    returnValue += '<div class="hintitem"><img src="' + hint.url.replace("http:","https:") + '=s180"></img></div>';
                } else {
                    returnValue += '<div class="hintitem">' + hint.text + '</div>';
+               }
+                if (hint.portalurl !== undefined) {
+                   returnValue += '</a>';
                }
            }
         } else if (!data.huntHasStarted) {
@@ -260,7 +282,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         if (selectedPortal !== undefined) {
             if (selectedPortal !== window.plugin.egghunt.selectedportal) {
                   window.plugin.egghunt.selectedportal = selectedPortal;
-                  if (window.plugin.egghunt.isbunny) {
+                  if (window.plugin.egghunt.isbunny && !window.plugin.egghunt.ishunter) {
                       var existingLayer = window.plugin.egghunt.egglayerlist[portal.selectedPortalGuid];
                       if (existingLayer !== undefined)  {
                           selectedPortal = existingLayer;
@@ -268,11 +290,29 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
                       var latlng = selectedPortal.getLatLng();
                       window.plugin.egghunt.drawInputPopop(selectedPortal, latlng);
-                  } else if (window.plugin.egghunt.huntHasStarted) {
-                      window.plugin.egghunt.getUpdate(portal.selectedPortalGuid);
+             //     } else if (window.plugin.egghunt.huntHasStarted && window.plugin.egghunt.ishunter) {
+                      } else if (window.plugin.egghunt.ishunter) {
+                      window.plugin.egghunt.drawSearchPopup(portal.selectedPortalGuid);
                   }
               }
           }
+    }
+
+    window.plugin.egghunt.drawSearchPopup = function(guid) {
+         var selectedPortal = window.plugin.egghunt.selectedportal;
+         var latlng = window.plugin.egghunt.selectedportal.getLatLng();
+         var formpopup = L.popup();
+
+        formpopup.setLatLng(latlng);
+
+       var formContent = '<div style="width:200px;height:40px;margin-top:30px;"><form id="submit-search" name="submit-search">'
+                                      + '<input name="portalid" id="portalid" type="hidden" value="' + guid +  '"/>'
+                                      + '<input name="submitbuttonvalue" id="submittedstate" type="hidden">'
+                                      + '<button type="submit" id="searchbutton" value="search" style="clear:both; float:left; width:100%;height:30px;">Search here</button>'
+                                      + '</form>';
+
+                formpopup.setContent(formContent + '</div>');
+                formpopup.openOn(window.map);
     }
 
     window.plugin.egghunt.drawInputPopop = function(portal, latlng) {
@@ -324,13 +364,17 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         var northWest = map.getBounds().getNorthWest();
         var southEast = map.getBounds().getSouthEast();
         var requestDate = new Date();
+        var portalidstring = '';
+        if (portalid !== undefined) {
+           portalidstring = '&portalid=' + portalid
+        }
         window.plugin.egghunt.datarequestdate = requestDate;
         $.ajax({
             url: window.plugin.egghunt.scriptURL + '?nickname=' + window.PLAYER.nickname + '&team=' + window.PLAYER.team + ''
             + '&token=' + window.plugin.egghunt.getOrSetInstallationToken() + ''
             + '&nwlat=' +northWest.lat  + '&nwlng=' +northWest.lng + '&selat=' +southEast.lat + '&selng=' +southEast.lng + ''
             + '&version=' + window.plugin.egghunt.pluginVersion + ''
-            + '&portalid=' + portalid,
+            + portalidstring,
             type: 'GET',
             dataType: 'text',
             success: function (data, status, header) {
@@ -389,6 +433,25 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
              }
          });
 
+        });
+
+         $('body').on('submit','#submit-search', function(e) {
+            e.preventDefault();
+                 //e.stopPropagation();
+                 map.closePopup();
+               console.log(e.currentTarget, e);
+                  var targetId = $(e.target).attr('id');
+                 if (targetId === undefined && !(targetId === 'searchbutton'))
+                 {
+                     return false;
+                 }
+
+                 var portalid = $(e.target).find("#portalid").val();
+             if (portalid !== undefined) {
+                 window.plugin.egghunt.getUpdate(portalid);
+             } else {
+                 return false;
+             }
         });
     }
 
@@ -504,7 +567,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         
         #easteregghuntmain {
             background-color: darkviolet;
-            border-radius: 12px 12px 8px 8px;
+            border-radius:8px;
             box-shadow: var(--panel-shade);
             color: white;
             display: flex;
@@ -520,11 +583,9 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         .head-container {
             display: flex;
         }
-
         .column-container {
             display: flex;
             flex: 1;
-            height: calc(100% - 60px);
             padding: 8px;
         }
         
@@ -538,17 +599,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding: 8px;
             text-align:center;
         }
-
         .head-column {
             flex: 1;
-        }
-
-        .head-left {
-            border-radius: 8px 0 0;
-        }
-
-        .head-right {
-            border-radius: 0 8px 0 0;
         }
         
         .column {
@@ -556,6 +608,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             flex: 1;
             flex-direction: column;
             margin: 8px;
+        }
+
+        .column-right {
+           overflow-y:auto;
+           height:200px;
         }
         
         .counter {
