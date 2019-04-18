@@ -709,14 +709,13 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
          const addPieces = () => {
              for (let i = 0; i < amountOfGrass; i++) {
              const pieceOfGrass = document.createElement('img')
-             pieceOfGrass.src = `url('https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/grass.svg')`
+             pieceOfGrass.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/grass.svg'
              pieceOfGrass.style = `
                position: absolute;
                bottom: 0;
                left: ${Math.random() * window.innerWidth}px;
                width: ${Math.random() * 80}px;
              `
-             console.log('teehee', i)
              grassLayer.appendChild(pieceOfGrass)
             }
          }
