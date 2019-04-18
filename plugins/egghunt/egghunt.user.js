@@ -55,6 +55,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.egghunt.getBunnyEnabled();
         window.plugin.egghunt.initButtonControl();
         window.plugin.egghunt.addStyling();
+        document.body.appendChild(window.plugin.egghunt.addGrass());
         window.plugin.egghunt.egglayer = new L.featureGroup();
         window.addLayerGroup('Eggs', window.plugin.egghunt.egglayer, true);
         window.plugin.egghunt.egglayer.on("click", window.plugin.egghunt.eggClicked);
@@ -687,6 +688,42 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding-bottom: 8px;
         }
      `).appendTo("head");
+     }
+
+     window.plugin.egghunt.addGrass = () => {
+         const amountOfGrass = Math.floor(window.innerWidth / 50)
+         const grassLayer = document.createElement('div')
+
+         grassLayer.classList.add('grass-layer')
+         grassLayer.style = `
+           height: 100%;
+           left: 0;
+           pointer-events: none;
+           position: absolute;
+           top: 0;
+           width: 100%;
+           z-index: 9999;
+         `
+         console.log('IWASCALLED!!!!')
+
+         const addPieces = () => {
+             for (let i = 0; i < amountOfGrass; i++) {
+             const pieceOfGrass = document.createElement('img')
+             pieceOfGrass.src = `url('https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/grass.svg')`
+             pieceOfGrass.style = `
+               position: absolute;
+               bottom: 0;
+               left: ${Math.random() * window.innerWidth}px;
+               width: ${Math.random() * 80}px;
+             `
+             console.log('teehee', i)
+             grassLayer.appendChild(pieceOfGrass)
+            }
+         }
+         
+         addPieces()
+
+         return grassLayer
      }
 
   // PLUGIN END //////////////////////////////////////////////////////////
