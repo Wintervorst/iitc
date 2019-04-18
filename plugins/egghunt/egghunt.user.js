@@ -709,7 +709,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
          const addPieces = () => {
              for (let i = 0; i < amountOfGrass; i++) {
              const pieceOfGrass = document.createElement('img')
-             pieceOfGrass.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/grass.svg'
+             pieceOfGrass.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/grass.svg?sanitize=true'
              pieceOfGrass.style = `
                position: absolute;
                bottom: 0;
