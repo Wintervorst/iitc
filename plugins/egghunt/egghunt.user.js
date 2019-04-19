@@ -2,11 +2,11 @@
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.8.20190417.013370
+// @version        0.0.9.20190419.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js
-// @description    [iitc-20190417.013370] Easter Egg Hunt
+// @description    [iitc-20190419.013370] Easter Egg Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190417.013370';
+  plugin_info.dateTimeVersion = '20190419.013370';
   plugin_info.pluginId = 'egghunt';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -158,12 +158,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '  <div class="column column-left">'
         + '    <div id="toplistinfo">'
         + '	     <div class="counter" id="huntcounter">'
-        + '	       <div class="countertitle">'
-        + '		     Hunt starts in'
-        + '	       </div>'
-        + '        <div id="counterclock" class="counterclock">'
-        +            window.plugin.egghunt.startTimer(data.startdatetime)
-        + '        </div>'
+          +       window.plugin.egghunt.drawTimerAndTopList(data)
         + '        <div class="hunterstats"> '
         + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
         + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ window.plugin.egghunt.formatTimeStamp(data.latesthunter.timestamp) + ') : <span class="nickname ' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
@@ -194,6 +189,43 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         + '</div>';
 
         window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
+    }
+
+    window.plugin.egghunt.drawTimerAndTopList = function(data) {
+        var result = '';
+        if (data.huntHasStarted) {
+              result  += '<div class="countertitlesmall">'
+        + '		     Hunt ends in <span id="counterclock" class="counterclocksmall">'
+        +            window.plugin.egghunt.startTimer(data.enddatetime)
+        + '        </span>'
+        + '	       </div>'
+            + '<div class="toplisthead">Toplist</div>'
+            + window.plugin.egghunt.showTopList(data);
+        } else {
+        result  += '	       <div class="countertitle">'
+        + '		     Hunt starts in'
+        + '	       </div>'
+        + '        <div id="counterclock" class="counterclock">'
+        +            window.plugin.egghunt.startTimer(data.startdatetime)
+        + '        </div>';
+        }
+        return result;
+    }
+
+    window.plugin.egghunt.showTopList = function(data) {
+       var result = '<div class="toplist">' ;
+      for (var i = 0; i < 10; i++) {
+          result += '<span class="toplistitem">#'
+          + (i+1)*1 + '.' + ' '
+
+          + '<span class="nickname res">Player</span> '
+           + (i+1)*9 + ' '
+          + ' eggs</span>';
+      }
+        result += "</div>";
+
+        return result;
+
     }
 
     window.plugin.egghunt.formatTimeStamp = function(dateTime) {
@@ -476,6 +508,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
                window.plugin.egghunt.initButtonControl = function() {
+                   if (true) {
                 L.Control.ToggleControl = L.Control.extend({
                     onAdd: function(map) {
                         var container = L.DomUtil.create('div', 'leaflet-bar eh-control');
@@ -540,6 +573,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 L.control.toggleControl({
                     position: 'topleft'
                 }).addTo(map);
+                   }
             }
 
 
@@ -627,10 +661,37 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             font-size:30px;	
         }
         
-        #counterclock {
+        .counterclock {
             height:60px;
             width:100%;
         }
+
+      .countertitlesmall {
+            width:100%;
+
+            font-size:12px;
+        }
+
+        .counterclocksmall {
+            font-size:12px;
+            width:100%;
+        }
+
+ .toplisthead {
+  height:20px;
+  font-size:16px;
+width:100%;
+text-align:center;
+}
+.toplist {
+  height:100px;
+overflow-y:auto;
+}
+
+.toplistitem {
+  width:100%;
+float:left;
+}
         
         .hunterstats {
             width:100%;
