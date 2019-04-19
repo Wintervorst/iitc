@@ -775,7 +775,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
      }
 
      window.plugin.egghunt.addGrass = () => {
-         const amountOfGrass = Math.floor(window.innerWidth / 50)
+         const amountOfGrass = Math.floor(window.innerWidth / 40)
          const grassLayer = document.createElement('div')
 
          grassLayer.classList.add('grass-layer')
@@ -797,7 +797,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                position: absolute;
                bottom: 0;
                left: ${Math.random() * window.innerWidth}px;
-               width: ${Math.random() * 60 + 20}px;
+               width: ${Math.random() * 160 + 40}px;
              `
              grassLayer.appendChild(pieceOfGrass)
             }
