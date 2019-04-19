@@ -56,6 +56,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.egghunt.initButtonControl();
         window.plugin.egghunt.addStyling();
         document.body.appendChild(window.plugin.egghunt.addGrass());
+        window.plugin.egghunt.addRabbit()
         window.plugin.egghunt.egglayer = new L.featureGroup();
         window.addLayerGroup('Eggs', window.plugin.egghunt.egglayer, true);
         window.plugin.egghunt.egglayer.on("click", window.plugin.egghunt.eggClicked);
@@ -751,6 +752,27 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
      `).appendTo("head");
      }
 
+     window.plugin.egghunt.easeOut = (progress, power = 2) => 1 - (1 - progress) ** power
+
+     window.plugin.egghunt.tween = ({ from = 0, to = 1, delay = 0, duration = 220, ease = window.plugin.egghunt.easeOut, onUpdate} = {}) => {
+         const delta = to - from
+         const startTime = performance.now() + delay
+
+         const update = timestamp => {
+             const elapsed = timestamp - startTime
+             const progress = Math.min(elapsed / duration, 1)
+             const latest = from + ease(progress) * delta
+
+             if (onUpdate) onUpdate(latest)
+
+             if (progress < 1) {
+                 requestAnimationFrame(update)
+             }
+         }
+
+         requestAnimationFrame(update)
+     }
+
      window.plugin.egghunt.addGrass = () => {
          const amountOfGrass = Math.floor(window.innerWidth / 50)
          const grassLayer = document.createElement('div')
@@ -765,7 +787,6 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
            width: 100%;
            z-index: 2999;
          `
-         console.log('IWASCALLED!!!!')
 
          const addPieces = () => {
              for (let i = 0; i < amountOfGrass; i++) {
@@ -775,7 +796,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                position: absolute;
                bottom: 0;
                left: ${Math.random() * window.innerWidth}px;
-               width: ${Math.random() * 80}px;
+               width: ${Math.random() * 60 + 20}px;
              `
              grassLayer.appendChild(pieceOfGrass)
             }
@@ -784,6 +805,92 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
          addPieces()
 
          return grassLayer
+     }
+
+     window.plugin.egghunt.addRabbit = () => {
+         const timeAtStart = performance.now()
+         const appearanceVariance = 30000
+         const minimumTimeToNextAppearance = 10000
+
+         const nextAppearanceRoll = timestamp => timestamp + Math.random() * appearanceVariance + minimumTimeToNextAppearance
+         let nextRabbitAppearance = nextAppearanceRoll(timeAtStart)
+
+         const addRabbitLayer = () => {
+             const rabbitLayer = document.createElement('div')
+             rabbitLayer.classList.add('rabbit-layer')
+             rabbitLayer.style = `
+               height: 100%;
+               left: 0;
+               pointer-events: none;
+               position: absolute;
+               top: 0;
+               width: 100%;
+             `
+             document.body.appendChild(rabbitLayer)
+         }
+
+         const showRabbit = () => {
+             const appearedAt = performance.now()
+             const appearanceDuration = 1000
+             const rabbitWidth = 100
+
+             const rabbit = document.createElement('div')
+             rabbit.classList.add('rabbit')
+             rabbit.style = `
+               background-color: red;
+               bottom: -100px;
+               height: 100px;
+               left: ${Math.max(Math.random() * window.innerWidth - rabbitWidth, 0)}px;
+               position: absolute;
+               width: ${rabbitWidth}px;
+             `
+             const rabbitLayer = document.querySelector('.rabbit-layer')
+             rabbitLayer.appendChild(rabbit)
+             const rabbitToRemove = document.querySelector('.rabbit')
+
+             window.plugin.egghunt.tween({
+                 from: 0,
+                 to: 100,
+                 duration: 1000,
+                 onUpdate: v => {
+                     rabbitToRemove.style.transform = `translateY(${-v}px)` }
+                 }
+             )
+
+             window.plugin.egghunt.tween({
+                 from: 100,
+                 to: 0,
+                 delay: 1000,
+                 duration: 1000,
+                 onUpdate: v => {
+                     rabbitToRemove.style.transform = `translateY(${-v}px)` }
+                 }
+             )
+
+             const removeTimer = timestamp => {
+
+                 if (timestamp > appearedAt + appearanceDuration) {
+                     rabbitLayer.removeChild(rabbitToRemove)
+                     return
+                 }
+                 requestAnimationFrame(removeTimer)
+             }
+
+             requestAnimationFrame(removeTimer)
+         }
+
+         const appearanceTimer = timestamp => {
+
+            if (timestamp > nextRabbitAppearance) {
+                showRabbit()
+                nextRabbitAppearance = nextAppearanceRoll(timestamp)
+            }
+
+            requestAnimationFrame(appearanceTimer)
+         }
+
+         addRabbitLayer()
+         requestAnimationFrame(appearanceTimer)
      }
 
   // PLUGIN END //////////////////////////////////////////////////////////
