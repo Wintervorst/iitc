@@ -174,15 +174,13 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
               </div>
               <div class="head">Egglog</div>
               <div id="egglog">
-                ${htmlContent +=  window.plugin.egghunt.getLogList(data)}
-                ${htmlContent += ''}
+                ${window.plugin.egghunt.getLogList(data)}
               </div>
             </div>
           </div>
           <div class="column column-right">
             <div id="hintlist">
-              ${htmlContent +=  window.plugin.egghunt.getHintList(data)}
-              ${htmlContent += ''}
+              ${window.plugin.egghunt.getHintList(data)}
             </div>
           </div>
         </div>
