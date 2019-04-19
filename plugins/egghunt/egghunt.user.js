@@ -696,8 +696,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }
         
         .hunterstats {
-            width:100%;
-            padding:4px;
+            width: 100%;
+            padding: 4px 0;
         }
         
         #signedupcount, #latestsignup, .logitem, .hintitem {
