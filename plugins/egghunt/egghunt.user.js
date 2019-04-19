@@ -148,47 +148,47 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
     window.plugin.egghunt.updateEggsplorer = function(data) {
-        var htmlContent = ''
-        + '<div class="head-container">'
-        + '  <div class="head head-column">Easter Egg Hunt 2019</div>'
-        + '	 <div class="head head-column">Eggsplorer</div>'
-        + '  <div class="head head-column">Hints</div>'
-        + '</div>'
-        + '<div class="column-container">'
-        + '  <div class="column column-left">'
-        + '    <div id="toplistinfo">'
-        + '	     <div class="counter" id="huntcounter">'
-          +       window.plugin.egghunt.drawTimerAndTopList(data)
-        + '        <div class="hunterstats"> '
-        + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
-        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ window.plugin.egghunt.formatTimeStamp(data.latesthunter.timestamp) + ') : <span class="nickname ' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
-        + '        </div>'
-        + '      </div>'
-        + '    </div>'
-        + '  </div>'
-        + '  <div class="column column-center">'
-        + '    <div id="eggsplorer">'
-        + '      <div class="eggsplorer-content collapsable">'
-        + '	       <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
-        + '	       <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
-        + '      </div>'
-        + '    <div class="head">Egglog</div>'
-        + '    <div id="egglog">'
-                 htmlContent +=  window.plugin.egghunt.getLogList(data);
-                 htmlContent += ''
-        + '    </div>'
-        + '  </div>'
-        + '</div>'
-        + '<div class="column column-right">'
-        + '  <div id="hintlist">';
-        htmlContent +=  window.plugin.egghunt.getHintList(data);
-        htmlContent += ''
-        + '	 </div>'
-        + '</div>'
-        + '</div>'
-        + '</div>';
+      var htmlContent = `
+        <div class="head-container">
+          <div class="head head-column head-left">Easter Egg Hunt 2019</div>
+          <div class="head head-column head-center">Eggsplorer</div>
+          <div class="head head-column head-right">Hints</div>
+        </div>
+        <div class="column-container">
+          <div class="column column-left">
+            <div id="toplistinfo">
+              <div class="counter" id="huntcounter">
+                    ${ window.plugin.egghunt.drawTimerAndTopList(data) }
+                <div class="hunterstats">
+                  <div id="signedupcount" class="signedupcount">${data.huntercount} hunters signed up</div>
+                  <div id="latestsignup" class="latestsignup">Latest signup (${data.latesthunter.timestamp}) : <span class="${data.latesthunter.team.toLowerCase().substring(0,3)}">${data.latesthunter.huntername}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column column-center">
+            <div id="eggsplorer">
+              <div class="eggsplorer-content collapsable">
+                <div id="eggshidden">${data.eggsplorer.hidden} eggs hidden</div>
+           	    <div id="eggsfound">${data.eggsplorer.found} eggs found</div>
+              </div>
+              <div class="head">Egglog</div>
+              <div id="egglog">
+                ${htmlContent +=  window.plugin.egghunt.getLogList(data)}
+                ${htmlContent += ''}
+              </div>
+            </div>
+          </div>
+          <div class="column column-right">
+            <div id="hintlist">
+              ${htmlContent +=  window.plugin.egghunt.getHintList(data)}
+              ${htmlContent += ''}
+            </div>
+          </div>
+        </div>
+      </div>`
 
-        window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
+      window.plugin.egghunt.eggsplorer.innerHTML = htmlContent
     }
 
     window.plugin.egghunt.drawTimerAndTopList = function(data) {
@@ -602,7 +602,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         
         #easteregghuntmain {
             background-color: darkviolet;
-            border-radius:8px;
+            border-radius: 12px 12px 8px 8px;
             box-shadow: var(--panel-shade);
             color: white;
             display: flex;
@@ -618,9 +618,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         .head-container {
             display: flex;
         }
+
         .column-container {
             display: flex;
             flex: 1;
+            height: calc(100% - 60px);
             padding: 8px;
         }
         
@@ -634,64 +636,64 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding: 8px;
             text-align:center;
         }
+        
         .head-column {
             flex: 1;
         }
         
+        .head-left {
+            border-radius: 8px 0 0;
+        }
+
+        .head-right {
+            border-radius: 0 8px 0 0;
+        }
+
         .column {
             display: flex;
             flex: 1;
             flex-direction: column;
             margin: 8px;
         }
-
-        .column-right {
-           overflow-y:auto;
-           height:200px;
-        }
         
         .counter {
-            height:160px;
-            width:100%;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
         }
         
         .countertitle {
-            width:100%;
             height:40px;
             font-size:30px;	
         }
         
         .counterclock {
             height:60px;
-            width:100%;
         }
 
-      .countertitlesmall {
-            width:100%;
-
+       .countertitlesmall {
             font-size:12px;
         }
 
         .counterclocksmall {
             font-size:12px;
-            width:100%;
         }
 
- .toplisthead {
-  height:20px;
-  font-size:16px;
-width:100%;
-text-align:center;
-}
-.toplist {
-  height:100px;
-overflow-y:auto;
-}
+        .toplisthead {
+            height:20px;
+            font-size:16px;
+            text-align:center;
+        }
 
-.toplistitem {
-  width:100%;
-float:left;
-}
+        .toplist {
+            height: 86px;
+            overflow-y:auto;
+        }
+
+        .toplistitem {
+            width:100%;
+            float:left;
+        }
         
         .hunterstats {
             width:100%;
@@ -763,7 +765,7 @@ float:left;
            position: absolute;
            top: 0;
            width: 100%;
-           z-index: 9999;
+           z-index: 2999;
          `
          console.log('IWASCALLED!!!!')
 
