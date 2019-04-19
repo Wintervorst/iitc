@@ -104,7 +104,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
     window.plugin.egghunt.eggIcon = L.icon({
-        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/easteregg.png',
+        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/easteregg.svg?sanitize=true',
         iconSize:     [32, 42], // size of the icon
         iconAnchor:   [30, 60], // point of the icon which will correspond to marker's location
         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
