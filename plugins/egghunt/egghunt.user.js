@@ -753,17 +753,19 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
      }
 
      window.plugin.egghunt.easeOut = (progress, power = 2) => 1 - (1 - progress) ** power
+     window.plugin.egghunt.easeIn = (progress, power = 2) => progress ** power
 
-     window.plugin.egghunt.tween = ({ from = 0, to = 1, delay = 0, duration = 220, ease = window.plugin.egghunt.easeOut, onUpdate} = {}) => {
+     window.plugin.egghunt.tween = ({ from = 0, to = 1, duration = 220, ease = window.plugin.egghunt.easeOut, onUpdate} = {}) => {
          const delta = to - from
-         const startTime = performance.now() + delay
+         const startTime = performance.now()
 
          const update = timestamp => {
              const elapsed = timestamp - startTime
-             const progress = Math.min(elapsed / duration, 1)
+             const progress = Math.max(Math.min(elapsed / duration, 1), 0)
              const latest = from + ease(progress) * delta
 
              if (onUpdate) onUpdate(latest)
+             console.log(progress)
 
              if (progress < 1) {
                  requestAnimationFrame(update)
@@ -831,13 +833,13 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
          const showRabbit = () => {
              const appearedAt = performance.now()
-             const appearanceDuration = 1000
+             const appearanceDuration = 2000
              const rabbitWidth = 100
 
-             const rabbit = document.createElement('div')
+             const rabbit = document.createElement('img')
              rabbit.classList.add('rabbit')
+             rabbit.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/rabbit.svg?sanitize=true'
              rabbit.style = `
-               background-color: red;
                bottom: -100px;
                height: 100px;
                left: ${Math.max(Math.random() * window.innerWidth - rabbitWidth, 0)}px;
@@ -848,24 +850,36 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
              rabbitLayer.appendChild(rabbit)
              const rabbitToRemove = document.querySelector('.rabbit')
 
-             window.plugin.egghunt.tween({
-                 from: 0,
-                 to: 100,
-                 duration: 1000,
-                 onUpdate: v => {
-                     rabbitToRemove.style.transform = `translateY(${-v}px)` }
-                 }
-             )
+             const moveRabbitUp = callback => {
+                window.plugin.egghunt.tween({
+                    from: 0,
+                    to: 100,
+                    duration: appearanceDuration / 2,
+                    onUpdate: v => {
+                        rabbitToRemove.style.transform = `translateY(${-v}px)` 
+                        if (v === 100) {
+                            callback()
+                        }
+                    }
 
-             window.plugin.egghunt.tween({
-                 from: 100,
-                 to: 0,
-                 delay: 1000,
-                 duration: 1000,
-                 onUpdate: v => {
-                     rabbitToRemove.style.transform = `translateY(${-v}px)` }
-                 }
-             )
+                    }
+                )
+             }
+
+             const moveRabbitDown = () => {
+                window.plugin.egghunt.tween({
+                    from: 100,
+                    to: 0,
+                    ease: window.plugin.egghunt.easeIn,
+                    duration: appearanceDuration / 2,
+                    onUpdate: v => {
+                        rabbitToRemove.style.transform = `translateY(${-v}px)` }
+                    }
+                )
+             }
+
+             moveRabbitUp(moveRabbitDown)
+
 
              const removeTimer = timestamp => {
 
