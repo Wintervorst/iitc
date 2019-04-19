@@ -752,8 +752,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
      `).appendTo("head");
      }
 
-     window.plugin.egghunt.easeOut = (progress, power = 2) => 1 - (1 - progress) ** power
-     window.plugin.egghunt.easeIn = (progress, power = 2) => progress ** power
+     window.plugin.egghunt.easeOut = (progress, power = 4) => 1 - (1 - progress) ** power
+     window.plugin.egghunt.easeIn = (progress, power = 4) => progress ** power
 
      window.plugin.egghunt.tween = ({ from = 0, to = 1, duration = 220, ease = window.plugin.egghunt.easeOut, onUpdate} = {}) => {
          const delta = to - from
@@ -765,7 +765,6 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
              const latest = from + ease(progress) * delta
 
              if (onUpdate) onUpdate(latest)
-             console.log(progress)
 
              if (progress < 1) {
                  requestAnimationFrame(update)
@@ -811,8 +810,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
      window.plugin.egghunt.addRabbit = () => {
          const timeAtStart = performance.now()
-         const appearanceVariance = 30000
-         const minimumTimeToNextAppearance = 10000
+         const appearanceVariance = 10000
+         const minimumTimeToNextAppearance = 5000
 
          const nextAppearanceRoll = timestamp => timestamp + Math.random() * appearanceVariance + minimumTimeToNextAppearance
          let nextRabbitAppearance = nextAppearanceRoll(timeAtStart)
@@ -827,13 +826,14 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                position: absolute;
                top: 0;
                width: 100%;
+               z-index: 9999;
              `
              document.body.appendChild(rabbitLayer)
          }
 
          const showRabbit = () => {
              const appearedAt = performance.now()
-             const appearanceDuration = 2000
+             const appearanceDuration = 1000
              const rabbitWidth = 100
 
              const rabbit = document.createElement('img')
@@ -856,7 +856,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                     to: 100,
                     duration: appearanceDuration / 2,
                     onUpdate: v => {
-                        rabbitToRemove.style.transform = `translateY(${-v}px)` 
+                        rabbitToRemove.style.transform = `translateY(${-v}px) translateX(${100 - v}px)` 
                         if (v === 100) {
                             callback()
                         }
@@ -873,7 +873,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                     ease: window.plugin.egghunt.easeIn,
                     duration: appearanceDuration / 2,
                     onUpdate: v => {
-                        rabbitToRemove.style.transform = `translateY(${-v}px)` }
+                        rabbitToRemove.style.transform = `translateY(${-v}px) translateX(${v - 100}px)` }
                     }
                 )
              }
