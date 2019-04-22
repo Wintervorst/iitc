@@ -1,12 +1,12 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.4.20190412.013370
+// @version        0.0.9.20190419.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js
-// @description    [iitc-20190412.013370] Easter Egg Hunt
+// @description    [iitc-20190419.013370] Easter Egg Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,14 +29,17 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190412.013370';
+  plugin_info.dateTimeVersion = '20190419.013370';
   plugin_info.pluginId = 'egghunt';
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
   window.plugin.egghunt = function() {};
-    window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbxEuItZOQaI4ZX2wR_Wkro7b4xKaqN57zWiw4x-9hZ8j_Z0BSG5/exec';
-    window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js'
+ //    window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbwc1VVSeDKaBvMhJiOESJXQOFb6rRZyylT16I2zfZdKNyOwoVo/exec';
+  //  window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js'
+     window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbxEuItZOQaI4ZX2wR_Wkro7b4xKaqN57zWiw4x-9hZ8j_Z0BSG5/exec';
+    
+window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js'
     window.plugin.egghunt.pluginVersion = '0.0.4';
     window.plugin.egghunt.storedtokenkeyname = 'egghunt.installationtoken';
     window.plugin.egghunt.eggsplorer = {};
@@ -46,12 +49,15 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     window.plugin.egghunt.datarequestdate = '';
     window.plugin.egghunt.requesteddata = '';
     window.plugin.egghunt.isbunny = false;
+    window.plugin.egghunt.ishunter = true;
     window.plugin.egghunt.huntHasStarted = false;
 
     var setup = function() {
         window.plugin.egghunt.getBunnyEnabled();
         window.plugin.egghunt.initButtonControl();
         window.plugin.egghunt.addStyling();
+        document.body.appendChild(window.plugin.egghunt.addGrass());
+        window.plugin.egghunt.addRabbit()
         window.plugin.egghunt.egglayer = new L.featureGroup();
         window.addLayerGroup('Eggs', window.plugin.egghunt.egglayer, true);
         window.plugin.egghunt.egglayer.on("click", window.plugin.egghunt.eggClicked);
@@ -87,6 +93,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
              console.log(data);
              window.plugin.egghunt.huntHasStarted = data.huntHasStarted;
              window.plugin.egghunt.egglist = data.egglist;
+             window.plugin.egghunt.ishunter = !data.isbunny;
              if (window.plugin.egghunt.egglist != null) {
                  window.plugin.egghunt.egglayer.clearLayers();
                  for (var i = 0; i < window.plugin.egghunt.egglist.length; i++) {
@@ -99,7 +106,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
     window.plugin.egghunt.eggIcon = L.icon({
-        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/easteregg.png',
+        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/easteregg2.png',
         iconSize:     [32, 42], // size of the icon
         iconAnchor:   [30, 60], // point of the icon which will correspond to marker's location
         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
@@ -140,57 +147,97 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.egghunt.initFormResponse();
     }
 
+
+
     window.plugin.egghunt.updateEggsplorer = function(data) {
-        var htmlContent = ''
-        + '<div class="head-container">'
-        + '  <div class="head head-column">Easter Egg Hunt 2019</div>'
-        + '	 <div class="head head-column">Eggsplorer</div>'
-        + '  <div class="head head-column">Hints</div>'
-        + '</div>'
-        + '<div class="column-container">'
-        + '  <div class="column column-left">'
-        + '    <div id="toplistinfo">'
-        + '	     <div class="counter" id="huntcounter">'
-        + '	       <div class="countertitle">'
+      var htmlContent = `
+        <div class="head-container">
+          <div class="head head-column head-left">Easter Egg Hunt 2019</div>
+          <div class="head head-column head-center">Eggsplorer</div>
+          <div class="head head-column head-right">Hints</div>
+        </div>
+        <div class="column-container">
+          <div class="column column-left">
+            <div id="toplistinfo">
+              <div class="counter" id="huntcounter">
+                    ${ window.plugin.egghunt.drawTimerAndTopList(data) }
+                <div class="hunterstats">
+                  <div id="signedupcount" class="signedupcount">${data.huntercount} hunters signed up</div>
+                  <div id="latestsignup" class="latestsignup">Latest signup (${data.latesthunter.timestamp}) : <span class="${data.latesthunter.team.toLowerCase().substring(0,3)}">${data.latesthunter.huntername}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column column-center">
+            <div id="eggsplorer">
+              <div class="eggsplorer-content collapsable">
+                <div id="eggshidden">${data.eggsplorer.hidden} eggs hidden</div>
+           	    <div id="eggsfound">${data.eggsplorer.found} eggs found</div>
+              </div>
+              <div class="head">Egglog</div>
+              <div id="egglog">
+                ${window.plugin.egghunt.getLogList(data)}
+              </div>
+            </div>
+          </div>
+          <div class="column column-right">
+            <div id="hintlist">
+              ${window.plugin.egghunt.getHintList(data)}
+            </div>
+          </div>
+        </div>
+      </div>`
+
+      window.plugin.egghunt.eggsplorer.innerHTML = htmlContent
+    }
+
+    window.plugin.egghunt.drawTimerAndTopList = function(data) {
+        var result = '';
+        if (data.huntHasStarted) {
+              result  += '<div class="countertitlesmall">'
+        + '		     Hunt ends in <span id="counterclock" class="counterclocksmall">'
+        +            window.plugin.egghunt.startTimer(data.enddatetime)
+        + '        </span>'
+        + '	       </div>'
+            + '<div class="toplisthead">Toplist</div>'
+            + window.plugin.egghunt.showTopList(data);
+        } else {
+        result  += '	       <div class="countertitle">'
         + '		     Hunt starts in'
         + '	       </div>'
         + '        <div id="counterclock" class="counterclock">'
         +            window.plugin.egghunt.startTimer(data.startdatetime)
-        + '        </div>'
-        + '        <div class="hunterstats"> '
-        + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
-        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ data.latesthunter.timestamp  +') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
-        + '        </div>'
-        + '      </div>'
-        + '    </div>'
-        + '  </div>'
-        + '  <div class="column column-center">'
-        + '    <div id="eggsplorer">'
-        + '      <div class="eggsplorer-content collapsable">'
-        + '	       <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
-        + '	       <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
-        + '      </div>'
-        + '    <div class="head">Egglog</div>'
-        + '    <div id="egglog">'
-                 htmlContent +=  window.plugin.egghunt.getLogList(data);
-                 htmlContent += ''
-        + '    </div>'
-        + '  </div>'
-        + '</div>'
-        + '<div class="column column-right">'
-        + '  <div id="hintlist">';
-        htmlContent +=  window.plugin.egghunt.getHintList(data);
-        htmlContent += ''
-        + '	 </div>'
-        + '</div>'
-        + '</div>'
-        + '</div>';
-
-        window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
+        + '        </div>';
+        }
+        return result;
     }
+
+    window.plugin.egghunt.showTopList = function(data) {
+       var result = '<div class="toplist">' ;
+      for (var i = 0; i < 10; i++) {
+          result += '<span class="toplistitem">#'
+          + (i+1)*1 + '.' + ' '
+
+          + '<span class="nickname res">Player</span> '
+           + (i+1)*9 + ' '
+          + ' eggs</span>';
+      }
+        result += "</div>";
+
+        return result;
+
+    }
+
+    window.plugin.egghunt.formatTimeStamp = function(dateTime) {
+     // 2019-04-12T21:57:08
+
+        return dateTime.substring(0, 10) + ' ' + dateTime.substring(11, 19);
+    }
+
   window.plugin.egghunt.startTime = 0;
    window.plugin.egghunt.timerRunning = false;
   window.plugin.egghunt.clock = null;
+    window.plugin.egghunt.currentTimeText = '';
     window.plugin.egghunt.startTimer = function(time) {
         window.plugin.egghunt.startTime = time;
 
@@ -198,11 +245,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
           window.plugin.egghunt.timerRunning = true;
           setInterval(function(){ window.plugin.egghunt.updateTimeToStart(); }, 1000);
       }
+      return window.plugin.egghunt.currentTimeText;
     }
     window.plugin.egghunt.updateTimeToStart = function() {
-         if (window.plugin.egghunt.clock == null || window.plugin.egghunt.clock.length == 0) {
-            window.plugin.egghunt.clock = $("#counterclock");
-        }
+        window.plugin.egghunt.clock = $("#counterclock");
+         
               var secondMultiplier = 1000;
      var minuteMultiplier = secondMultiplier * 60;
    var hourMultiplier = minuteMultiplier * 60;
@@ -220,6 +267,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
    var result = days  + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds ';
+        window.plugin.egghunt.currentTimeText = result;
      window.plugin.egghunt.clock.text(result);
     }
 
@@ -229,8 +277,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
            for (var i = 0; i < data.latestfindslist.length; i++) {
               var find = data.latestfindslist[i];
                // <a onclick="window.selectPortalByLatLng(52.25109, 6.801604);return false" title="Pruisische Veldweg 11I, 7552 AA Hengelo, The Netherlands" href="/intel?ll=52.25109,6.801604&amp;z=17&amp;pll=52.25109,6.801604" class="help">1950's Art Hengelo</a>
-               returnValue += '<div class="logitem">'+ find.timestamp.substring(0,19) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Egg at '
-                  + '<a href="' + find.portal.link + '" class="help">' + find.portal.title  + '</a></div>';
+               returnValue += '<div class="logitem">'+ window.plugin.egghunt.formatTimeStamp(find.timestamp) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Egg</div>';
            }
         }
 
@@ -244,10 +291,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         } else if (data.hintlist != null && data.hintlist.length > 0) {
            for (var i = 0; i < data.hintlist.length; i++) {
               var hint = data.hintlist[i];
+               if (hint.portalurl !== undefined) {
+                   returnValue += '<a href="' + hint.portalurl + '">';
+               }
                if (hint.text == "") {
                    returnValue += '<div class="hintitem"><img src="' + hint.url.replace("http:","https:") + '=s180"></img></div>';
                } else {
                    returnValue += '<div class="hintitem">' + hint.text + '</div>';
+               }
+                if (hint.portalurl !== undefined) {
+                   returnValue += '</a>';
                }
            }
         } else if (!data.huntHasStarted) {
@@ -262,7 +315,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         if (selectedPortal !== undefined) {
             if (selectedPortal !== window.plugin.egghunt.selectedportal) {
                   window.plugin.egghunt.selectedportal = selectedPortal;
-                  if (window.plugin.egghunt.isbunny) {
+                  if (window.plugin.egghunt.isbunny && !window.plugin.egghunt.ishunter) {
                       var existingLayer = window.plugin.egghunt.egglayerlist[portal.selectedPortalGuid];
                       if (existingLayer !== undefined)  {
                           selectedPortal = existingLayer;
@@ -270,11 +323,29 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
                       var latlng = selectedPortal.getLatLng();
                       window.plugin.egghunt.drawInputPopop(selectedPortal, latlng);
-                  } else if (window.plugin.egghunt.huntHasStarted) {
-                      window.plugin.egghunt.getUpdate(portal.selectedPortalGuid);
+             //     } else if (window.plugin.egghunt.huntHasStarted && window.plugin.egghunt.ishunter) {
+                      } else if (window.plugin.egghunt.ishunter) {
+                      window.plugin.egghunt.drawSearchPopup(portal.selectedPortalGuid);
                   }
               }
           }
+    }
+
+    window.plugin.egghunt.drawSearchPopup = function(guid) {
+         var selectedPortal = window.plugin.egghunt.selectedportal;
+         var latlng = window.plugin.egghunt.selectedportal.getLatLng();
+         var formpopup = L.popup();
+
+        formpopup.setLatLng(latlng);
+
+       var formContent = '<div style="width:200px;height:40px;margin-top:30px;"><form id="submit-search" name="submit-search">'
+                                      + '<input name="portalid" id="portalid" type="hidden" value="' + guid +  '"/>'
+                                      + '<input name="submitbuttonvalue" id="submittedstate" type="hidden">'
+                                      + '<button type="submit" id="searchbutton" value="search" style="clear:both; float:left; width:100%;height:30px;">Search here</button>'
+                                      + '</form>';
+
+                formpopup.setContent(formContent + '</div>');
+                formpopup.openOn(window.map);
     }
 
     window.plugin.egghunt.drawInputPopop = function(portal, latlng) {
@@ -326,13 +397,17 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         var northWest = map.getBounds().getNorthWest();
         var southEast = map.getBounds().getSouthEast();
         var requestDate = new Date();
+        var portalidstring = '';
+        if (portalid !== undefined) {
+           portalidstring = '&portalid=' + portalid
+        }
         window.plugin.egghunt.datarequestdate = requestDate;
         $.ajax({
             url: window.plugin.egghunt.scriptURL + '?nickname=' + window.PLAYER.nickname + '&team=' + window.PLAYER.team + ''
             + '&token=' + window.plugin.egghunt.getOrSetInstallationToken() + ''
             + '&nwlat=' +northWest.lat  + '&nwlng=' +northWest.lng + '&selat=' +southEast.lat + '&selng=' +southEast.lng + ''
             + '&version=' + window.plugin.egghunt.pluginVersion + ''
-            + '&portalid=' + portalid,
+            + portalidstring,
             type: 'GET',
             dataType: 'text',
             success: function (data, status, header) {
@@ -392,6 +467,25 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
          });
 
         });
+
+         $('body').on('submit','#submit-search', function(e) {
+            e.preventDefault();
+                 //e.stopPropagation();
+                 map.closePopup();
+               console.log(e.currentTarget, e);
+                  var targetId = $(e.target).attr('id');
+                 if (targetId === undefined && !(targetId === 'searchbutton'))
+                 {
+                     return false;
+                 }
+
+                 var portalid = $(e.target).find("#portalid").val();
+             if (portalid !== undefined) {
+                 window.plugin.egghunt.getUpdate(portalid);
+             } else {
+                 return false;
+             }
+        });
     }
 
         // Create a token for this installation if it did not already exist
@@ -414,6 +508,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
                window.plugin.egghunt.initButtonControl = function() {
+                   if (true) {
                 L.Control.ToggleControl = L.Control.extend({
                     onAdd: function(map) {
                         var container = L.DomUtil.create('div', 'leaflet-bar eh-control');
@@ -478,6 +573,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 L.control.toggleControl({
                     position: 'topleft'
                 }).addTo(map);
+                   }
             }
 
 
@@ -506,7 +602,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         
         #easteregghuntmain {
             background-color: darkviolet;
-            border-radius:8px;
+            border-radius: 12px 12px 8px 8px;
             box-shadow: var(--panel-shade);
             color: white;
             display: flex;
@@ -522,9 +618,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         .head-container {
             display: flex;
         }
+
         .column-container {
             display: flex;
             flex: 1;
+            height: calc(100% - 60px);
             padding: 8px;
         }
         
@@ -538,10 +636,19 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding: 8px;
             text-align:center;
         }
+        
         .head-column {
             flex: 1;
         }
         
+        .head-left {
+            border-radius: 8px 0 0;
+        }
+
+        .head-right {
+            border-radius: 0 8px 0 0;
+        }
+
         .column {
             display: flex;
             flex: 1;
@@ -550,24 +657,47 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }
         
         .counter {
-            height:160px;
-            width:100%;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
         }
         
         .countertitle {
-            width:100%;
             height:40px;
             font-size:30px;	
         }
         
-        #counterclock {
+        .counterclock {
             height:60px;
+        }
+
+       .countertitlesmall {
+            font-size:12px;
+        }
+
+        .counterclocksmall {
+            font-size:12px;
+        }
+
+        .toplisthead {
+            height:20px;
+            font-size:16px;
+            text-align:center;
+        }
+
+        .toplist {
+            height: 86px;
+            overflow-y:auto;
+        }
+
+        .toplistitem {
             width:100%;
+            float:left;
         }
         
         .hunterstats {
-            width:100%;
-            padding:4px;
+            width: 100%;
+            padding: 4px 0;
         }
         
         #signedupcount, #latestsignup, .logitem, .hintitem {
@@ -621,6 +751,161 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding-bottom: 8px;
         }
      `).appendTo("head");
+     }
+
+     window.plugin.egghunt.easeOut = (progress, power = 4) => 1 - (1 - progress) ** power
+     window.plugin.egghunt.easeIn = (progress, power = 4) => progress ** power
+
+     window.plugin.egghunt.tween = ({ from = 0, to = 1, duration = 220, ease = window.plugin.egghunt.easeOut, onUpdate} = {}) => {
+         const delta = to - from
+         const startTime = performance.now()
+
+         const update = timestamp => {
+             const elapsed = timestamp - startTime
+             const progress = Math.max(Math.min(elapsed / duration, 1), 0)
+             const latest = from + ease(progress) * delta
+
+             if (onUpdate) onUpdate(latest)
+
+             if (progress < 1) {
+                 requestAnimationFrame(update)
+             }
+         }
+
+         requestAnimationFrame(update)
+     }
+
+     window.plugin.egghunt.addGrass = () => {
+         const amountOfGrass = Math.floor(window.innerWidth / 40)
+         const grassLayer = document.createElement('div')
+
+         grassLayer.classList.add('grass-layer')
+         grassLayer.style = `
+           height: 100%;
+           left: 0;
+           pointer-events: none;
+           position: absolute;
+           top: 0;
+           width: 100%;
+           z-index: 2999;
+         `
+
+         const addPieces = () => {
+             for (let i = 0; i < amountOfGrass; i++) {
+             const pieceOfGrass = document.createElement('img')
+             pieceOfGrass.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/grass.svg?sanitize=true'
+             pieceOfGrass.style = `
+               position: absolute;
+               bottom: 0;
+               left: ${Math.random() * window.innerWidth}px;
+               width: ${Math.random() * 160 + 40}px;
+             `
+             grassLayer.appendChild(pieceOfGrass)
+            }
+         }
+         
+         addPieces()
+
+         return grassLayer
+     }
+
+     window.plugin.egghunt.addRabbit = () => {
+         const timeAtStart = performance.now()
+         const appearanceVariance = 10000
+         const minimumTimeToNextAppearance = 5000
+
+         const nextAppearanceRoll = timestamp => timestamp + Math.random() * appearanceVariance + minimumTimeToNextAppearance
+         let nextRabbitAppearance = nextAppearanceRoll(timeAtStart)
+
+         const addRabbitLayer = () => {
+             const rabbitLayer = document.createElement('div')
+             rabbitLayer.classList.add('rabbit-layer')
+             rabbitLayer.style = `
+               height: 100%;
+               left: 0;
+               pointer-events: none;
+               position: absolute;
+               top: 0;
+               width: 100%;
+               z-index: 9999;
+             `
+             document.body.appendChild(rabbitLayer)
+         }
+
+         const showRabbit = () => {
+             const appearedAt = performance.now()
+             const appearanceDuration = 1000
+             const rabbitWidth = 100
+
+             const rabbit = document.createElement('img')
+             rabbit.classList.add('rabbit')
+             rabbit.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/rabbit.svg?sanitize=true'
+             rabbit.style = `
+               bottom: -100px;
+               height: 100px;
+               left: ${Math.max(Math.random() * window.innerWidth - rabbitWidth, 0)}px;
+               position: absolute;
+               width: ${rabbitWidth}px;
+             `
+             const rabbitLayer = document.querySelector('.rabbit-layer')
+             rabbitLayer.appendChild(rabbit)
+             const rabbitToRemove = document.querySelector('.rabbit')
+
+             const moveRabbitUp = callback => {
+                window.plugin.egghunt.tween({
+                    from: 0,
+                    to: 100,
+                    duration: appearanceDuration / 2,
+                    onUpdate: v => {
+                        rabbitToRemove.style.transform = `translateY(${-v}px) translateX(${100 - v}px)` 
+                        if (v === 100) {
+                            callback()
+                        }
+                    }
+
+                    }
+                )
+             }
+
+             const moveRabbitDown = () => {
+                window.plugin.egghunt.tween({
+                    from: 100,
+                    to: 0,
+                    ease: window.plugin.egghunt.easeIn,
+                    duration: appearanceDuration / 2,
+                    onUpdate: v => {
+                        rabbitToRemove.style.transform = `translateY(${-v}px) translateX(${v - 100}px)` }
+                    }
+                )
+             }
+
+             moveRabbitUp(moveRabbitDown)
+
+
+             const removeTimer = timestamp => {
+
+                 if (timestamp > appearedAt + appearanceDuration) {
+                     rabbitLayer.removeChild(rabbitToRemove)
+                     return
+                 }
+                 requestAnimationFrame(removeTimer)
+             }
+
+             requestAnimationFrame(removeTimer)
+         }
+
+         const appearanceTimer = timestamp => {
+
+            if (timestamp > nextRabbitAppearance) {
+                showRabbit()
+                nextRabbitAppearance = nextAppearanceRoll(timestamp)
+            }
+
+            requestAnimationFrame(appearanceTimer)
+         }
+
+         addRabbitLayer()
+         requestAnimationFrame(appearanceTimer)
      }
 
   // PLUGIN END //////////////////////////////////////////////////////////
