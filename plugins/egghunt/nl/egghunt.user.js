@@ -2,11 +2,11 @@
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.7.20190416.013370
+// @version        0.0.9.20190419.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js
-// @description    [iitc-20190416.013370] Easter Egg Hunt
+// @description    [iitc-20190419.013370] Easter Egg Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,14 +29,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190416.013370';
+  plugin_info.dateTimeVersion = '20190419.013370';
   plugin_info.pluginId = 'egghunt';
   // PLUGIN START ///////////////////////////////////////////////////////
 
   // use own namespace for plugin
   window.plugin.egghunt = function() {};
-    window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbz9UoFa_SaZPPwyKPpWtyBOWfk-snDIs1yzlI8OuGs0rJU8yxY/exec';
-    window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js'
+ //    window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbwc1VVSeDKaBvMhJiOESJXQOFb6rRZyylT16I2zfZdKNyOwoVo/exec';
+  //  window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/egghunt.user.js'
+     window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbz9UoFa_SaZPPwyKPpWtyBOWfk-snDIs1yzlI8OuGs0rJU8yxY/exec';
+     window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/nl/egghunt.user.js'
     window.plugin.egghunt.pluginVersion = '0.0.4';
     window.plugin.egghunt.storedtokenkeyname = 'egghunt.installationtoken';
     window.plugin.egghunt.eggsplorer = {};
@@ -53,6 +55,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         window.plugin.egghunt.getBunnyEnabled();
         window.plugin.egghunt.initButtonControl();
         window.plugin.egghunt.addStyling();
+        document.body.appendChild(window.plugin.egghunt.addGrass());
+        window.plugin.egghunt.addRabbit()
         window.plugin.egghunt.egglayer = new L.featureGroup();
         window.addLayerGroup('Eggs', window.plugin.egghunt.egglayer, true);
         window.plugin.egghunt.egglayer.on("click", window.plugin.egghunt.eggClicked);
@@ -101,7 +105,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
     window.plugin.egghunt.eggIcon = L.icon({
-        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/easteregg.png',
+        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/easteregg2.png',
         iconSize:     [32, 42], // size of the icon
         iconAnchor:   [30, 60], // point of the icon which will correspond to marker's location
         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
@@ -145,52 +149,82 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
     window.plugin.egghunt.updateEggsplorer = function(data) {
-        var htmlContent = ''
-        + '<div class="head-container">'
-        + '  <div class="head head-column">Easter Egg Hunt 2019</div>'
-        + '	 <div class="head head-column">Eggsplorer</div>'
-        + '  <div class="head head-column">Hints</div>'
-        + '</div>'
-        + '<div class="column-container">'
-        + '  <div class="column column-left">'
-        + '    <div id="toplistinfo">'
-        + '	     <div class="counter" id="huntcounter">'
-        + '	       <div class="countertitle">'
+      var htmlContent = `
+        <div class="head-container">
+          <div class="head head-column head-left">Easter Egg Hunt 2019</div>
+          <div class="head head-column head-center">Eggsplorer</div>
+          <div class="head head-column head-right">Hints</div>
+        </div>
+        <div class="column-container">
+          <div class="column column-left">
+            <div id="toplistinfo">
+              <div class="counter" id="huntcounter">
+                    ${ window.plugin.egghunt.drawTimerAndTopList(data) }
+                <div class="hunterstats">
+                  <div id="signedupcount" class="signedupcount">${data.huntercount} hunters signed up</div>
+                  <div id="latestsignup" class="latestsignup">Latest signup (${data.latesthunter.timestamp}) : <span class="${data.latesthunter.team.toLowerCase().substring(0,3)}">${data.latesthunter.huntername}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column column-center">
+            <div id="eggsplorer">
+              <div class="eggsplorer-content collapsable">
+                <div id="eggshidden">${data.eggsplorer.hidden} eggs hidden</div>
+           	    <div id="eggsfound">${data.eggsplorer.found} eggs found</div>
+              </div>
+              <div class="head">Egglog</div>
+              <div id="egglog">
+                ${window.plugin.egghunt.getLogList(data)}
+              </div>
+            </div>
+          </div>
+          <div class="column column-right">
+            <div id="hintlist">
+              ${window.plugin.egghunt.getHintList(data)}
+            </div>
+          </div>
+        </div>
+      </div>`
+
+      window.plugin.egghunt.eggsplorer.innerHTML = htmlContent
+    }
+
+    window.plugin.egghunt.drawTimerAndTopList = function(data) {
+        var result = '';
+        if (data.huntHasStarted) {
+              result  += '<div class="countertitlesmall">'
+        + '		     Hunt ends in <span id="counterclock" class="counterclocksmall">'
+        +            window.plugin.egghunt.startTimer(data.enddatetime)
+        + '        </span>'
+        + '	       </div>'
+            + '<div class="toplisthead">Toplist</div>'
+            + window.plugin.egghunt.showTopList(data);
+        } else {
+        result  += '	       <div class="countertitle">'
         + '		     Hunt starts in'
         + '	       </div>'
         + '        <div id="counterclock" class="counterclock">'
         +            window.plugin.egghunt.startTimer(data.startdatetime)
-        + '        </div>'
-        + '        <div class="hunterstats"> '
-        + '          <div id="signedupcount" class="signedupcount">' + data.huntercount + ' hunters signed up</div>'
-        + '          <div id="latestsignup" class="latestsignup">Latest signup ('+ window.plugin.egghunt.formatTimeStamp(data.latesthunter.timestamp) + ') : <span class="' + data.latesthunter.team.toLowerCase().substring(0,3) + '">' + data.latesthunter.huntername + '</div>'
-        + '        </div>'
-        + '      </div>'
-        + '    </div>'
-        + '  </div>'
-        + '  <div class="column column-center">'
-        + '    <div id="eggsplorer">'
-        + '      <div class="eggsplorer-content collapsable">'
-        + '	       <div id="eggshidden">' + data.eggsplorer.hidden + ' eggs hidden</div>'
-        + '	       <div id="eggsfound">' + data.eggsplorer.found + ' eggs found</div>'
-        + '      </div>'
-        + '    <div class="head">Egglog</div>'
-        + '    <div id="egglog">'
-                 htmlContent +=  window.plugin.egghunt.getLogList(data);
-                 htmlContent += ''
-        + '    </div>'
-        + '  </div>'
-        + '</div>'
-        + '<div class="column column-right">'
-        + '  <div id="hintlist">';
-        htmlContent +=  window.plugin.egghunt.getHintList(data);
-        htmlContent += ''
-        + '	 </div>'
-        + '</div>'
-        + '</div>'
-        + '</div>';
+        + '        </div>';
+        }
+        return result;
+    }
 
-        window.plugin.egghunt.eggsplorer.innerHTML = htmlContent;
+    window.plugin.egghunt.showTopList = function(data) {
+       var result = '<div class="toplist">' ;
+      for (var i = 0; i < 10; i++) {
+          result += '<span class="toplistitem">#'
+          + (i+1)*1 + '.' + ' '
+
+          + '<span class="nickname res">Player</span> '
+           + (i+1)*9 + ' '
+          + ' eggs</span>';
+      }
+        result += "</div>";
+
+        return result;
+
     }
 
     window.plugin.egghunt.formatTimeStamp = function(dateTime) {
@@ -242,8 +276,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
            for (var i = 0; i < data.latestfindslist.length; i++) {
               var find = data.latestfindslist[i];
                // <a onclick="window.selectPortalByLatLng(52.25109, 6.801604);return false" title="Pruisische Veldweg 11I, 7552 AA Hengelo, The Netherlands" href="/intel?ll=52.25109,6.801604&amp;z=17&amp;pll=52.25109,6.801604" class="help">1950's Art Hengelo</a>
-               returnValue += '<div class="logitem">'+ find.timestamp.substring(0,19) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Egg at '
-                  + '<a href="' + find.portal.link + '" class="help">' + find.portal.title  + '</a></div>';
+               returnValue += '<div class="logitem">'+ window.plugin.egghunt.formatTimeStamp(find.timestamp) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Egg</div>';
            }
         }
 
@@ -474,6 +507,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     }
 
                window.plugin.egghunt.initButtonControl = function() {
+                   if (true) {
                 L.Control.ToggleControl = L.Control.extend({
                     onAdd: function(map) {
                         var container = L.DomUtil.create('div', 'leaflet-bar eh-control');
@@ -538,6 +572,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 L.control.toggleControl({
                     position: 'topleft'
                 }).addTo(map);
+                   }
             }
 
 
@@ -566,7 +601,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         
         #easteregghuntmain {
             background-color: darkviolet;
-            border-radius:8px;
+            border-radius: 12px 12px 8px 8px;
             box-shadow: var(--panel-shade);
             color: white;
             display: flex;
@@ -582,9 +617,11 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         .head-container {
             display: flex;
         }
+
         .column-container {
             display: flex;
             flex: 1;
+            height: calc(100% - 60px);
             padding: 8px;
         }
         
@@ -598,10 +635,19 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding: 8px;
             text-align:center;
         }
+        
         .head-column {
             flex: 1;
         }
         
+        .head-left {
+            border-radius: 8px 0 0;
+        }
+
+        .head-right {
+            border-radius: 0 8px 0 0;
+        }
+
         .column {
             display: flex;
             flex: 1;
@@ -610,24 +656,47 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }
         
         .counter {
-            height:160px;
-            width:100%;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
         }
         
         .countertitle {
-            width:100%;
             height:40px;
             font-size:30px;	
         }
         
-        #counterclock {
+        .counterclock {
             height:60px;
+        }
+
+       .countertitlesmall {
+            font-size:12px;
+        }
+
+        .counterclocksmall {
+            font-size:12px;
+        }
+
+        .toplisthead {
+            height:20px;
+            font-size:16px;
+            text-align:center;
+        }
+
+        .toplist {
+            height: 86px;
+            overflow-y:auto;
+        }
+
+        .toplistitem {
             width:100%;
+            float:left;
         }
         
         .hunterstats {
-            width:100%;
-            padding:4px;
+            width: 100%;
+            padding: 4px 0;
         }
         
         #signedupcount, #latestsignup, .logitem, .hintitem {
@@ -681,6 +750,161 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             padding-bottom: 8px;
         }
      `).appendTo("head");
+     }
+
+     window.plugin.egghunt.easeOut = (progress, power = 4) => 1 - (1 - progress) ** power
+     window.plugin.egghunt.easeIn = (progress, power = 4) => progress ** power
+
+     window.plugin.egghunt.tween = ({ from = 0, to = 1, duration = 220, ease = window.plugin.egghunt.easeOut, onUpdate} = {}) => {
+         const delta = to - from
+         const startTime = performance.now()
+
+         const update = timestamp => {
+             const elapsed = timestamp - startTime
+             const progress = Math.max(Math.min(elapsed / duration, 1), 0)
+             const latest = from + ease(progress) * delta
+
+             if (onUpdate) onUpdate(latest)
+
+             if (progress < 1) {
+                 requestAnimationFrame(update)
+             }
+         }
+
+         requestAnimationFrame(update)
+     }
+
+     window.plugin.egghunt.addGrass = () => {
+         const amountOfGrass = Math.floor(window.innerWidth / 40)
+         const grassLayer = document.createElement('div')
+
+         grassLayer.classList.add('grass-layer')
+         grassLayer.style = `
+           height: 100%;
+           left: 0;
+           pointer-events: none;
+           position: absolute;
+           top: 0;
+           width: 100%;
+           z-index: 2999;
+         `
+
+         const addPieces = () => {
+             for (let i = 0; i < amountOfGrass; i++) {
+             const pieceOfGrass = document.createElement('img')
+             pieceOfGrass.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/grass.svg?sanitize=true'
+             pieceOfGrass.style = `
+               position: absolute;
+               bottom: 0;
+               left: ${Math.random() * window.innerWidth}px;
+               width: ${Math.random() * 160 + 40}px;
+             `
+             grassLayer.appendChild(pieceOfGrass)
+            }
+         }
+         
+         addPieces()
+
+         return grassLayer
+     }
+
+     window.plugin.egghunt.addRabbit = () => {
+         const timeAtStart = performance.now()
+         const appearanceVariance = 10000
+         const minimumTimeToNextAppearance = 5000
+
+         const nextAppearanceRoll = timestamp => timestamp + Math.random() * appearanceVariance + minimumTimeToNextAppearance
+         let nextRabbitAppearance = nextAppearanceRoll(timeAtStart)
+
+         const addRabbitLayer = () => {
+             const rabbitLayer = document.createElement('div')
+             rabbitLayer.classList.add('rabbit-layer')
+             rabbitLayer.style = `
+               height: 100%;
+               left: 0;
+               pointer-events: none;
+               position: absolute;
+               top: 0;
+               width: 100%;
+               z-index: 9999;
+             `
+             document.body.appendChild(rabbitLayer)
+         }
+
+         const showRabbit = () => {
+             const appearedAt = performance.now()
+             const appearanceDuration = 1000
+             const rabbitWidth = 100
+
+             const rabbit = document.createElement('img')
+             rabbit.classList.add('rabbit')
+             rabbit.src = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/assets/rabbit.svg?sanitize=true'
+             rabbit.style = `
+               bottom: -100px;
+               height: 100px;
+               left: ${Math.max(Math.random() * window.innerWidth - rabbitWidth, 0)}px;
+               position: absolute;
+               width: ${rabbitWidth}px;
+             `
+             const rabbitLayer = document.querySelector('.rabbit-layer')
+             rabbitLayer.appendChild(rabbit)
+             const rabbitToRemove = document.querySelector('.rabbit')
+
+             const moveRabbitUp = callback => {
+                window.plugin.egghunt.tween({
+                    from: 0,
+                    to: 100,
+                    duration: appearanceDuration / 2,
+                    onUpdate: v => {
+                        rabbitToRemove.style.transform = `translateY(${-v}px) translateX(${100 - v}px)` 
+                        if (v === 100) {
+                            callback()
+                        }
+                    }
+
+                    }
+                )
+             }
+
+             const moveRabbitDown = () => {
+                window.plugin.egghunt.tween({
+                    from: 100,
+                    to: 0,
+                    ease: window.plugin.egghunt.easeIn,
+                    duration: appearanceDuration / 2,
+                    onUpdate: v => {
+                        rabbitToRemove.style.transform = `translateY(${-v}px) translateX(${v - 100}px)` }
+                    }
+                )
+             }
+
+             moveRabbitUp(moveRabbitDown)
+
+
+             const removeTimer = timestamp => {
+
+                 if (timestamp > appearedAt + appearanceDuration) {
+                     rabbitLayer.removeChild(rabbitToRemove)
+                     return
+                 }
+                 requestAnimationFrame(removeTimer)
+             }
+
+             requestAnimationFrame(removeTimer)
+         }
+
+         const appearanceTimer = timestamp => {
+
+            if (timestamp > nextRabbitAppearance) {
+                showRabbit()
+                nextRabbitAppearance = nextAppearanceRoll(timestamp)
+            }
+
+            requestAnimationFrame(appearanceTimer)
+         }
+
+         addRabbitLayer()
+         requestAnimationFrame(appearanceTimer)
      }
 
   // PLUGIN END //////////////////////////////////////////////////////////
