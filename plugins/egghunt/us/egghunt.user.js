@@ -38,7 +38,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
  
      window.plugin.egghunt.scriptURL = 'https://script.google.com/macros/s/AKfycbxEuItZOQaI4ZX2wR_Wkro7b4xKaqN57zWiw4x-9hZ8j_Z0BSG5/exec';
     
-window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js'
+window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js';
     window.plugin.egghunt.pluginVersion = '0.0.4';
     window.plugin.egghunt.storedtokenkeyname = 'egghunt.installationtoken';
     window.plugin.egghunt.eggsplorer = {};
