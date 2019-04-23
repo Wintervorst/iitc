@@ -655,6 +655,10 @@ window.plugin.egghunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/maste
             flex-direction: column;
             margin: 8px;
         }
+
+        .column-right {
+  height:200px;
+ }
         
         .counter {
             display: flex;
