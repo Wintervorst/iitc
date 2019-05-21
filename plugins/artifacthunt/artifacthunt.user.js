@@ -1,12 +1,12 @@
 // ==UserScript==
 // @id             iitc-plugin-artifacthunt@wintervorst
-// @name           IITC plugin: Abbadon Artifact Hunt
+// @name           IITC plugin: Abaddon Artifact Hunt
 // @category       Layer
-// @version        0.0.10.20190422.013370
+// @version        0.1.10.20190521.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/us/artifacthunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/us/artifacthunt.user.js
-// @description    [iitc-20190422.013370] Abbadon Artifact Hunt
+// @description    [iitc-20190521.013370] Abaddon Artifact Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -53,7 +53,7 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
 
     var setup = function() {
         window.plugin.artifacthunt.getBunnyEnabled();
-        window.plugin.artifacthunt.initButtonControl();
+
         window.plugin.artifacthunt.addStyling();
         //document.body.appendChild(window.plugin.artifacthunt.addGrass());
         //window.plugin.artifacthunt.addRabbit()
@@ -100,13 +100,18 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
                  }
              }
 
+             if (data.isbunny) {
+              window.plugin.artifacthunt.initButtonControl();
+             }
+
              window.plugin.artifacthunt.updateEggsplorer(data);
+
          }
     }
 
     window.plugin.artifacthunt.eggIcon = L.icon({
-        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/assets/artifact.png',
-        iconSize:     [32, 42], // size of the icon
+        iconUrl: 'https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/assets/abaddon_chicago.png',
+        iconSize:     [40, 40], // size of the icon
         iconAnchor:   [30, 60], // point of the icon which will correspond to marker's location
         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
     });
@@ -220,7 +225,7 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
 
           + '<span class="nickname ' +  item.team.toLowerCase().substring(0,3) + '">' +  item.player +'</span> '
            + item.count + ' '
-          + ' eggs</span>';
+          + ' artifacts</span>';
       }
         result += "</div>";
 
@@ -277,7 +282,7 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
            for (var i = 0; i < data.latestfindslist.length; i++) {
               var find = data.latestfindslist[i];
                // <a onclick="window.selectPortalByLatLng(52.25109, 6.801604);return false" title="Pruisische Veldweg 11I, 7552 AA Hengelo, The Netherlands" href="/intel?ll=52.25109,6.801604&amp;z=17&amp;pll=52.25109,6.801604" class="help">1950's Art Hengelo</a>
-               returnValue += '<div class="logitem">'+ window.plugin.artifacthunt.formatTimeStamp(find.timestamp) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Egg</div>';
+               returnValue += '<div class="logitem">'+ window.plugin.artifacthunt.formatTimeStamp(find.timestamp) + ' - <span class="'+ find.team.toLowerCase().substring(0,3) + ' nickname">' + find.huntername + '</span> found an Artifact</div>';
            }
         }
 
@@ -386,7 +391,7 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
         + '<input name="nickname" id="nickname" type="hidden" value="' + window.PLAYER.nickname + '">'
         + '<input name="token" id="token" type="hidden" value="' + window.plugin.artifacthunt.getOrSetInstallationToken() + '">'
         + '<input name="submitbuttonvalue" id="submittedstate" type="hidden">'
-        + '<button type="submit" id="hidebutton" value="hide" style="clear:both; float:left; width:100%;height:30px;">Hide Egg</button>'
+        + '<button type="submit" id="hidebutton" value="hide" style="clear:both; float:left; width:100%;height:30px;">Hide Artifact</button>'
         + '</form>';
 
         formpopup.setContent(formContent + '</div>');
@@ -507,8 +512,12 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
         return guid.replace(/-/g,"");
     }
 
+    window.plugin.artifacthunt.initButtonControlInitialized = false;
                window.plugin.artifacthunt.initButtonControl = function() {
-                   if (true) {
+
+
+                   if (!window.plugin.artifacthunt.initButtonControlInitialized) {
+                      window.plugin.artifacthunt.initButtonControlInitialized = true;
                 L.Control.ToggleControl = L.Control.extend({
                     onAdd: function(map) {
                         var container = L.DomUtil.create('div', 'leaflet-bar eh-control');
@@ -601,7 +610,7 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
         }
 
         #easterartifacthuntmain {
-            background-color: darkviolet;
+            background-color: #006EA1;
             border-radius: 12px 12px 8px 8px;
             box-shadow: var(--panel-shade);
             color: white;
@@ -627,8 +636,8 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
         }
 
         .head {
-            background-color: orange;
-            color: darkviolet;
+            background-color: #00AFD5;
+            color: #006EA1;
             font-family:Arial;
             font-size:18px;
             font-weight:bold;
