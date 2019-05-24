@@ -2,11 +2,11 @@
 // @id             iitc-plugin-artifacthunt@wintervorst
 // @name           IITC plugin: Abaddon Artifact Hunt
 // @category       Layer
-// @version        0.1.10.20190521.013370
+// @version        0.2.10.20190524.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/us/artifacthunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/us/artifacthunt.user.js
-// @description    [iitc-20190521.013370] Abaddon Artifact Hunt
+// @description    [iitc-20190524.013370] Abaddon Artifact Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20190422.013370';
+  plugin_info.dateTimeVersion = '20190524.013370';
   plugin_info.pluginId = 'artifacthunt';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -50,6 +50,7 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
     window.plugin.artifacthunt.isbunny = false;
     window.plugin.artifacthunt.ishunter = true;
     window.plugin.artifacthunt.huntHasStarted = false;
+    window.plugin.artifacthunt.playboxStyle = {fill: true, color: 'teal', fillColor:'teal', opacity: 1, weight: 3, fillOpacity:0.20, clickable: false, interactive: false };
 
     var setup = function() {
         window.plugin.artifacthunt.getBunnyEnabled();
@@ -57,8 +58,11 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
         window.plugin.artifacthunt.addStyling();
         //document.body.appendChild(window.plugin.artifacthunt.addGrass());
         //window.plugin.artifacthunt.addRabbit()
+
+        window.plugin.artifacthunt.playboxLayer = new L.LayerGroup();
         window.plugin.artifacthunt.egglayer = new L.featureGroup();
         window.addLayerGroup('Eggs', window.plugin.artifacthunt.egglayer, true);
+        window.addLayerGroup('Playbox', window.plugin.artifacthunt.playboxLayer, true);
         window.plugin.artifacthunt.egglayer.on("click", window.plugin.artifacthunt.eggClicked);
 
         window.plugin.artifacthunt.initControls();
@@ -69,6 +73,16 @@ window.plugin.artifacthunt.updateUrl = 'https://github.com/Wintervorst/iitc/raw/
         window.addHook('portalSelected',  window.plugin.artifacthunt.portalSelected);
         //map.on('zoomend', function() {  window.plugin.artifacthunt.getUpdate(); });
         map.on('moveend', function() {  window.plugin.artifacthunt.getUpdate(); });
+
+        window.plugin.artifacthunt.drawPlaybox();
+    }
+
+    window.plugin.artifacthunt.drawPlaybox = function() {
+        var path = [{"lat":41.91189063253717,"lng":-87.62635231018066},{"lat":41.91430178803837,"lng":-87.6300323009491},{"lat":41.91688848935042,"lng":-87.63113737106323},{"lat":41.91671285245554,"lng":-87.63789653778076},{"lat":41.903874083350345,"lng":-87.63720989227295},{"lat":41.903746321429416,"lng":-87.64017105102539},{"lat":41.893875940359635,"lng":-87.64004230499268},{"lat":41.893907885801035,"lng":-87.63708114624023},{"lat":41.89140012004841,"lng":-87.63705968856812},{"lat":41.89154387998115,"lng":-87.62427091598511},{"lat":41.90232495281649,"lng":-87.62429237365723}];
+        //var path = [{lat:41.899241,lng:-87.631137}, {lat:41.905122,lng:-87.629833}, {lat:41.911865, lng:-87.631882}, {lat:41.903513, lng:-87.630066}];
+        var region = L.geodesicPolygon(path, window.plugin.artifacthunt.playboxStyle);
+        var playbox = new google.maps.Polygon({paths: path});
+        window.plugin.artifacthunt.playboxLayer.addLayer(region);
     }
 
     window.plugin.artifacthunt.updateView = function() {
