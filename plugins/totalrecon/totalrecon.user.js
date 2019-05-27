@@ -2,11 +2,11 @@
 // @id             iitc-plugin-totalrecon@wintervorst
 // @name           IITC plugin: Total Recon
 // @category       Highlighter
-// @version        1.0.3.20181110.013370
+// @version        1.1.0.20190527.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
-// @description    [iitc-20181110.013370] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
+// @description    [iitc-20190527.013370] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -34,7 +34,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
 //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20181110.013370';
+  plugin_info.dateTimeVersion = '20190527.013370';
   plugin_info.pluginId = 'totalrecon';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -186,7 +186,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 
      if (window.map.hasLayer(markerLayer)) {
-			var marker = createGenericMarker(portalLatLng, markerColor, {
+			var marker = window.plugin.totalrecon.createGenericMarker(portalLatLng, markerColor, {
 				title: title,
                 id:candidate.id,
                 data:candidate,
@@ -262,7 +262,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
   var form;
 
    window.plugin.totalrecon.fireCreatedEvent = function (latlng) {
-      var marker = createGenericMarker(latlng, 'pink', {
+      var marker = window.plugin.totalrecon.createGenericMarker(latlng, 'pink', {
          title: 'Place your mark!'
      	});
 
@@ -374,6 +374,31 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 			  window.map.removeLayer(window.plugin.totalrecon.editmarker);
      };
      window.plugin.totalrecon.drawInputPopop(event.layer.getLatLng(), event.layer.options.data);
+  }
+
+  window.plugin.totalrecon.getGenericMarkerSvg = function(color) {
+      var markerTemplate = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg"\n	version="1.1" baseProfile="full"\n	width="25px" height="41px" viewBox="0 0 25 41">\n\n	<path d="M1.36241844765,18.67488124675 A12.5,12.5 0 1,1 23.63758155235,18.67488124675 L12.5,40.5336158073 Z" style="stroke:none; fill: %COLOR%;" />\n	<path d="M1.80792170975,18.44788599685 A12,12 0 1,1 23.19207829025,18.44788599685 L12.5,39.432271175 Z" style="stroke:#000000; stroke-width:1px; stroke-opacity: 0.15; fill: none;" />\n	<path d="M2.921679865,17.8803978722 A10.75,10.75 0 1,1 22.078320135,17.8803978722 L12.5,36.6789095943 Z" style="stroke:#ffffff; stroke-width:1.5px; stroke-opacity: 0.35; fill: none;" />\n\n	<path d="M19.86121593215,17.25 L12.5,21.5 L5.13878406785,17.25 L5.13878406785,8.75 L12.5,4.5 L19.86121593215,8.75 Z M7.7368602792,10.25 L17.2631397208,10.25 L12.5,18.5 Z M12.5,13 L7.7368602792,10.25 M12.5,13 L17.2631397208,10.25 M12.5,13 L12.5,18.5 M19.86121593215,17.25 L16.39711431705,15.25 M5.13878406785,17.25 L8.60288568295,15.25 M12.5,4.5 L12.5,8.5" style="stroke:#ffffff; stroke-width:1.25px; stroke-opacity: 1; fill: none;" />\n\n</svg>';
+
+      return markerTemplate.replace(/%COLOR%/g, color);
+  }
+
+  window.plugin.totalrecon.getGenericMarkerIcon = function(color,className) {
+      return L.divIcon({
+          iconSize: new L.Point(25, 41),
+          iconAnchor: new L.Point(12, 41),
+          html: window.plugin.totalrecon.getGenericMarkerSvg(color),
+          className: className || 'leaflet-iitc-divicon-generic-marker'
+      });
+  }
+
+  window.plugin.totalrecon.createGenericMarker = function(ll,color,options) {
+      options = options || {};
+
+      var markerOpt = $.extend({
+          icon: window.plugin.totalrecon.getGenericMarkerIcon(color || '#a24ac3')
+      }, options);
+
+      return L.marker(ll, markerOpt);
   }
 
   // Initialize the plugin
