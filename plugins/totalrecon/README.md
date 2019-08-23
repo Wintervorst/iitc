@@ -1,3 +1,5 @@
+<a href="intent://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js#Intent;scheme=https;action=android.intent.action.VIEW;end;">Android link</a>
+
 ## If you want to have a map of your submitted portals and potential portals on multiple devices and share it with other players. This script makes that possible.
 
 <kbd><img src="https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/assets/markersonthemap.png"></img></kbd><br/>
