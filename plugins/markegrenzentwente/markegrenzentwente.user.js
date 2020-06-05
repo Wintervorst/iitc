@@ -36,7 +36,7 @@ function wrapper(plugin_info) {
     window.plugin.markegrenzentwente = function () { };
 
     window.plugin.markegrenzentwente.drawStenen = function () {
-        var geopoints = window.plugin.markegrenzentwente.markegrenzendata; 
+        var geopoints = window.plugin.markegrenzentwente.markegrenzendata;
         var layer = window.plugin.markegrenzentwente.markegrenzenbestaandlayer;
         var color = window.plugin.markegrenzentwente.colorbestaand;
         for (var key in geopoints) {
@@ -85,7 +85,7 @@ function wrapper(plugin_info) {
 
 
     window.plugin.markegrenzentwente.placeMarker = function (location, title, urlnow, info, markercolor, layer) {
-        var portalLatLng = L.latLng(location.lat(), location.lng());        
+        var portalLatLng = L.latLng(location.lat(), location.lng());
         var marker = createGenericMarker(portalLatLng, markercolor, {
             title: title
         });
@@ -118,15 +118,14 @@ function wrapper(plugin_info) {
     }
 
     window.plugin.markegrenzentwente.drawPoly = function (map, polyCoords, polyLabel) {
-        console.log(polyCoords);
         var coordList = [];
         for (var i = 0; i < polyCoords.length; i++) {
             var locat = polyCoords[i];
             coordList.push(L.latLng(locat.lat(), locat.lng()));
         }
-        console.log(coordList);
         var rectangle = L.polygon(coordList, { color: 'purple', weight: 4, clickable: false, fillOpacity: 0 });
-        rectangle.addTo(window.plugin.markegrenzentwente.markegrenzenlayer);   
+        rectangle.addTo(window.plugin.markegrenzentwente.markegrenzenlayer);
+    }
 
     window.plugin.markegrenzentwente.setcolor = function () {
         $(".leaflet-control-layers-overlays label span:contains('markegrenzen - Bestaand')").parent().css('background-color', window.plugin.markegrenzentwente.colorbestaand).css('color', 'white');
@@ -13252,5 +13251,3 @@ var info = {};
 if (typeof GM_info !== 'undefined' && GM_info && GM_info.script) info.script = { version: GM_info.script.version, name: GM_info.script.name, description: GM_info.script.description };
 script.appendChild(document.createTextNode('(' + wrapper + ')(' + JSON.stringify(info) + ');'));
 (document.body || document.head || document.documentElement).appendChild(script);
-
-
