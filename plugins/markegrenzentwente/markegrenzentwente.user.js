@@ -2,7 +2,7 @@
 // @id             iitc-plugin-markegrenzen-twente
 // @name           IITC plugin: Markegrenzen Twente
 // @category       Layer
-// @version        0.1.1.20200108.21732
+// @version        0.1.2.20200605.21732
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/markegrenzentwente/markegrenzentwente.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/markegrenzentwente/markegrenzentwente.user.js
