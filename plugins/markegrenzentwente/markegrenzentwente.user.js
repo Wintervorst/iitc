@@ -2,11 +2,11 @@
 // @id             iitc-plugin-markegrenzen-twente
 // @name           IITC plugin: Markegrenzen Twente
 // @category       Layer
-// @version        0.1.2.20200605.21732
+// @version        0.1.3.20200605.21733
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/markegrenzentwente/markegrenzentwente.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/markegrenzentwente/markegrenzentwente.user.js
-// @description    [iitc-2020-06-05-021732] Toont de staat van de markegrenzen
+// @description    [iitc-2020-06-05-021733] Toont de staat van de markegrenzen
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -26,7 +26,7 @@ function wrapper(plugin_info) {
     //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
     //(leaving them in place might break the 'About IITC' page or break update checks)
     plugin_info.buildName = 'iitc';
-    plugin_info.dateTimeVersion = '20170108.21732';
+    plugin_info.dateTimeVersion = '20200605.21732';
     plugin_info.pluginId = 'markegrenzen-twente';
     //END PLUGIN AUTHORS NOTE
 
@@ -34,6 +34,32 @@ function wrapper(plugin_info) {
     // source information from http://www.markegrenzen.nl/
     // use own namespace for plugin
     window.plugin.markegrenzentwente = function () { };
+
+
+      window.plugin.markegrenzentwente.getGenericMarkerSvg = function(color) {
+      var markerTemplate = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg"\n	version="1.1" baseProfile="full"\n	width="25px" height="41px" viewBox="0 0 25 41">\n\n	<path d="M1.36241844765,18.67488124675 A12.5,12.5 0 1,1 23.63758155235,18.67488124675 L12.5,40.5336158073 Z" style="stroke:none; fill: %COLOR%;" />\n	<path d="M1.80792170975,18.44788599685 A12,12 0 1,1 23.19207829025,18.44788599685 L12.5,39.432271175 Z" style="stroke:#000000; stroke-width:1px; stroke-opacity: 0.15; fill: none;" />\n	<path d="M2.921679865,17.8803978722 A10.75,10.75 0 1,1 22.078320135,17.8803978722 L12.5,36.6789095943 Z" style="stroke:#ffffff; stroke-width:1.5px; stroke-opacity: 0.35; fill: none;" />\n\n	<path d="M19.86121593215,17.25 L12.5,21.5 L5.13878406785,17.25 L5.13878406785,8.75 L12.5,4.5 L19.86121593215,8.75 Z M7.7368602792,10.25 L17.2631397208,10.25 L12.5,18.5 Z M12.5,13 L7.7368602792,10.25 M12.5,13 L17.2631397208,10.25 M12.5,13 L12.5,18.5 M19.86121593215,17.25 L16.39711431705,15.25 M5.13878406785,17.25 L8.60288568295,15.25 M12.5,4.5 L12.5,8.5" style="stroke:#ffffff; stroke-width:1.25px; stroke-opacity: 1; fill: none;" />\n\n</svg>';
+
+      return markerTemplate.replace(/%COLOR%/g, color);
+  }
+
+  window.plugin.markegrenzentwente.getGenericMarkerIcon = function(color,className) {
+      return L.divIcon({
+          iconSize: new L.Point(25, 41),
+          iconAnchor: new L.Point(12, 41),
+          html: window.plugin.markegrenzentwente.getGenericMarkerSvg(color),
+          className: className || 'leaflet-iitc-divicon-generic-marker'
+      });
+  }
+
+  window.plugin.markegrenzentwente.createGenericMarker = function(ll,color,options) {
+      options = options || {};
+
+      var markerOpt = $.extend({
+          icon: window.plugin.markegrenzentwente.getGenericMarkerIcon(color || '#a24ac3')
+      }, options);
+
+      return L.marker(ll, markerOpt);
+  }
 
     window.plugin.markegrenzentwente.drawStenen = function () {
         var geopoints = window.plugin.markegrenzentwente.markegrenzendata;
@@ -86,7 +112,7 @@ function wrapper(plugin_info) {
 
     window.plugin.markegrenzentwente.placeMarker = function (location, title, urlnow, info, markercolor, layer) {
         var portalLatLng = L.latLng(location.lat(), location.lng());
-        var marker = createGenericMarker(portalLatLng, markercolor, {
+        var marker = window.plugin.markegrenzentwente.createGenericMarker(portalLatLng, markercolor, {
             title: title
         });
 
