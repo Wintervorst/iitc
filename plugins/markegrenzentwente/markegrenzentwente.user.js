@@ -6,7 +6,7 @@
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/markegrenzentwente/markegrenzentwente.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/markegrenzentwente/markegrenzentwente.user.js
-// @description    [iitc-2020-01-08-021732] Toont de staat van de markegrenzen
+// @description    [iitc-2020-06-05-021732] Toont de staat van de markegrenzen
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
