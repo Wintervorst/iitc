@@ -2,7 +2,7 @@
 // @id             iitc-plugin-dronerange@wintervorst
 // @name           IITC plugin: Drone range
 // @category       Layer
-// @version        0.0.1.20200610.013370
+// @version        0.0.2.20200610.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
@@ -71,7 +71,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     var latlng = new L.LatLng(coo.lat, coo.lng);
 
     // Specify the no submit circle options
-    var circleOptions = {color:'black', opacity:0.5, fillColor:'purple', fillOpacity:0.05, weight:1, clickable:false, interactive:false};
+    var circleOptions = {color:'black', opacity:0.5, fillColor:'grey', fillOpacity:0.05, weight:1, clickable:false, interactive:false};
     var range = 300; // Hardcoded to 20m, the universal too close for new submit range of a portal
 
     // Create the circle object with specified options
