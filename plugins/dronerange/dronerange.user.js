@@ -2,7 +2,7 @@
 // @id             iitc-plugin-dronerange@wintervorst
 // @name           IITC plugin: Drone range
 // @category       Layer
-// @version        0.0.3.20200611.013370
+// @version        0.0.4.20200611.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
@@ -38,7 +38,7 @@ function wrapper(plugin_info) {
   window.plugin.dronerange.layerlist = {};
   window.plugin.dronerange.currentportal;
   window.plugin.dronerange.cellLevel = 16 ;
-  window.plugin.dronerange.circleradius = 495;
+  window.plugin.dronerange.circleradius = 500;
   window.plugin.dronerange.cellOptions = {fill: true, color: 'teal', fillColor:'teal', opacity: 1, weight: 3, fillOpacity:0.10, clickable: false, interactive: false };
 
   window.plugin.dronerange.update = function () {
@@ -64,8 +64,7 @@ window.plugin.dronerange.seenCells = {};
 
   }
 
-  window.plugin.dronerange.drawCellAndNeighbors = function (layer, cell, cellSize, cellOptions, center) {
-      console.log(center);
+  window.plugin.dronerange.drawCellAndNeighbors = function (layer, cell, cellSize, cellOptions, center) {      
     var cellStr = cell.toString();
 
       if (!window.plugin.dronerange.seenCells[cellStr]) {
@@ -73,18 +72,20 @@ window.plugin.dronerange.seenCells = {};
         window.plugin.dronerange.seenCells[cellStr] = true;
     // is it on the screen?
     var corners = cell.getCornerLatLngs();
+          var region = L.geodesicPolygon([corners[0], corners[1], corners[2], corners[3]], cellOptions);
     var cellBounds = L.latLngBounds([corners[0], corners[1]]).extend(corners[2]).extend(corners[3]);
 
     // Only draw filled cells when they are completely on screen because we must likely calculate something in it
-   if (cellBounds.intersects(window.plugin.dronerange.bounds)) {
+         if (window.plugin.dronerange.bounds.contains(region.getBounds())) {
+   //if (cellBounds.intersects(window.plugin.dronerange.bounds)) {
       // on screen - draw it
 
-        var distance_one = center.distanceTo(corners[0]);
-      var distance_two = center.distanceTo(corners[1]);
-      var distance_three = center.distanceTo(corners[2]);
-      var distance_four = center.distanceTo(corners[3]);
-       var radius = window.plugin.dronerange.circleradius;
-       if (distance_one < radius ||distance_two < radius ||  distance_three < radius || distance_four < radius) {
+//         var distance_one = center.distanceTo(corners[0]);
+//       var distance_two = center.distanceTo(corners[1]);
+//       var distance_three = center.distanceTo(corners[2]);
+//       var distance_four = center.distanceTo(corners[3]);
+//        var radius = window.plugin.dronerange.circleradius;
+//        if (distance_one < radius ||distance_two < radius ||  distance_three < radius || distance_four < radius) {
 
 
       window.plugin.dronerange.drawCell(layer, cell, cellSize, cellOptions);
@@ -95,7 +96,7 @@ window.plugin.dronerange.seenCells = {};
         window.plugin.dronerange.drawCellAndNeighbors(layer, neighbors[i], cellSize, cellOptions, center);
       }
     }
-   }
+   //}
 
       }
 
@@ -208,10 +209,11 @@ window.plugin.dronerange.seenCells = {};
     circle.addTo(window.plugin.dronerange.dronerangeFlightplanLayers);
     window.plugin.dronerange.flightplanportallayers[portal.options.guid] = circle;
     //window.plugin.dronerange.addflightpoint(portal);
-
+      this._latlng = latlng;
       window.plugin.dronerange.bounds= circle.getBounds();
     window.plugin.dronerange.drawCells(latlng, window.plugin.dronerange.cellLevel, window.plugin.dronerange.cellOptions, window.plugin.dronerange.dronerangeFlightplanLayers)
   }
+
 
   window.plugin.dronerange.addflightpoint = function (portal) {
     var index = window.plugin.dronerange.flightpoints.length;
