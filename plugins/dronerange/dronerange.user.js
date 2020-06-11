@@ -2,7 +2,7 @@
 // @id             iitc-plugin-dronerange@wintervorst
 // @name           IITC plugin: Drone range
 // @category       Layer
-// @version        0.0.4.20200611.013370
+// @version        0.0.5.20200611.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
