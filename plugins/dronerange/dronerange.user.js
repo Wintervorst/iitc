@@ -2,11 +2,11 @@
 // @id             iitc-plugin-dronerange@wintervorst
 // @name           IITC plugin: Drone range
 // @category       Layer
-// @version        0.0.7.20200613.013370
+// @version        0.0.8.20200614.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
-// @description    [iitc-20200613.013370] Draws the action radius for a drone per portal
+// @description    [iitc-20200614.013370] Draws the action radius for a drone per portal
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -29,7 +29,7 @@ function wrapper(plugin_info) {
   //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
   //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc';
-  plugin_info.dateTimeVersion = '20200613.013370';
+  plugin_info.dateTimeVersion = '20200614.013370';
   plugin_info.pluginId = 'Dronerange';
   // PLUGIN START ///////////////////////////////////////////////////////
 
@@ -67,8 +67,12 @@ function wrapper(plugin_info) {
   window.plugin.dronerange.drawCells = function (portalLatLng, cellSize, cellOptions, layer, circle) {
     var cell = S2.S2Cell.FromLatLng(portalLatLng, window.plugin.dronerange.cellLevel);
     window.plugin.dronerange.seenCells = {};
+    window.plugin.dronerange.celllayers = [];
     window.plugin.dronerange.drawCellAndNeighbors(layer, cell, cellSize, cellOptions, portalLatLng, circle);
+    window.plugin.dronerange.highlightPortalList();
   }
+
+  window.plugin.dronerange.celllayers = [];
 
   window.plugin.dronerange.drawCellAndNeighbors = function (layer, cell, cellSize, cellOptions, center, circle) {
     var cellStr = cell.toString();
@@ -98,7 +102,7 @@ function wrapper(plugin_info) {
       var radius = window.plugin.dronerange.circleradius;
       var sorted = distanceArray.sort((a, b) => (a.d > b.d) ? 1 : -1);
       if (Math.ceil(sorted[0].d) < window.plugin.dronerange.circleradius || window.plugin.dronerange.bounds.contains(cellBounds)) {
-
+        window.plugin.dronerange.celllayers.push(cell);
 
         cellOptions.opacity = 0.5;
         window.plugin.dronerange.drawCell(layer, cell, cellSize, cellOptions);
@@ -112,6 +116,51 @@ function wrapper(plugin_info) {
       }
 
     }
+  }
+
+ window.plugin.dronerange.highlightPortalList = function() {
+     console.log(window.plugin.dronerange.currentportal);
+     console.log(window.plugin.dronerange.celllayers);
+     if (window.plugin.dronerange.celllayers.length > 0) {
+        window.plugin.dronerange.possibleportallist = window.portals;
+         for (var i = 0;i < window.plugin.dronerange.celllayers.length; i++) {
+             window.plugin.dronerange.highlightportalsincell(window.plugin.dronerange.celllayers[i]);
+         }
+     }
+ }
+
+  window.plugin.dronerange.possibleportallist = [];
+
+  window.plugin.dronerange.highlightportalsincell = function(cell) {
+    var cellCorners = cell.getCornerLatLngs();
+  	var cellPolygon = new google.maps.Polygon({paths: cellCorners});
+  	$.each(window.plugin.dronerange.possibleportallist, function(i, portal) {
+    	  if (portal != undefined) {
+              var portalLatLng = portal.getLatLng();
+
+                  if (cellPolygon.containsLatLng(portalLatLng)) {
+                      window.plugin.dronerange.highlightPortal(portalLatLng, i);
+//                       var indexIs = window.plugin.dronerange.possibleportallist.indexOf(portal);
+//                       window.plugin.dronerange.possibleportallist.splice(indexIs, 1);
+                  }
+
+          }
+  	});
+  }
+
+  window.plugin.dronerange.highlightPortal = function(latlng, guid) {
+    var circleOptions = { color: '#983091', opacity: 1, weight: 4, fillColor:'#F5B338', fillOpacity: 1, clickable: false, interactive: false };
+      if (guid === window.plugin.dronerange.currentportal) {
+         circleOptions.fillColor = 'F8F8F8';
+          circleOptions.color = 'teal';
+      }
+    var range = 10;
+
+    // Create the circle object with specified options
+    var circle = new L.Circle(latlng, range, circleOptions);
+
+    // Add the new circle to the dronerange draw layer
+    circle.addTo(window.plugin.dronerange.dronerangeFlightplanLayers);
   }
 
   window.plugin.dronerange.drawCell = function (layer, cell, cellSize, cellOptions) {
@@ -189,6 +238,7 @@ function wrapper(plugin_info) {
   window.plugin.dronerange.portalSelected = function (portal) {
     if (window.plugin.dronerange.currentportal !== portal.selectedPortalGuid) {
       //console.log(portal);
+        window.plugin.dronerange.currentportal = portal.selectedPortalGuid;
       var porsec = window.portals[portal.selectedPortalGuid];
       //if (window.plugin.dronerange.flightplanportals[portal.selectedPortalGuid] === undefined) {
       //        window.plugin.dronerange.flightplanportals[portal.selectedPortalGuid] = porsec;
@@ -267,6 +317,8 @@ function wrapper(plugin_info) {
     window.updateDisplayedLayerGroup = window.updateDisplayedLayerGroupModified;
 
     window.addHook('portalSelected', window.plugin.dronerange.portalSelected);
+
+      window.addHook('mapDataRefreshEnd', window.plugin.dronerange.highlightPortalList);
   }
 
   // Overload for IITC default in order to catch the manual select/deselect event and handle it properly
@@ -278,6 +330,92 @@ function wrapper(plugin_info) {
   }
 
   window.plugin.dronerange.initializeS2 = function () {
+      if (!google.maps.Polygon.prototype.getBounds) {
+  google.maps.Polygon.prototype.getBounds = function(latLng) {
+    var bounds = new google.maps.LatLngBounds(),
+      paths = this.getPaths(),
+      path,
+      p, i;
+
+    for (p = 0; p < paths.getLength(); p++) {
+      path = paths.getAt(p);
+      for (i = 0; i < path.getLength(); i++) {
+        bounds.extend(path.getAt(i));
+      }
+    }
+
+    return bounds;
+  };
+}
+      if (google.maps.Polygon.prototype.containsLatLng === undefined) {
+       // Polygon containsLatLng - method to determine if a latLng is within a polygon
+google.maps.Polygon.prototype.containsLatLng = function(latLng) {
+  // Exclude points outside of bounds as there is no way they are in the poly
+
+  var inPoly = false,
+    bounds, lat, lng,
+    numPaths, p, path, numPoints,
+    i, j, vertex1, vertex2;
+
+  // Arguments are a pair of lat, lng variables
+  if (arguments.length == 2) {
+    if (
+      typeof arguments[0] == "number" &&
+      typeof arguments[1] == "number"
+    ) {
+      lat = arguments[0];
+      lng = arguments[1];
+    }
+  } else if (arguments.length == 1) {
+    bounds = this.getBounds();
+
+    if (!bounds && !bounds.contains(latLng)) {
+      return false;
+    }
+    lat = latLng.lat;
+    lng = latLng.lng;
+  } else {
+    console.log("Wrong number of inputs in google.maps.Polygon.prototype.contains.LatLng");
+  }
+
+  // Raycast point in polygon method
+
+  numPaths = this.getPaths().getLength();
+  for (p = 0; p < numPaths; p++) {
+    path = this.getPaths().getAt(p);
+    numPoints = path.getLength();
+    j = numPoints - 1;
+
+    for (i = 0; i < numPoints; i++) {
+      vertex1 = path.getAt(i);
+      vertex2 = path.getAt(j);
+
+      if (
+        vertex1.lng() <  lng &&
+        vertex2.lng() >= lng ||
+        vertex2.lng() <  lng &&
+        vertex1.lng() >= lng
+      ) {
+        if (
+          vertex1.lat() +
+          (lng - vertex1.lng()) /
+          (vertex2.lng() - vertex1.lng()) *
+          (vertex2.lat() - vertex1.lat()) <
+          lat
+        ) {
+          inPoly = !inPoly;
+        }
+      }
+
+      j = i;
+    }
+  }
+
+  return inPoly;
+};
+
+      }
+
     if (window.plugin.s2celldrawer === undefined) {
       window.S2 = {};
 
