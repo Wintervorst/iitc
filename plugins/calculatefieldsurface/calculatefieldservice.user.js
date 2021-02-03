@@ -2,11 +2,11 @@
 // @id             iitc-plugin-calculate-field-surface
 // @name           IITC plugin: Calculate field surface
 // @category       Info
-// @version        0.0.1.20210202.21732
+// @version        0.0.2.20210203.21732
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
-// @description    [iitc-2021-02-02-021732] Calculate surface of field
+// @description    [iitc-2021-02-03-021732] Calculate surface of field
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -25,7 +25,7 @@ function wrapper(plugin_info) {
     //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
     //(leaving them in place might break the 'About IITC' page or break update checks)
     plugin_info.buildName = 'iitc';
-    plugin_info.dateTimeVersion = '20210202.21732';
+    plugin_info.dateTimeVersion = '20210203.21732';
     plugin_info.pluginId = ' iitc-plugin-calculate-field-surface';
     //END PLUGIN AUTHORS NOTE
 
@@ -63,21 +63,31 @@ function wrapper(plugin_info) {
         var point = ev.latlng;
         var fields = window.fields;
         var content = "";
+        var defaultcontent = "Click on map";
         for (var guid in fields) {
             var field = fields[guid];
 
             // we don't need to check the field's bounds first. pnpoly is pretty simple math.
             // Checking the bounds is about 50 times slower than just using pnpoly
             if (window.plugin.calculateFieldSurface.pnpoly(field._latlngs, point)) {
-                if (field.options.team == TEAM_RES) {
-                    content += "RES field: " + window.plugin.calculateFieldSurface.calculateSurface(field._latlngs) + " m2<br/>";
-                } else {
-                    content += "ENL field: " + window.plugin.calculateFieldSurface.calculateSurface(field._latlngs) + " m2<br/>";
+                var squareMeters = window.plugin.calculateFieldSurface.calculateSurface(field._latlngs);
+                var result = "";
+                if (window.plugin.calculateFieldSurface.muinput.value !== undefined && window.plugin.calculateFieldSurface.muinput.value !== "") {
+                    const parsed = parseInt(window.plugin.calculateFieldSurface.muinput.value);
+                    if (!isNaN(parsed)) {
+                        result = " => " + Math.round((parsed * 10000000 / squareMeters)) / 10000 + " MU/1000m2";
+                    }
                 }
-
+                if (field.options.team == TEAM_RES) {
+                    content += "RES field: " + squareMeters + " m2" + result + "<br/>";
+                } else {
+                    content += "ENL field: " + squareMeters + " m2" + result + "<br/>";
+                }
             }
         }
-
+        if (content === "") {
+            content = defaultcontent;
+        }
         window.plugin.calculateFieldSurface.tooltip.innerHTML = content;
 
         return false;
@@ -87,11 +97,16 @@ function wrapper(plugin_info) {
         var btn = window.plugin.calculateFieldSurface.button,
             tooltip = window.plugin.calculateFieldSurface.tooltip,
             layer = window.plugin.calculateFieldSurface.layer;
-
+        ev.preventDefault();
+        ev.stopPropagation();
         if (btn.classList.contains("active")) {
+            if (ev.target.nodeName == "A") {
+                map.off("click", window.plugin.calculateFieldSurface.calculate);
+                btn.classList.remove("active");
+            } else {
 
-            map.off("click", window.plugin.calculateFieldSurface.calculate);
-            btn.classList.remove("active");
+                return false;
+            }
         } else {
             console.log("inactive");
 
@@ -213,13 +228,23 @@ function wrapper(plugin_info) {
         tooltip.className = "leaflet-control-layer-count-tooltip";
         button.appendChild(tooltip);
 
+        var information = document.createElement("div");
+        information.id = "resultforcount";
+        tooltip.appendChild(information);
+
+        var muinput = document.createElement("input");
+        muinput.id = "inputfield";
+        muinput.placeholder = "Enter MU";
+        tooltip.appendChild(muinput);
+
         var container = document.createElement("div");
         container.className = "leaflet-control-layer-count leaflet-bar leaflet-control";
         container.appendChild(button);
         parent.append(container);
 
         window.plugin.calculateFieldSurface.button = button;
-        window.plugin.calculateFieldSurface.tooltip = tooltip;
+        window.plugin.calculateFieldSurface.tooltip = information;
+        window.plugin.calculateFieldSurface.muinput = muinput;
         window.plugin.calculateFieldSurface.container = container;
     }
 
