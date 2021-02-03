@@ -97,15 +97,14 @@ function wrapper(plugin_info) {
         var btn = window.plugin.calculateFieldSurface.button,
             tooltip = window.plugin.calculateFieldSurface.tooltip,
             layer = window.plugin.calculateFieldSurface.layer;
-        ev.preventDefault();
-        ev.stopPropagation();
+        
         if (btn.classList.contains("active")) {
             if (ev.target.nodeName == "A") {
                 map.off("click", window.plugin.calculateFieldSurface.calculate);
                 btn.classList.remove("active");
             } else {
-
-                return false;
+                ev.preventDefault();
+                ev.stopPropagation();
             }
         } else {
             console.log("inactive");
