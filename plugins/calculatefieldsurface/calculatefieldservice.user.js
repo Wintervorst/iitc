@@ -2,11 +2,11 @@
 // @id             iitc-plugin-calculate-field-surface
 // @name           IITC plugin: Calculate field surface
 // @category       Info
-// @version        0.0.2.20210203.21732
+// @version        0.0.3.20210204.21732
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
-// @description    [iitc-2021-02-03-021732] Calculate surface of field
+// @description    [iitc-2021-02-04-021732] Calculate surface of field
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -25,7 +25,7 @@ function wrapper(plugin_info) {
     //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
     //(leaving them in place might break the 'About IITC' page or break update checks)
     plugin_info.buildName = 'iitc';
-    plugin_info.dateTimeVersion = '20210203.21732';
+    plugin_info.dateTimeVersion = '20210204.21732';
     plugin_info.pluginId = ' iitc-plugin-calculate-field-surface';
     //END PLUGIN AUTHORS NOTE
 
@@ -95,22 +95,24 @@ function wrapper(plugin_info) {
 
     window.plugin.calculateFieldSurface.onBtnClick = function (ev) {
         var btn = window.plugin.calculateFieldSurface.button,
-            tooltip = window.plugin.calculateFieldSurface.tooltip,
+            parent = window.plugin.calculateFieldSurface.parent,
             layer = window.plugin.calculateFieldSurface.layer;
-        
+        ev.preventDefault();
+        ev.stopPropagation();
         if (btn.classList.contains("active")) {
             if (ev.target.nodeName == "A") {
                 map.off("click", window.plugin.calculateFieldSurface.calculate);
                 btn.classList.remove("active");
+                parent.classList.remove("active");
             } else {
-                ev.preventDefault();
-                ev.stopPropagation();
+
             }
         } else {
             console.log("inactive");
 
             map.on("click", window.plugin.calculateFieldSurface.calculate);
             btn.classList.add("active");
+            parent.classList.add("active");
             setTimeout(function () {
                 tooltip.textContent = "Click on map";
             }, 10);
@@ -212,37 +214,51 @@ function wrapper(plugin_info) {
         return (num * Math.PI) / 180;
     }
 
+    window.plugin.calculateFieldSurface.noClick = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
+
     var setup = function () {
-        $('<style>').prop('type', 'text/css').html('.leaflet-control-layer-count a\n{\n	\n}\n.leaflet-control-layer-count a.active\n{\n	background-color: #BBB;\n}\n.leaflet-control-layer-count-tooltip\n{\n	background-color: rgba(255, 255, 255, 0.6);\n	display: none;\n	height: 24px;\n	left: 30px;\n	line-height: 24px;\n	margin-left: 15px;\n	margin-top: -12px;\n	padding: 0 10px;\n	position: absolute;\n	top: 50%;\n	white-space: nowrap;\n	width: auto;\n}\n.leaflet-control-layer-count a.active .leaflet-control-layer-count-tooltip\n{\n	display: block;\n}\n.leaflet-control-layer-count-tooltip:before\n{\n	border-color: transparent rgba(255, 255, 255, 0.6);\n	border-style: solid;\n	border-width: 12px 12px 12px 0;\n	content: "";\n	display: block;\n	height: 0;\n	left: -12px;\n	position: absolute;\n	width: 0;\n}\n').appendTo('head');
+        $('<style>').prop('type', 'text/css').html('.leaflet-control-layer-count a\n{\n	\n}\n.leaflet-control-layer-count a.active\n{\n	background-color: #BBB;\n}\n.leaflet-control-layer-count-tooltip\n{\n	background-color: rgba(255, 255, 255, 0.6);\n	display: none;\n	height: 24px;\n	left: 30px;\n	line-height: 24px;\n	margin-left: 15px;\n	margin-top: -12px;\n	padding: 0 10px;\n	position: absolute;\n	top: 50%;\n	white-space: nowrap;\n	width: auto;\n}\n.leaflet-control-layer-count .active.leaflet-control-layer-count-tooltip\n{\n	display: block;\n}\n.leaflet-control-layer-count-tooltip:before\n{\n	border-color: transparent rgba(255, 255, 255, 0.6);\n	border-style: solid;\n	border-width: 12px 12px 12px 0;\n	content: "";\n	display: block;\n	height: 0;\n	left: -12px;\n	position: absolute;\n	width: 0;\n}\n').appendTo('head');
 
         var parent = $(".leaflet-top.leaflet-left", window.map.getContainer());
 
         var button = document.createElement("a");
         button.className = "leaflet-bar-part";
         button.innerHTML = "🌄"
-        button.addEventListener("click", window.plugin.calculateFieldSurface.onBtnClick, false);
+        button.addEventListener("click", window.plugin.calculateFieldSurface.onBtnClick, true);
         button.title = 'Calculate surface of field';
 
-        var tooltip = document.createElement("div");
-        tooltip.className = "leaflet-control-layer-count-tooltip";
-        button.appendChild(tooltip);
 
-        var information = document.createElement("div");
-        information.id = "resultforcount";
-        tooltip.appendChild(information);
-
-        var muinput = document.createElement("input");
-        muinput.id = "inputfield";
-        muinput.placeholder = "Enter MU";
-        tooltip.appendChild(muinput);
 
         var container = document.createElement("div");
         container.className = "leaflet-control-layer-count leaflet-bar leaflet-control";
         container.appendChild(button);
+
+        var tooltip = document.createElement("div");
+        tooltip.className = "leaflet-control-layer-count-tooltip";
+
+        container.appendChild(tooltip);
+
+        var information = document.createElement("div");
+        information.id = "resultforcount";
+        information.text = "Click on map";
+        tooltip.appendChild(information);
+
+        var muinput = document.createElement("input");
+        muinput.id = "inputfield";
+        muinput.type = "text";
+        muinput.placeholder = "Enter MU";
+        muinput.addEventListener("click", window.plugin.calculateFieldSurface.noClick);
+        tooltip.appendChild(muinput);
+
         parent.append(container);
 
         window.plugin.calculateFieldSurface.button = button;
         window.plugin.calculateFieldSurface.tooltip = information;
+        window.plugin.calculateFieldSurface.parent = tooltip;
         window.plugin.calculateFieldSurface.muinput = muinput;
         window.plugin.calculateFieldSurface.container = container;
     }
