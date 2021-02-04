@@ -2,7 +2,7 @@
 // @id             iitc-plugin-calculate-field-surface
 // @name           IITC plugin: Calculate field surface
 // @category       Info
-// @version        0.0.4.20210204.21732
+// @version        0.0.5.20210204.21732
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
@@ -221,7 +221,7 @@ function wrapper(plugin_info) {
     }
 
     var setup = function () {
-        $('<style>').prop('type', 'text/css').html('.leaflet-control-layer-count a\n{\n	\n}\n.leaflet-control-layer-count a.active\n{\n	background-color: #BBB;\n}\n.leaflet-control-layer-count-tooltip\n{\ncolor:rgba(0, 0, 0, 1.0)\n	background-color: rgba(255, 255, 255, 1.0);\n	display: none;\n	height: 24px;\n	left: 30px;\n	line-height: 24px;\n	margin-left: 15px;\n	margin-top: -12px;\n	padding: 0 10px;\n	position: absolute;\n	top: 50%;\n	white-space: nowrap;\n	width: auto;\n}\n.leaflet-control-layer-count .active.leaflet-control-layer-count-tooltip\n{\n	display: block;\n}\n.leaflet-control-layer-count-tooltip:before\n{\n	border-color: transparent rgba(255, 255, 255, 0.6);\n	border-style: solid;\n	border-width: 12px 12px 12px 0;\n	content: "";\n	display: block;\n	height: 0;\n	left: -12px;\n	position: absolute;\n	width: 0;\n}\n').appendTo('head');
+        $('<style>').prop('type', 'text/css').html('.leaflet-control-layer-count a\n{\n	\n}\n.leaflet-control-layer-count a.active\n{\n	background-color: #BBB;\n}\n.leaflet-control-layer-count-tooltip\n{\ncolor:rgba(0, 0, 0, 1.0);\n	background-color: rgba(255, 255, 255, 1.0);\n	display: none;\n	height: 24px;\n	left: 30px;\n	line-height: 24px;\n	margin-left: 15px;\n	margin-top: -12px;\n	padding: 0 10px;\n	position: absolute;\n	top: 50%;\n	white-space: nowrap;\n	width: auto;\n}\n.leaflet-control-layer-count .active.leaflet-control-layer-count-tooltip\n{\n	display: block;\n}\n.leaflet-control-layer-count-tooltip:before\n{\n	border-color: transparent rgba(255, 255, 255, 0.6);\n	border-style: solid;\n	border-width: 12px 12px 12px 0;\n	content: "";\n	display: block;\n	height: 0;\n	left: -12px;\n	position: absolute;\n	width: 0;\n}\n').appendTo('head');
 
         var parent = $(".leaflet-top.leaflet-left", window.map.getContainer());
 
