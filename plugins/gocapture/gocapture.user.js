@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.11.20210526.11236
+// @version        0.0.12.20210526.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    0.0.11 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.12 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -39,7 +39,7 @@ function wrapper(plugin_info) {
 
   window.plugin.gocapture.layerlist = {}
   window.plugin.gocapture.capturedportals = {}
-  window.plugin.gocapture.localstoragekey = 'gocapture.capturedportalslist'
+  window.plugin.gocapture.localstoragekey = 'gocapture.capturedportallist2'
   window.plugin.gocapture.circlefirstlayerlist = {}
   window.plugin.gocapture.circlesecondlayerlist = {}
 
