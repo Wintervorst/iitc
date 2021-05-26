@@ -2,7 +2,7 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.1.20210526.11234
+// @version        0.0.2.20210526.11235
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
