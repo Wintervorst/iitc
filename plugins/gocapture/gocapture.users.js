@@ -7,10 +7,14 @@
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @description    [iitc-2021-05-26-112345] Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
-// @include        https://intel.ingress.com/*
+// @include        https://*.ingress.com/intel*
+// @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
-// @match          https://intel.ingress.com/*
+// @include        https://intel.ingress.com/*
+// @match          https://*.ingress.com/intel*
+// @match          http://*.ingress.com/intel*
 // @match          http://intel.ingress.com/*
+// @match          https://intel.ingress.com/*
 // @include        https://*.ingress.com/mission/*
 // @include        http://*.ingress.com/mission/*
 // @match          https://*.ingress.com/mission/*
