@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.6.20210526.11236
+// @version        0.0.7.20210526.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    0.0.6 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.7 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -22,9 +22,9 @@
 // @grant          none
 // ==/UserScript==
 
-function wrapper (plugin_info) {
+function wrapper(plugin_info) {
   // ensure plugin framework is there, even if iitc is not yet loaded
-  if (typeof window.plugin !== 'function') window.plugin = function () {}
+  if (typeof window.plugin !== 'function') window.plugin = function () { }
 
   //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
   //(leaving them in place might break the 'About IITC' page or break update checks)
@@ -35,7 +35,7 @@ function wrapper (plugin_info) {
 
   // PLUGIN START ////////////////////////////////////////////////////////
 
-  window.plugin.gocapture = function () {}
+  window.plugin.gocapture = function () { }
 
   window.plugin.gocapture.layerlist = {}
   window.plugin.gocapture.capturedportals = {}
@@ -48,7 +48,6 @@ function wrapper (plugin_info) {
       return
 
     if (window.map.hasLayer(window.plugin.gocapture.uncapturedAvailableLayer)) {
-      window.plugin.gocapture.uncapturedAvailableLayer.clearLayers();
       $.each(window.portals, function (i, portal) {
         window.plugin.gocapture.drawAvailableUncaptured(portal)
       })
@@ -75,7 +74,6 @@ function wrapper (plugin_info) {
   window.plugin.gocapture.drawAvailableUncaptured = function (portal) {
     if (!window.plugin.gocapture.capturedportals[portal.options.guid]) {
       var agentCaptured = false
-      console.log(portal)
       if (
         !(
           portal.options.ent.length !== 3 ||
@@ -235,6 +233,6 @@ if (typeof GM_info !== 'undefined' && GM_info && GM_info.script)
 script.appendChild(
   document.createTextNode('(' + wrapper + ')(' + JSON.stringify(info) + ');')
 )
-;(document.body || document.head || document.documentElement).appendChild(
-  script
-)
+  ; (document.body || document.head || document.documentElement).appendChild(
+    script
+  )
