@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.8.20210526.11236
+// @version        0.0.9.20210526.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    0.0.8 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.9 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -39,7 +39,7 @@ function wrapper(plugin_info) {
 
   window.plugin.gocapture.layerlist = {}
   window.plugin.gocapture.capturedportals = {}
-  window.plugin.gocapture.localstoragekey = 'gocapture.capturedportals'
+  window.plugin.gocapture.localstoragekey = 'gocapture.capturedportalslist'
   window.plugin.gocapture.circlefirstlayerlist = {}
   window.plugin.gocapture.circlesecondlayerlist = {}
 
@@ -66,7 +66,7 @@ function wrapper(plugin_info) {
 
   window.plugin.gocapture.loadcaptured = function () {
     var stored = localStorage.getItem(window.plugin.gocapture.localstoragekey)
-    if (stored !== undefined && stored != null) {
+    if (stored !== undefined && stored !== null) {
       window.plugin.gocapture.capturedportals = JSON.parse(stored)
     }
   }
@@ -82,7 +82,7 @@ function wrapper(plugin_info) {
             !(portal.options.ent[2][18] > 0))
         )
       ) {
-        agentCaptured = portal.options.ent[2][18] === 3
+        agentCaptured =  portal.options.ent[2][18] & 0b10 === 2;
       }
 
       if (agentCaptured) {
