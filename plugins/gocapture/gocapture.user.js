@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.9.20210526.11236
+// @version        0.0.10.20210526.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    0.0.9 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.10 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -69,6 +69,11 @@ function wrapper(plugin_info) {
     if (stored !== undefined && stored !== null) {
       window.plugin.gocapture.capturedportals = JSON.parse(stored)
     }
+  }
+
+  window.plugin.gocapture.removecaptured = function () {
+      alert('clear cache');
+    localStorage.removeItem(window.plugin.gocapture.localstoragekey)
   }
 
   window.plugin.gocapture.drawAvailableUncaptured = function (portal) {
@@ -181,6 +186,10 @@ function wrapper(plugin_info) {
           window.plugin.gocapture.update()
         }
       }
+
+        if (a.name === 'Go Capture! - Clear cache') {
+window.plugin.gocapture.removecaptured();
+        }
     } else {
       window.plugin.gocapture.update()
     }
@@ -196,6 +205,16 @@ function wrapper(plugin_info) {
     )
     window.plugin.gocapture.layerlist['Go Capture! - Portals'] =
       window.plugin.gocapture.uncapturedAvailableLayer
+
+      // temp
+         window.plugin.gocapture.clearstorage = new L.LayerGroup()
+    window.addLayerGroup(
+      'Go Capture! - Clear cache',
+      window.plugin.gocapture.clearstorage,
+      false
+    )
+    window.plugin.gocapture.layerlist['Go Capture! - Clear cache'] =
+      window.plugin.gocapture.clearstorage
 
     addHook('mapDataRefreshEnd', window.plugin.gocapture.update)
     window.pluginCreateHook('displayedLayerUpdated')
