@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.2.20210526.11235
+// @version        0.0.4.20210526.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    [iitc-2021-05-26-112345] Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.4 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -40,14 +40,15 @@ function wrapper(plugin_info) {
     window.plugin.gocapture.layerlist = {};
     window.plugin.gocapture.capturedportals = {};
     window.plugin.gocapture.localstoragekey = "gocapture.capturedportals"
+    window.plugin.gocapture.circlefirstlayerlist = {};
+    window.plugin.gocapture.circlesecondlayerlist = {};
 
     window.plugin.gocapture.update = function () {
 
         if (!window.map.hasLayer(window.plugin.gocapture.uncapturedAvailableLayer))
             return;
 
-        if (window.map.hasLayer(window.plugin.gocapture.uncapturedAvailableLayer)) {
-            window.plugin.gocapture.uncapturedAvailableLayer.clearLayers();
+        if (window.map.hasLayer(window.plugin.gocapture.uncapturedAvailableLayer)) {            
 
             $.each(window.portals, function (i, portal) {
                 window.plugin.gocapture.drawAvailableUncaptured(portal);
@@ -56,8 +57,7 @@ function wrapper(plugin_info) {
     }
 
     window.plugin.gocapture.addcaptured = function (guid) {
-        window.plugin.gocapture.capturedportals[guid] = true;
-        console.log(window.plugin.gocapture.capturedportals);
+        window.plugin.gocapture.capturedportals[guid] = true;        
         if (window.plugin.gocapture.capturedportals) {
             localStorage.setItem(window.plugin.gocapture.localstoragekey, JSON.stringify(window.plugin.gocapture.capturedportals));
         }
@@ -76,29 +76,39 @@ function wrapper(plugin_info) {
 
             if (portal.options.data.agentCaptured) {
                 window.plugin.gocapture.addcaptured(portal.options.guid);
+                var circleFirstLayer = window.plugin.gocapture.circlefirstlayerlist[portal.options.guid];
+                if (circleFirstLayer) {
+                    window.plugin.gocapture.uncapturedAvailableLayer.removeLayer(circleFirstLayer);
+                }
+                var circleSecondLayer = window.plugin.gocapture.circlesecondlayerlist[portal.options.guid];
+                if (circleSecondLayer) {
+                    window.plugin.gocapture.uncapturedAvailableLayer.removeLayer(circleSecondLayer);
+                }
             } else {
                 if (portal.options.data.team === "N" || (portal.options.data.team === "E" && window.PLAYER.team == "RESISTANCE") || (portal.options.data.team === "R" && window.PLAYER.team == "ENLIGHTENED")) {
 
-                    window.plugin.gocapture.draw(portal, 'teal', 30, 5, 1, 'teal', 0, window.plugin.gocapture.uncapturedAvailableLayer);
-                    window.plugin.gocapture.draw(portal, 'white', 25, 5, 1, 'purple', 0.3, window.plugin.gocapture.uncapturedAvailableLayer);
+                    window.plugin.gocapture.draw(portal, 'teal', 30, 5, 1, 'teal', 0, window.plugin.gocapture.uncapturedAvailableLayer, window.plugin.gocapture.circlefirstlayerlist);
+                    window.plugin.gocapture.draw(portal, 'white', 25, 5, 1, 'purple', 0.3, window.plugin.gocapture.uncapturedAvailableLayer, window.plugin.gocapture.circlesecondlayerlist);
 
                 }
             }
         }
     }
 
-    window.plugin.gocapture.draw = function (portal, color, range, weight, opacity, fillColor, fillOpacity, layer) {
-        // Create a new location object for the portal
-        var coo = portal._latlng;
-        var latlng = new L.LatLng(coo.lat, coo.lng);
+    window.plugin.gocapture.draw = function (portal, color, range, weight, opacity, fillColor, fillOpacity, layer, circlelayerlist) {
+        if (!circlelayerlist[portal.options.guid]) {
+            // Create a new location object for the portal
+            var coo = portal._latlng;
+            var latlng = new L.LatLng(coo.lat, coo.lng);
 
-        // Specify the no submit circle options
-        var circleOptions = { color: color, opacity: opacity, weight: weight, fillColor: fillColor, fillOpacity: fillOpacity, clickable: false, interactive: false };
+            // Specify the no submit circle options
+            var circleOptions = { color: color, opacity: opacity, weight: weight, fillColor: fillColor, fillOpacity: fillOpacity, clickable: false, interactive: false };
 
-        // Create the circle object with specified options
-        var circle = new L.Circle(latlng, range, circleOptions);
-
-        circle.addTo(layer);
+            // Create the circle object with specified options
+            var circle = new L.Circle(latlng, range, circleOptions);
+            circlelayerlist[portal.options.guid] = circle;
+            circle.addTo(layer);
+        }
     }
 
     window.plugin.gocapture.setSelected = function (a) {
