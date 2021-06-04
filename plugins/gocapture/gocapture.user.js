@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.14.20210526.11236
+// @version        0.0.15.20210604.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    0.0.14 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.15 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -29,7 +29,7 @@ function wrapper(plugin_info) {
   //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
   //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc'
-  plugin_info.dateTimeVersion = '20210526.11234'
+  plugin_info.dateTimeVersion = '20210604.11234'
   plugin_info.pluginId = ' iitc-plugin-go-capture'
   //END PLUGIN AUTHORS NOTE
 
@@ -71,10 +71,10 @@ function wrapper(plugin_info) {
     }
   }
 
-  window.plugin.gocapture.removecaptured = function () {
-      alert('clear cache');
-    localStorage.removeItem(window.plugin.gocapture.localstoragekey)
+  window.plugin.gocapture.portalAdded = function (data) {
+    window.plugin.gocapture.drawAvailableUncaptured(data.portal);
   }
+
 
   window.plugin.gocapture.drawAvailableUncaptured = function (portal) {
     if (!window.plugin.gocapture.capturedportals[portal.options.guid]) {
@@ -107,36 +107,48 @@ function wrapper(plugin_info) {
           )
         }
       } else {
-        if (
-          portal.options.data.team === 'N' ||
+        var isAvailable = (portal.options.data.team === 'N' ||
           (portal.options.data.team === 'E' &&
             window.PLAYER.team == 'RESISTANCE') ||
           (portal.options.data.team === 'R' &&
             window.PLAYER.team == 'ENLIGHTENED')
-        ) {
-          window.plugin.gocapture.draw(
-            portal,
-            'teal',
-            30,
-            5,
-            1,
-            'teal',
-            0,
-            window.plugin.gocapture.uncapturedAvailableLayer,
-            window.plugin.gocapture.circlefirstlayerlist
-          )
-          window.plugin.gocapture.draw(
-            portal,
-            'white',
-            25,
-            5,
-            1,
-            'purple',
-            0.3,
-            window.plugin.gocapture.uncapturedAvailableLayer,
-            window.plugin.gocapture.circlesecondlayerlist
-          )
+        );
+
+
+        var circleColor = 'white'
+        var circleBorderColor = 'purple'
+        var outerColor = 'teal';
+        var toDrawlayer = window.plugin.gocapture.uncapturedAvailableLayer;
+        if (!isAvailable) {
+          circleColor = 'pink';
+          circleBorderColor = 'red'
+          outerColor = 'pink';
+          toDrawlayer = window.plugin.gocapture.uncapturedUnavailableLayer
         }
+
+        window.plugin.gocapture.draw(
+          portal,
+          outerColor,
+          30,
+          5,
+          1,
+          outerColor,
+          0,
+          toDrawlayer,
+          window.plugin.gocapture.circlefirstlayerlist
+        )
+        window.plugin.gocapture.draw(
+          portal,
+          circleColor,
+          25,
+          5,
+          1,
+          circleBorderColor,
+          0.3,
+          toDrawlayer,
+          window.plugin.gocapture.circlesecondlayerlist
+        )
+
       }
     }
   }
@@ -186,10 +198,6 @@ function wrapper(plugin_info) {
           window.plugin.gocapture.update()
         }
       }
-
-        if (a.name === 'Go Capture! - Clear cache') {
-window.plugin.gocapture.removecaptured();
-        }
     } else {
       window.plugin.gocapture.update()
     }
@@ -206,6 +214,15 @@ window.plugin.gocapture.removecaptured();
     window.plugin.gocapture.layerlist['Go Capture! - Portals'] =
       window.plugin.gocapture.uncapturedAvailableLayer
 
+    window.plugin.gocapture.uncapturedUnavailableLayer = new L.LayerGroup()
+    window.addLayerGroup(
+      'Go Capture! - Unavailable Portals',
+      window.plugin.gocapture.uncapturedUnavailableLayer,
+      true
+    )
+    window.plugin.gocapture.layerlist['Go Capture! - Unavailable Portals'] =
+      window.plugin.gocapture.uncapturedUnavailableLayer
+
     //   // temp
     //      window.plugin.gocapture.clearstorage = new L.LayerGroup()
     // window.addLayerGroup(
@@ -216,7 +233,8 @@ window.plugin.gocapture.removecaptured();
     // window.plugin.gocapture.layerlist['Go Capture! - Clear cache'] =
     //   window.plugin.gocapture.clearstorage
 
-    addHook('mapDataRefreshEnd', window.plugin.gocapture.update)
+    addHook('portalAdded', window.plugin.gocapture.portalAdded);
+    //addHook('mapDataRefreshEnd', window.plugin.gocapture.update)
     window.pluginCreateHook('displayedLayerUpdated')
 
     window.addHook('displayedLayerUpdated', window.plugin.gocapture.setSelected)
