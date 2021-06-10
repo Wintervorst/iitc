@@ -36,7 +36,7 @@ function wrapper(plugin_info) {
   // PLUGIN START ////////////////////////////////////////////////////////
 
   window.plugin.followme = function () { }
-    window.plugin.followme.refreshDelay = 30000; // milliseconds
+    window.plugin.followme.refreshDelay = 15000; // milliseconds
     window.plugin.followme.latestRefresh = Date.now();
     window.plugin.followme.latestLat = '';
     window.plugin.followme.latestLng = '';
