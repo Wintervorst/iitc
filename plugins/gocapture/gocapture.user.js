@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.16.20210629.11236
+// @version        0.0.17.20210630.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    0.0.16 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.17 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -29,7 +29,7 @@ function wrapper(plugin_info) {
   //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
   //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc'
-  plugin_info.dateTimeVersion = '20210629.11234'
+  plugin_info.dateTimeVersion = '20210630.11234'
   plugin_info.pluginId = ' iitc-plugin-go-capture'
   //END PLUGIN AUTHORS NOTE
 
@@ -78,8 +78,10 @@ function wrapper(plugin_info) {
 
   window.plugin.gocapture.drawAvailableUncaptured = function (portal) {
       var agentCaptured = false
+      var oldCaptured = false;
       if (window.plugin.gocapture.capturedportals[portal.options.guid]) {
           agentCaptured = true;
+          oldCaptured = true;
       }
 
 
@@ -91,11 +93,13 @@ function wrapper(plugin_info) {
             !(portal.options.ent[2][18] > 0))
         )
       ) {
-        agentCaptured = (portal.options.ent[2][18] & 0b10) === 2;
+        agentCaptured = oldCaptured || (portal.options.ent[2][18] & 0b10) === 2;
       }
 
       if (agentCaptured) {
-        window.plugin.gocapture.addcaptured(portal.options.guid)
+          if (!oldCaptured) {
+              window.plugin.gocapture.addcaptured(portal.options.guid)
+          }
         var circleFirstLayer =
           window.plugin.gocapture.circlefirstlayerlist[portal.options.guid]
         if (circleFirstLayer) {
@@ -232,16 +236,6 @@ function wrapper(plugin_info) {
     )
     window.plugin.gocapture.layerlist['Go Capture! - Unavailable Portals'] =
       window.plugin.gocapture.uncapturedUnavailableLayer
-
-    //   // temp
-    //      window.plugin.gocapture.clearstorage = new L.LayerGroup()
-    // window.addLayerGroup(
-    //   'Go Capture! - Clear cache',
-    //   window.plugin.gocapture.clearstorage,
-    //   false
-    // )
-    // window.plugin.gocapture.layerlist['Go Capture! - Clear cache'] =
-    //   window.plugin.gocapture.clearstorage
 
     addHook('portalAdded', window.plugin.gocapture.portalAdded);
     //addHook('mapDataRefreshEnd', window.plugin.gocapture.update)
