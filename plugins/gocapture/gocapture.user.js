@@ -2,11 +2,11 @@
 // @id             iitc-plugin-go-capture
 // @name           IITC plugin: Go Capture!
 // @category       Info
-// @version        0.0.17.20210630.11236
+// @version        0.0.18.20210820.11236
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gocapture/gocapture.user.js
-// @description    0.0.17 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
+// @description    0.0.18 - Go Capture! - Highlights available unique captures. Captures are stored in the browser for more reliable results.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*
@@ -29,7 +29,7 @@ function wrapper(plugin_info) {
   //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
   //(leaving them in place might break the 'About IITC' page or break update checks)
   plugin_info.buildName = 'iitc'
-  plugin_info.dateTimeVersion = '20210630.11234'
+  plugin_info.dateTimeVersion = '20210820.11234'
   plugin_info.pluginId = ' iitc-plugin-go-capture'
   //END PLUGIN AUTHORS NOTE
 
@@ -39,9 +39,13 @@ function wrapper(plugin_info) {
 
   window.plugin.gocapture.layerlist = {}
   window.plugin.gocapture.capturedportals = {}
+  window.plugin.gocapture.visitedportals = {}
   window.plugin.gocapture.localstoragekey = 'gocapture.capturedportallist2'
+  window.plugin.gocapture.localstoragekeyvisit = 'gocapture.visitedportallist'
   window.plugin.gocapture.circlefirstlayerlist = {}
   window.plugin.gocapture.circlesecondlayerlist = {}
+  window.plugin.gocapture.circlefirstlayervisitedlist = {}
+  window.plugin.gocapture.circlesecondlayervisitedlist = {}
 
   window.plugin.gocapture.update = function () {
     if (!window.map.hasLayer(window.plugin.gocapture.uncapturedAvailableLayer))
@@ -64,10 +68,27 @@ function wrapper(plugin_info) {
     }
   }
 
+      window.plugin.gocapture.addvisited = function (guid) {
+    window.plugin.gocapture.visitedportals[guid] = true
+    if (window.plugin.gocapture.visitedportals) {
+      localStorage.setItem(
+        window.plugin.gocapture.localstoragekeyvisit,
+        JSON.stringify(window.plugin.gocapture.visitedportals)
+      )
+    }
+  }
+
   window.plugin.gocapture.loadcaptured = function () {
     var stored = localStorage.getItem(window.plugin.gocapture.localstoragekey)
     if (stored !== undefined && stored !== null) {
       window.plugin.gocapture.capturedportals = JSON.parse(stored)
+    }
+  }
+
+    window.plugin.gocapture.loadvisited = function () {
+    var stored = localStorage.getItem(window.plugin.gocapture.localstoragekeyvisit)
+    if (stored !== undefined && stored !== null) {
+      window.plugin.gocapture.visitedportals = JSON.parse(stored)
     }
   }
 
@@ -79,11 +100,17 @@ function wrapper(plugin_info) {
   window.plugin.gocapture.drawAvailableUncaptured = function (portal) {
       var agentCaptured = false
       var oldCaptured = false;
+      var agentVisited = false
+      var oldVisited = false;
       if (window.plugin.gocapture.capturedportals[portal.options.guid]) {
           agentCaptured = true;
           oldCaptured = true;
       }
 
+      if (window.plugin.gocapture.visitedportals[portal.options.guid]) {
+          agentVisited = true;
+          oldVisited = true;
+      }
 
       if (
         !(
@@ -93,7 +120,8 @@ function wrapper(plugin_info) {
             !(portal.options.ent[2][18] > 0))
         )
       ) {
-        agentCaptured = oldCaptured || (portal.options.ent[2][18] & 0b10) === 2;
+          agentCaptured = oldCaptured || (portal.options.ent[2][18] & 0b10) === 2;
+          agentVisited = oldVisited || (portal.options.ent[2][18] & 0b1) === 1;
       }
 
       if (agentCaptured) {
@@ -162,7 +190,55 @@ function wrapper(plugin_info) {
               toDrawlayer,
               window.plugin.gocapture.circlesecondlayerlist
           )
-        
+      }
+
+        if (agentVisited) {
+          if (!oldVisited) {
+              window.plugin.gocapture.addvisited(portal.options.guid)
+          }
+        var circleVisitedFirstLayer =
+          window.plugin.gocapture.circlefirstlayervisitedlist[portal.options.guid]
+        if (circleVisitedFirstLayer) {
+          window.plugin.gocapture.unvisitedLayer.removeLayer(
+            circleVisitedFirstLayer
+          )
+        }
+        var circleVisitedSecondLayer =
+          window.plugin.gocapture.circlesecondlayervisitedlist[portal.options.guid]
+        if (circleVisitedSecondLayer) {
+          window.plugin.gocapture.unvisitedLayer.removeLayer(
+            circleVisitedSecondLayer
+          )
+        }
+      } else {
+          console.log('nog niet bezocht');
+           circleColor = 'white'
+          circleBorderColor = 'orange'
+          outerColor = 'purple';
+          toDrawlayer = window.plugin.gocapture.unvisitedLayer;
+
+          window.plugin.gocapture.draw(
+              portal,
+              outerColor,
+              25,
+              5,
+              1,
+              outerColor,
+              0,
+              toDrawlayer,
+              window.plugin.gocapture.circlefirstlayervisitedlist
+          )
+          window.plugin.gocapture.draw(
+              portal,
+              circleColor,
+              20,
+              5,
+              1,
+              circleBorderColor,
+              0.3,
+              toDrawlayer,
+              window.plugin.gocapture.circlesecondlayervisitedlist
+          )
       }
     
   }
@@ -225,8 +301,16 @@ function wrapper(plugin_info) {
       window.plugin.gocapture.uncapturedAvailableLayer,
       true
     )
-    window.plugin.gocapture.layerlist['Go Capture! - Portals'] =
-      window.plugin.gocapture.uncapturedAvailableLayer
+    window.plugin.gocapture.layerlist['Go Capture! - Portals'] = window.plugin.gocapture.uncapturedAvailableLayer
+
+      window.plugin.gocapture.loadvisited()
+    window.plugin.gocapture.unvisitedLayer = new L.LayerGroup()
+    window.addLayerGroup(
+      'Go Visit! - Portals',
+      window.plugin.gocapture.unvisitedLayer,
+      true
+    )
+    window.plugin.gocapture.layerlist['Go Visit! - Portals'] = window.plugin.gocapture.unvisitedLayer
 
       window.plugin.gocapture.uncapturedUnavailableLayer = new L.LayerGroup()
     window.addLayerGroup(
