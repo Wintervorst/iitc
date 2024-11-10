@@ -7,7 +7,7 @@
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @description    [iitc-20190613.013370] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
-// @match	   https://intel.ingress.com/*
+// @match	         https://intel.ingress.com/*
 // @match          http://intel.ingress.com/*
 // @include        https://*.ingress.com/mission/*
 // @include        http://*.ingress.com/mission/*

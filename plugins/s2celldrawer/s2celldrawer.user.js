@@ -15,7 +15,7 @@
 // @include        http://*.ingress.com/mission/*
 // @match          https://*.ingress.com/mission/*
 // @match          http://*.ingress.com/mission/*
-// @match	   https://intel.ingress.com/*
+// @match	         https://intel.ingress.com/*
 // @match          http://intel.ingress.com/*
 // @grant          none
 // ==/UserScript==
