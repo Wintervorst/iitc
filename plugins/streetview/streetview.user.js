@@ -2,11 +2,11 @@
 // @id             iitc-plugin-streetview@wintervorst
 // @name           IITC plugin: Streetview
 // @category       Layer
-// @version        0.0.1.20190204.010307
+// @version        0.0.2.20241120.010307
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/streetview/streetview.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/streetview/streetview.user.js
-// @description    [iitc-20190201.010307] Draws streetview over intel map including visible portals. Movement is mirrored on Intel map
+// @description    [iitc-20241120.010307] Draws streetview over intel map including visible portals. Movement is mirrored on Intel map
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

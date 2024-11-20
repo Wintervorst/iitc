@@ -2,11 +2,11 @@
 // @id             iitc-plugin-egghunt@wintervorst
 // @name           IITC plugin: Easter Egg Hunt
 // @category       Layer
-// @version        0.0.10.20190422.013370
+// @version        0.0.11.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/egghunt/us/egghunt.user.js
-// @description    [iitc-20190422.013370] Easter Egg Hunt
+// @description    [iitc-20241120.013370] Easter Egg Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -15,6 +15,8 @@
 // @include        http://*.ingress.com/mission/*
 // @match          https://*.ingress.com/mission/*
 // @match          http://*.ingress.com/mission/*
+// @match          https://intel.ingress.com/*
+// @match          http://intel.ingress.com/*
 // @grant          none
 // ==/UserScript==
 

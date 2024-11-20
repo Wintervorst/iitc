@@ -2,11 +2,11 @@
 // @id             iitc-plugin-toggle-uniques
 // @name           IITC plugin: Toggle uniques
 // @category       Info
-// @version        0.0.1.20210208.21732
+// @version        0.0.2.20241120.21732
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/toggleuniques/toggleuniques.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/toggleuniques/toggleuniques.user.js
-// @description    [iitc-2021-02-08-021732] Toggle uniques
+// @description    [iitc-20241120-021732] Toggle uniques
 // @include        https://intel.ingress.com/*
 // @include        http://intel.ingress.com/*
 // @match          https://intel.ingress.com/*

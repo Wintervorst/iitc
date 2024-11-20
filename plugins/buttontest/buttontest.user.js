@@ -2,11 +2,11 @@
 // @id             iitc-plugin-buttontest@wintervorst
 // @name           IITC plugin: button test
 // @category       Layer
-// @version        0.0.1.20190311.013370
+// @version        0.0.2.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/buttontest/buttontest.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/buttontest/buttontest.user.js
-// @description    [iitc-20190311.013370] Test buttons on mobile
+// @description    [iitc-20241120.013370] Test buttons on mobile
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

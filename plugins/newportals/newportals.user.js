@@ -2,11 +2,11 @@
 // @id             iitc-plugin-newportals@wintervorst
 // @name           IITC plugin: New portals
 // @category       Layer
-// @version        0.1.2.20190315.013370
+// @version        0.1.3.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/newportals/newportals.user.js
-// @description    [iitc-20190315.013370] Highlights new portals created since previous session on a previous day. All new portals for today are marked for the entire day.
+// @description    [iitc-20241120.013370] Highlights new portals created since previous session on a previous day. All new portals for today are marked for the entire day.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

@@ -2,11 +2,11 @@
 // @id             iitc-plugin-occupied17cells@wintervorst
 // @name           IITC plugin: L17 Cells for Pokémon Go
 // @category       Layer
-// @version        0.0.9.20190311.013370
+// @version        0.0.10.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied17cells/occupied17cells.user.js
-// @description    [iitc-20190311.013370] Highlights level 17 cells where a stop/gym limit is reached, in order to see where you would best submit new portal candidates
+// @description    [iitc-20241120.013370] Highlights level 17 cells where a stop/gym limit is reached, in order to see where you would best submit new portal candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

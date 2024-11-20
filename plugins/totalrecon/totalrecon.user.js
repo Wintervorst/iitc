@@ -2,11 +2,11 @@
 // @id             iitc-plugin-totalrecon@wintervorst
 // @name           IITC plugin: Total Recon
 // @category       Highlighter
-// @version        1.1.0.20190527.013370
+// @version        1.1.1.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/totalrecon/totalrecon.user.js
-// @description    [iitc-20190527.013370] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
+// @description    [iitc-20241120.013370] Place markers on the map for possible candidates, submitted candidates, rejected candidates and succesful candidates.
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

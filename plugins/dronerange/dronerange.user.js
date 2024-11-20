@@ -2,11 +2,11 @@
 // @id             iitc-plugin-dronerange@wintervorst
 // @name           IITC plugin: Drone range
 // @category       Layer
-// @version        0.0.8.20200614.013370
+// @version        0.0.9.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/dronerange/dronerange.user.js
-// @description    [iitc-20200614.013370] Draws the action radius for a drone per portal
+// @description    [iitc-20241120.013370] Draws the action radius for a drone per portal
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

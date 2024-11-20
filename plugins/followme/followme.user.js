@@ -2,11 +2,11 @@
 // @id             iitc-plugin-follow-me
 // @name           IITC plugin: Follow me
 // @category       Utility
-// @version        0.0.2.20210610.13371
+// @version        0.0.3.20241120.13371
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/followme/followme.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/followme/followme.user.js
-// @description    0.0.2 - Follow me! - Keeps your current location centered on the map
+// @description    0.0.3 - Follow me! - Keeps your current location centered on the map
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @include        http://intel.ingress.com/*

@@ -2,11 +2,11 @@
 // @id             iitc-plugin-gympossible@wintervorst
 // @name           IITC plugin: L14 Cells - Gympossible
 // @category       Layer
-// @version        0.0.7.20190311.013370
+// @version        0.0.8.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/gympossible/gympossible.user.js
-// @description    [iitc-20190311.013370] Highlights level 14 cells where the next stop wil generate a gym in that cell in order to see where you would best submit new portal candidates
+// @description    [iitc-20241120.013370] Highlights level 14 cells where the next stop wil generate a gym in that cell in order to see where you would best submit new portal candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

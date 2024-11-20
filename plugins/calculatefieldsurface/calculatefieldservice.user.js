@@ -2,11 +2,11 @@
 // @id             iitc-plugin-calculate-field-surface
 // @name           IITC plugin: Calculate field surface
 // @category       Info
-// @version        0.0.5.20210204.21732
+// @version        0.0.6.20241120.21732
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/calculatefieldsurface/calculatefieldsurface.user.js
-// @description    [iitc-2021-02-04-021732] Calculate surface of field
+// @description    [iitc-20241120-021732] Calculate surface of field
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

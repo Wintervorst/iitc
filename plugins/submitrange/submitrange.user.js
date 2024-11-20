@@ -2,11 +2,11 @@
 // @id             iitc-plugin-submitrange@wintervorst
 // @name           IITC plugin: Portal submitrange
 // @category       Layer
-// @version        1.0.12.20190613.013370
+// @version        1.0.13.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/submitrange/submitrange.user.js
-// @description    [iitc-20190613.013370] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
+// @description    [iitc-20241120.013370] Shows the 'too close' radius of existing portals, in order to see where you can search for and submit new candidates
 // @match	         https://intel.ingress.com/*
 // @match          http://intel.ingress.com/*
 // @include        https://*.ingress.com/mission/*

@@ -2,11 +2,11 @@
 // @id             iitc-plugin-occupied19cells@wintervorst
 // @name           IITC plugin: L19 Cells for Ingress
 // @category       Layer
-// @version        0.0.7.20190311.013370
+// @version        0.0.8.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/occupied19cells/occupied19cells.user.js
-// @description    [iitc-20190311.013370] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
+// @description    [iitc-20241120.013370] Highlights level 19 cells where portal limit is reached, in order to see where you would best submit new candidates
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*

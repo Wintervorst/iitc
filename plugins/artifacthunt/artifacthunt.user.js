@@ -2,11 +2,11 @@
 // @id             iitc-plugin-artifacthunt@wintervorst
 // @name           IITC plugin: Abaddon Artifact Hunt
 // @category       Layer
-// @version        0.2.10.20190524.013370
+// @version        0.2.11.20241120.013370
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/us/artifacthunt.user.js
 // @downloadURL    https://github.com/Wintervorst/iitc/raw/master/plugins/artifacthunt/us/artifacthunt.user.js
-// @description    [iitc-20190524.013370] Abaddon Artifact Hunt
+// @description    [iitc-20241120.013370] Abaddon Artifact Hunt
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
